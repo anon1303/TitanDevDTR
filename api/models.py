@@ -17,6 +17,7 @@ class Admin(dbase.Model):
 class Employee(dbase.Model):
 	__tablename__ = 'employee'
 	employeeid = dbase.Column(dbase.Integer, primary_key = True , autoincrement = True )
+	employeestatus = dbase.Column(dbase.Integer) 
 	fname = dbase.Column(dbase.String(50))
 	mname = dbase.Column(dbase.String(50))
 	lname = dbase.Column(dbase.String(50))
@@ -24,8 +25,11 @@ class Employee(dbase.Model):
 	code = dbase.Column(dbase.String(15))
 	contact = dbase.Column(dbase.String(15))
 	email = dbase.Column(dbase.String(30))
+	birth_date = db.Column(db.DATE, nullable=False)
+	gender = db.Column(db.String(6), nullable=False)
 
-	def __init__(self,fname, mname, lname, position, code, contact, email):
+	def __init__(self,fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus ):
+		self.employeestatus = 0
 		self.fname = fname
 		self.mname = mname
 		self.lname = lname
@@ -33,6 +37,8 @@ class Employee(dbase.Model):
 		self.code = code
 		self.contact = contact
 		self.email = email
+		self.birth_date = birth_date
+        self.gender = gender
 
 class Attendance(dbase.Model):
 	__tablename__ = 'attendance'
@@ -51,7 +57,7 @@ class Attendance(dbase.Model):
 		self.timeIn = timeIn
 		self.timeOut = timeOut
 		self.status = 0
-		self.dailyStatus = dailyStatus
+		self.dailyStatus = dailyStatus 
 		self.employeeid = employeeid
 
 
