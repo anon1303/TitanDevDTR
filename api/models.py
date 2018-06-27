@@ -16,7 +16,7 @@ class Admin(dbase.Model):
 
 class Employee(dbase.Model):
 	__tablename__ = 'employee'
-	id = dbase.Column(dbase.Integer, primary_key = True , autoincrement = True )
+	employeeid = dbase.Column(dbase.Integer, primary_key = True , autoincrement = True )
 	fname = dbase.Column(dbase.String(50))
 	mname = dbase.Column(dbase.String(50))
 	lname = dbase.Column(dbase.String(50))
@@ -33,6 +33,25 @@ class Employee(dbase.Model):
 		self.code = code
 		self.contact = contact
 		self.email = email
+
+class Attendance(dbase.Model):
+	__tablename__ = 'attendance'
+	employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey("employee.employeeid"), nullable=False)
+	lateTotal = dbase.Column(dbase.Integer)
+	absentTotal = dbase.Column(dbase.Integer)
+	timeIn = dbase.Column(dbase.DateTime)
+	timeOut = dbase.Column(dbase.DateTime)
+	status = dbase.Column(dbase.Integer)
+	dailyStatus = dbase.Column(dbase.String(6))
+
+	def __init__(self,lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus):
+		self.lateTotal = lateTotal
+		self.absentTotal = absentTotal
+		self.timeIn = timeIn
+		self.timeOut = timeOut
+		self.status = 0
+		self.dailyStatus = dailyStatus
+
 
 class Logs(dbase.Model):
     __tablename__ = "logs"
