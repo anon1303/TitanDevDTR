@@ -36,7 +36,8 @@ class Employee(dbase.Model):
 
 class Attendance(dbase.Model):
 	__tablename__ = 'attendance'
-	employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey("employee.employeeid"), nullable=False)
+
+	employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey("employee.employeeid"),primary_key = True, nullable=False)
 	lateTotal = dbase.Column(dbase.Integer)
 	absentTotal = dbase.Column(dbase.Integer)
 	timeIn = dbase.Column(dbase.DateTime)
@@ -44,13 +45,14 @@ class Attendance(dbase.Model):
 	status = dbase.Column(dbase.Integer)
 	dailyStatus = dbase.Column(dbase.String(6))
 
-	def __init__(self,lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus):
+	def __init__(self,lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus, employeeid):
 		self.lateTotal = lateTotal
 		self.absentTotal = absentTotal
 		self.timeIn = timeIn
 		self.timeOut = timeOut
 		self.status = 0
 		self.dailyStatus = dailyStatus
+		self.employeeid = employeeid
 
 
 class Logs(dbase.Model):
