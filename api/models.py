@@ -68,8 +68,5 @@ class Logs(dbase.Model):
 
     def __init__(self, details, log_date):
         self.details = details
-<<<<<<< HEAD
         self.log_date = log_date
-=======
-        self.log_date = log_date
->>>>>>> 8b29235f5f11aa96dba13e25113584ba6bbb3490
+
