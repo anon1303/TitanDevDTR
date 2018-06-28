@@ -4,14 +4,15 @@ from models import *
 from datetime import datetime
 
 
-@app.route('/', methods=['GET'])
-def index():
-    return 'this is index to test'
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    pass
 
 
 @app.route('/newEmployee', methods=['POST'])
 def addemployee():
     data = request.get_json()
+    #birth_date = Strip the time!!!!!!!!
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
                             birth_date=data['birth_date'],  gender=data['gender'], employeestatus=1)
@@ -22,7 +23,8 @@ def addemployee():
         dbase.session.commit()
         return jsonify({'message': 'New employee created!'})
     else:
-        return jsonify({'message': 'employee already created'})
+        return jsonify({'message': 'Employee already created'})
+
 
 @app.route('/deactivate', methods=['GET', 'POST'])
 def delEmployee():
@@ -41,6 +43,7 @@ def delEmployee():
 		return jsonify({'message': 'Employee deactivated'})
 	else:
 		return jsonify({'message': 'Employee is not found'})
+
 
 @app.route('/edit/<string:id>', methods=['POST'])
 def edit(id):
