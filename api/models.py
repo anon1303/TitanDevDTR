@@ -3,7 +3,7 @@ from itsdangerous import JSONWebSignatureSerializer as Serialize
 from flask_login import AnonymousUserMixin
 from sqlalchemy.orm import relationship
 from sqlalchemy import Integer, ForeignKey, String, Column
-from datetime import datetime
+from datetime import datetime, date
 
 class Admin(dbase.Model):
 	__tablename__ = 'admin'
@@ -17,7 +17,7 @@ class Admin(dbase.Model):
 class Employee(dbase.Model):
 	__tablename__ = 'employee'
 	employeeid = dbase.Column(dbase.Integer, primary_key = True , autoincrement = True )
-	employeestatus = dbase.Column(dbase.Integer) 
+	employeestatus = dbase.Column(dbase.String(1)) 
 	fname = dbase.Column(dbase.String(50))
 	mname = dbase.Column(dbase.String(50))
 	lname = dbase.Column(dbase.String(50))
@@ -25,11 +25,11 @@ class Employee(dbase.Model):
 	code = dbase.Column(dbase.String(15))
 	contact = dbase.Column(dbase.String(15))
 	email = dbase.Column(dbase.String(30))
-	birth_date = db.Column(db.DATE, nullable=False)
-	gender = db.Column(db.String(6), nullable=False)
+	birth_date = dbase.Column(dbase.DATE, nullable=False)
+	gender = dbase.Column(dbase.String(6), nullable=False)
 
-	def __init__(self,fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus ):
-		self.employeestatus = 0
+	def __init__(self,fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus):
+		self.employeestatus = "0"
 		self.fname = fname
 		self.mname = mname
 		self.lname = lname
@@ -38,7 +38,7 @@ class Employee(dbase.Model):
 		self.contact = contact
 		self.email = email
 		self.birth_date = birth_date
-        self.gender = gender
+		self.gender = gender
 
 class Attendance(dbase.Model):
 	__tablename__ = 'attendance'
