@@ -24,9 +24,10 @@ class Employee(dbase.Model):
     email = dbase.Column(dbase.String(30))
     birth_date = dbase.Column(dbase.DATE, nullable=False)
     gender = dbase.Column(dbase.String(6), nullable=False)
+    address = dbase.Column(dbase.String(50))
     attendance1 = dbase.relationship('Attendance', backref='employee', lazy=True)
 
-    def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus):
+    def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus, address):
         self.employeestatus = employeestatus
         self.fname = fname
         self.mname = mname
@@ -37,6 +38,7 @@ class Employee(dbase.Model):
         self.email = email
         self.birth_date = birth_date
         self.gender = gender
+        self.address = address
 
 
 class Attendance(dbase.Model):

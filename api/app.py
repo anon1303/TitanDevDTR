@@ -15,7 +15,7 @@ def addemployee():
     #birth_date = Strip the time!!!!!!!!
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
-                            birth_date=data['birth_date'],  gender=data['gender'], employeestatus=1)
+                            birth_date=data['birth_date'],  gender=data['gender'],address=data['address'], employeestatus=1)
     #search for employee using QRCODE
     employee = Employee.query.filter_by(code=data['code']).first()
     if employee is None:
@@ -90,6 +90,10 @@ def edit(id):
                 employee.gender = employee.gender
             else:
                 employee.gender = data['gender']
+            if data['address'] == '':
+                employee.address = employee.address
+            else:
+                employee.address = data['address']
             dbase.session.commit()
             return jsonify({'message': 'Success!'})
         except:
