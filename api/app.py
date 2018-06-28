@@ -24,7 +24,17 @@ def addemployee():
     else:
         return jsonify({'message': 'employee already created'})
 
+@app.route('/deactivate', methods=['GET', 'POST'])
+def delEmployee():
+    
+	data = request.get_json()
 
+	employee = Employee.query.filter_by(code=data['code']).first()
+	if employee:
+		employee.employeestatus = 0
+		dbase.session.add(employee)
+		dbase.session.commit()
 
-
-
+		return jsonify({'message': 'Employee deactivated'})
+	else:
+		return jsonify({'message': 'Employee is not found'})
