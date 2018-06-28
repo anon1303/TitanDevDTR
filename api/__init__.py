@@ -18,4 +18,8 @@ app.debug = True
 from models import *
 from app import *
 
+<<<<<<< HEAD
 dbase.create_all()
+=======
+dbase.create_all()
+>>>>>>> 8b29235f5f11aa96dba13e25113584ba6bbb3490
