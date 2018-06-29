@@ -19,7 +19,7 @@ class Employee(dbase.Model):
     mname = dbase.Column(dbase.String(50))
     lname = dbase.Column(dbase.String(50))
     position = dbase.Column(dbase.String(30))
-    code = dbase.Column(dbase.String(15))
+    code = dbase.Column(dbase.String(100))
     contact = dbase.Column(dbase.String(15))
     email = dbase.Column(dbase.String(30))
     birth_date = dbase.Column(dbase.DATE, nullable=False)
@@ -33,7 +33,7 @@ class Employee(dbase.Model):
         self.mname = mname
         self.lname = lname
         self.position = position
-        self.code = code
+        self.code = generate_password_hash(code, method='sha256')
         self.contact = contact
         self.email = email
         self.birth_date = birth_date
@@ -71,4 +71,3 @@ class Logs(dbase.Model):
     def __init__(self, details, log_date):
         self.details = details
         self.log_date = log_date
-

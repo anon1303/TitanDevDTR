@@ -65,6 +65,8 @@ pyasn1-modules==0.2.1
 pycparser==2.18
 PyJWT==1.6.1
 PyMySQL==0.7.11
+pypng==0.0.18
+PyQRCode==1.2.1
 python-dateutil==2.6.1
 python-editor==1.0.3
 pytz==2017.3
