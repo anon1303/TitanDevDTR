@@ -1,6 +1,8 @@
-from api import app, dbase, generate_password_hash
+from api import app, dbase, generate_password_hash, check_password_hash
 from flask import request, jsonify
 from models import *
+# add to req.txt
+from flask_login import login_user, login_required, LoginManager, logout_user
 from datetime import datetime
 # add to req.txt
 import pyqrcode
@@ -8,12 +10,36 @@ import pyqrcode
 import png
 
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Admin.query.get(user_id)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
+    data = request.get_json()
+    user = Admin.query.filter_by(username=data['username']).first()
+    if user is None:
+        return jsonify({'message': 'Invalid username or password'})
+    else:
+        if check_password_hash(user.password, data['password']):
+            login_user(user)
+            return jsonify({'message': 'Login Successful!'})
+
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'message': 'Logged out'})
 
 
 @app.route('/newEmployee', methods=['POST'])
+@login_required
 def addemployee():
     data = request.get_json()
     # birth_date = Strip the time!!!!!!!!
@@ -31,14 +57,16 @@ def addemployee():
 
 
 @app.route('/generate/qrcode', methods=['POST'])
+@login_required
 def genereate_code():
     data = request.get_json()
     qr = pyqrcode.create(data['code'])
-    qr.png('C:\Users\ACER\Desktop\code.png', scale=6)
+    qr.png('code.png', scale=6)
     return jsonify({'message': 'QR Code Generated!'})
 
 
 @app.route('/edit/<string:user_id>', methods=['POST'])
+@login_required
 def edit(user_id):
     data = request.get_json()
     employee = Employee.query.filter_by(code=user_id).first()
@@ -66,7 +94,7 @@ def edit(user_id):
             if data['code'] == '':
                 employee.code = employee.code
             else:
-                employee.code = generate_password_hash(data['code'])
+                employee.code = generate_password_hash(data['code'], method='sha256')
             if data['contact'] == '':
                 employee.contact = employee.contact
             else:
@@ -87,3 +115,15 @@ def edit(user_id):
             return jsonify({'message': 'Success!'})
         except:
             return jsonify({'message': 'edit failed'})
+
+
+@app.route('/time-in-pin/', methods=['GET'])
+def time_in_pin():
+    data = request.get_json()
+    pin = generate_password_hash(data['pin'], method='sha256')
+    employee = Employee.query.filter_by(code=pin).first()
+    if employee:
+        # add log in function here!
+        return jsonify({'message': 'Time-in Successful!'})
+    else:
+        return jsonify({'message': 'Time-'})

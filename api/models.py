@@ -1,9 +1,12 @@
 from api import dbase, generate_password_hash
+from flask_login import UserMixin
 
 
-class Admin(dbase.Model):
+# added usermixin
+class Admin(UserMixin, dbase.Model):
     __tablename__ = 'admin'
-    username = dbase.Column(dbase.String(50), nullable=False, primary_key=True)
+    id = dbase.Column(dbase.Integer, primary_key=True)
+    username = dbase.Column(dbase.String(50), nullable=False)
     password = dbase.Column(dbase.String(100), nullable=False)
 
     def __init__(self, username, password):
