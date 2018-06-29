@@ -4,11 +4,11 @@ from models import *
 # add to req.txt
 from flask_login import login_user, login_required, LoginManager, logout_user
 from datetime import datetime
-# add to req.txt
-import pyqrcode
-# add to req.txt
+# newly added
+from sqlalchemy import and_ 
 import png
-
+import pyqrcode
+# 
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -42,11 +42,14 @@ def logout():
 @login_required
 def addemployee():
     data = request.get_json()
+    
     # birth_date = Strip the time!!!!!!!!
+    birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
-                            birth_date=data['birth_date'],  gender=data['gender'], employeestatus=1)
-
+                            birth_date=data['birthdate'],  gender=data['gender'],address=data['address'], employeestatus=1)
+    
+    #search for employee using QRCODE
     employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
     if employee is None:
         dbase.session.add(new_employee)
@@ -55,7 +58,6 @@ def addemployee():
     else:
         return jsonify({'message': 'Employee already created'})
 
-
 @app.route('/generate/qrcode', methods=['POST'])
 @login_required
 def genereate_code():
@@ -63,6 +65,45 @@ def genereate_code():
     qr = pyqrcode.create(data['code'])
     qr.png('code.png', scale=6)
     return jsonify({'message': 'QR Code Generated!'})
+
+
+@app.route('/deactivate', methods=['GET', 'POST'])
+def delEmployee():
+    
+    data = request.get_json()
+    #search for employee using QRCODE and if the employee is active
+    employee = Employee.query.filter(and_(Employee.code==data['code'], Employee.employeestatus == 1)).first()
+    # employee = Employee.query.filter_by(code=data['code']).first()
+    if employee:
+        # 1 for active
+        # 0 for inactive
+        #change the status to 0
+    	employee.employeestatus = 0
+    	dbase.session.add(employee)
+    	dbase.session.commit()
+
+    	return jsonify({'message': 'Employee deactivated'})
+    else:
+    	return jsonify({'message': 'Employee is not found'})
+
+@app.route('/activate', methods=['GET', 'POST'])
+def ReActEmployee():
+    
+    data = request.get_json()
+    #search for employee using QRCODE and if the employee is active
+    employee = Employee.query.filter(and_(Employee.code==data['code'], Employee.employeestatus == 0)).first()
+    # employee = Employee.query.filter_by(code=data['code']).first()
+    if employee:
+        # 1 for active
+        # 0 for inactive
+        #change the status to 0
+        employee.employeestatus = 1
+        dbase.session.add(employee)
+        dbase.session.commit()
+
+        return jsonify({'message': 'Employee Activated'})
+    else:
+        return jsonify({'message': 'Employee is not found'})
 
 
 @app.route('/edit/<string:user_id>', methods=['POST'])
@@ -111,6 +152,10 @@ def edit(user_id):
                 employee.gender = employee.gender
             else:
                 employee.gender = data['gender']
+            if data['address'] == '':
+                employee.address = employee.address
+            else:
+                employee.address = data['address']
             dbase.session.commit()
             return jsonify({'message': 'Success!'})
         except:
