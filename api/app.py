@@ -1,7 +1,7 @@
 from api import app, dbase, generate_password_hash
 from flask import request, jsonify
 from models import *
-from datetime import datetime
+from datetime import datetime, date
 # newly added
 from sqlalchemy import and_ 
 import png
@@ -18,7 +18,7 @@ def addemployee():
     data = request.get_json()
     
     # birth_date = Strip the time!!!!!!!!
-    birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
+    birthdate = datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
                             birth_date=data['birthdate'],  gender=data['gender'],address=data['address'], employeestatus=1)
