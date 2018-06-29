@@ -1,4 +1,4 @@
-from api import app, dbase
+from api import app, dbase, generate_password_hash
 from flask import request, jsonify
 from models import *
 from datetime import datetime
@@ -16,12 +16,15 @@ def login():
 @app.route('/newEmployee', methods=['POST'])
 def addemployee():
     data = request.get_json()
-    #birth_date = Strip the time!!!!!!!!
+    
+    # birth_date = Strip the time!!!!!!!!
+    birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
-                            birth_date=data['birth_date'],  gender=data['gender'],address=data['address'], employeestatus=1)
+                            birth_date=data['birthdate'],  gender=data['gender'],address=data['address'], employeestatus=1)
+    
     #search for employee using QRCODE
-    employee = Employee.query.filter_by(code=data['code']).first()
+    employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
     if employee is None:
         dbase.session.add(new_employee)
         dbase.session.commit()
@@ -76,15 +79,15 @@ def ReActEmployee():
         return jsonify({'message': 'Employee is not found'})
 
 
-@app.route('/edit/<string:id>', methods=['POST'])
-def edit(id):
+@app.route('/edit/<string:user_id>', methods=['POST'])
+def edit(user_id):
     data = request.get_json()
-    employee = Employee.query.filter_by(code=id).first()
+    employee = Employee.query.filter_by(code=user_id).first()
     if employee is None:
         return jsonify({'message': 'user not found'})
     else:
         try:
-            #Check if the jsondata is empty, can be done here or front end
+            # Check if the jsondata is empty, can be done here or front end.
             if data['fname'] == '' or data['fname'] is None:
                 employee.fname = employee.fname
             else:

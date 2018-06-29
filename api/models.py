@@ -71,4 +71,3 @@ class Logs(dbase.Model):
     def __init__(self, details, log_date):
         self.details = details
         self.log_date = log_date
-
