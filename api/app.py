@@ -1,27 +1,52 @@
-from api import app, dbase, generate_password_hash
+from api import app, dbase, generate_password_hash, check_password_hash
 from flask import request, jsonify
 from models import *
-from datetime import datetime
+import datetime
 # newly added
+from flask_login import login_user, login_required, LoginManager, logout_user
+#pip install timedate, time
 from sqlalchemy import and_ 
 import png
 import pyqrcode
-# 
+from datetime import timedelta, date, datetime, time
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Admin.query.get(user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
+    data = request.get_json()
+    user = Admin.query.filter_by(username=data['username']).first()
+    if user is None:
+        return jsonify({'message': 'Invalid username or password'})
+    else:
+        if check_password_hash(user.password, data['password']):
+            login_user(user)
+            return jsonify({'message': 'Login Successful!'})
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'message': 'Logged out'})
+
 
 
 @app.route('/newEmployee', methods=['POST'])
+@login_required
 def addemployee():
     data = request.get_json()
     
     # birth_date = Strip the time!!!!!!!!
-    birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
+    birthdate = datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
-                            birth_date=data['birthdate'],  gender=data['gender'],address=data['address'], employeestatus=1)
+                            birth_date=data['birth_date'],  gender=data['gender'],address=data['address'], employeestatus=1)
     
     #search for employee using QRCODE
     employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
@@ -33,6 +58,7 @@ def addemployee():
         return jsonify({'message': 'Employee already created'})
 
 @app.route('/generate/qrcode', methods=['POST'])
+@login_required
 def genereate_code():
     data = request.get_json()
     qr = pyqrcode.create(data['code'])
@@ -41,6 +67,7 @@ def genereate_code():
 
 
 @app.route('/deactivate', methods=['GET', 'POST'])
+@login_required
 def delEmployee():
     
     data = request.get_json()
@@ -60,6 +87,7 @@ def delEmployee():
     	return jsonify({'message': 'Employee is not found'})
 
 @app.route('/activate', methods=['GET', 'POST'])
+@login_required
 def ReActEmployee():
     
     data = request.get_json()
@@ -80,6 +108,7 @@ def ReActEmployee():
 
 
 @app.route('/edit/<string:user_id>', methods=['POST'])
+@login_required
 def edit(user_id):
     data = request.get_json()
     employee = Employee.query.filter_by(code=user_id).first()
@@ -132,3 +161,41 @@ def edit(user_id):
             return jsonify({'message': 'Success!'})
         except:
             return jsonify({'message': 'edit failed'})
+
+@app.route('/TimeIn/<string:user_id>', methods=['POST'])
+@login_required
+def timein(user_id):
+
+    employee = Employee.query.filter_by(code=user_id).first()
+    if employee is None:
+        return jsonify({'message': 'user not found'})
+    else: 
+        # now = datetime.now().strftime("%m%d%Y%H%M")
+        # print str(now)
+        # now1 = datetime.now().strftime("%m%d%Y")
+        # # print str(now1)
+        # timein = "0900"
+        # # print str(now2)
+        # late = ''.join([now1, timein]) 
+        times = datetime.time(datetime.now())
+        timeins1 = "09:00:00"
+        # time2 = datetime.strptime('a','%H%M').time()
+        # print time
+        # print times 
+        # print late
+        timeins1 = datetime.datetime.strptime(timeins1, '%H:%M:%S')
+        timeins1 = datetime.time(timeins1.hour, timeins1.minute,timeins1.second)
+
+        tocompare = datetime.datetime.strptime(times, '%H:%M:%S')
+        tocompare = datetime.time(tocompare.hour, tocompare.minute, tocompare.second)
+
+        if tocompare < timeins1:
+            status1 = "not late"
+            return jsonify({'message': "not late"})
+        else:
+            status1 = "late"
+            return jsonify({'message': "late"})            
+        # EmployeeTimeIn = Attendance(lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus, employeeid)
+        # dbase.session.add(EmployeeTimeIn)
+        # dbase.session.commit()
+        # return jsonify({'message': now})

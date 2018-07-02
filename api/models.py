@@ -1,8 +1,9 @@
 from api import dbase, generate_password_hash
+from flask_login import UserMixin
 
-
-class Admin(dbase.Model):
+class Admin(UserMixin, dbase.Model):
     __tablename__ = 'admin'
+    Adminid = dbase.Column(dbase.Integer, primary_key=True)
     username = dbase.Column(dbase.String(50), nullable=False, primary_key=True)
     password = dbase.Column(dbase.String(100), nullable=False)
 
@@ -25,9 +26,10 @@ class Employee(dbase.Model):
     birth_date = dbase.Column(dbase.DATE, nullable=False)
     gender = dbase.Column(dbase.String(6), nullable=False)
     address = dbase.Column(dbase.String(50))
+    AttendanceId = dbase.Column(dbase.Integer, dbase.ForeignKey('attendance.AttendanceId'), nullable=True)
     attendance1 = dbase.relationship('Attendance', backref='employee', lazy=True)
 
-    def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus, address):
+    def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus, address, AttendanceId):
         self.employeestatus = employeestatus
         self.fname = fname
         self.mname = mname
@@ -39,20 +41,21 @@ class Employee(dbase.Model):
         self.birth_date = birth_date
         self.gender = gender
         self.address = address
-
+        self.AttendanceId = AttendanceId
 
 class Attendance(dbase.Model):
     __tablename__ = 'attendance'
-    id = dbase.Column(dbase.Integer, primary_key=True)
+    AttendanceId = dbase.Column(dbase.Integer, primary_key=True)
     employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey('employee.employeeid'))
     lateTotal = dbase.Column(dbase.Integer, default=0)
     absentTotal = dbase.Column(dbase.Integer, default=0)
     timeIn = dbase.Column(dbase.DateTime)
     timeOut = dbase.Column(dbase.DateTime)
     status = dbase.Column(dbase.Integer, default=0)
-    dailyStatus = dbase.Column(dbase.String(6))
+    dailyStatus = dbase.Column(dbase.String(8))
+    remark = dbase.Column(dbase.String(50))
 
-    def __init__(self, lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus, employeeid):
+    def __init__(self, lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus, employeeid, remark):
         self.lateTotal = lateTotal
         self.absentTotal = absentTotal
         self.timeIn = timeIn
@@ -60,6 +63,7 @@ class Attendance(dbase.Model):
         self.status = 0
         self.dailyStatus = dailyStatus
         self.employeeid = employeeid
+        self.ramark = remark
 
 
 class Logs(dbase.Model):
