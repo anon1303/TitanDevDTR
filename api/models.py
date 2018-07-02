@@ -3,7 +3,7 @@ from flask_login import UserMixin
 
 class Admin(UserMixin, dbase.Model):
     __tablename__ = 'admin'
-    Adminid = dbase.Column(dbase.Integer, primary_key=True)
+    id = dbase.Column(dbase.Integer, primary_key=True)
     username = dbase.Column(dbase.String(50), nullable=False, primary_key=True)
     password = dbase.Column(dbase.String(100), nullable=False)
 
@@ -14,7 +14,7 @@ class Admin(UserMixin, dbase.Model):
 
 class Employee(dbase.Model):
     __tablename__ = 'employee'
-    employeeid = dbase.Column(dbase.Integer, primary_key=True)
+    employeeid = dbase.Column(dbase.Integer, primary_key=True, autoincrement= True)
     employeestatus = dbase.Column(dbase.Integer, default=0)
     fname = dbase.Column(dbase.String(50))
     mname = dbase.Column(dbase.String(50))
@@ -26,10 +26,10 @@ class Employee(dbase.Model):
     birth_date = dbase.Column(dbase.DATE, nullable=False)
     gender = dbase.Column(dbase.String(6), nullable=False)
     address = dbase.Column(dbase.String(50))
-    AttendanceId = dbase.Column(dbase.Integer, dbase.ForeignKey('attendance.AttendanceId'), nullable=True)
+    # AttendanceId = dbase.Column(dbase.Integer, dbase.ForeignKey('attendance.AttendanceId'), autoincrement = True)
     attendance1 = dbase.relationship('Attendance', backref='employee', lazy=True)
 
-    def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus, address, AttendanceId):
+    def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus, address):
         self.employeestatus = employeestatus
         self.fname = fname
         self.mname = mname
@@ -41,7 +41,7 @@ class Employee(dbase.Model):
         self.birth_date = birth_date
         self.gender = gender
         self.address = address
-        self.AttendanceId = AttendanceId
+        # self.AttendanceId = AttendanceId
 
 class Attendance(dbase.Model):
     __tablename__ = 'attendance'
