@@ -1,7 +1,3 @@
-<?php
-	include("functions.php");
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,13 +51,6 @@
         </div>  
     </div>
 </div>
-
-<?php
-		if (isset($_POST['submit'])) {
-			$_SESSION['username']= $username;
-			submitLogin($_POST['username'], $_POST['password']);
-		}
-?>
 
 <div id="particles"></div>
 
