@@ -1,0 +1,36 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background: #000;
+}
+
+.bg {
+    /* The image used */
+    background-image: url("../img/titan_dev-02.png");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container{
+    position: relative;
+    bottom: 130px; 
+}
+
+.form-control{
+    text-align: center;
+}
+
+.time{
+    position: absolute;
+    top: 7%;   
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    color: #fff;
+    font-size: 80px;
+}
