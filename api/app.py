@@ -5,7 +5,7 @@ from models import *
 from flask_login import login_user, login_required, LoginManager, logout_user
 import datetime
 #pip install timedate, time
-from sqlalchemy import and_ 
+from sqlalchemy import and_, desc
 import png
 import pyqrcode
 from datetime import timedelta, date, datetime, time
@@ -44,16 +44,16 @@ def logout():
 # @login_required
 def newAdmin():
     data = request.get_json()
-    # new = Admin(username = data['username'], password = data['password'])
+    new = Admin(username = data['username'], password = data['password'])
     try:
         if data['username'] == '' or data['username'] is None:
-            admin.fname = admin.fname
+            new.fname = new.fname
         else:
-            admin.fname = data['username']
+            new.fname = data['username']
         if data['code'] == '':
-            admin.code = admin.code
+            new.code = new.code
         else:
-            admin.code = generate_password_hash(data['code'], method='sha256')
+            new.code = generate_password_hash(data['code'], method='sha256')
         dbase.session.commit()
         return jsonify({'message': 'successfull!'})
     except:
@@ -195,7 +195,7 @@ def timein(user_id):
     employee = Employee.query.filter_by(code=user_id).first()
     print employee
     empID = employee.employeeid
-    atts = Attendance.query.filter_by(employeeid =  empID).first()
+    atts = Attendance.query.filter_by(employeeid=empID).order_by(Attendance.timeIn.desc()).first()
     attsID = atts.status
     print atts
     print attsID
@@ -207,27 +207,16 @@ def timein(user_id):
         now1 = datetime.now().strftime("%m%d%Y")
         # # print str(now1)
         morninglate = "0900"
-        aftelate = "1305"
         morningIN1 = "0700"
         morningIN2 = "1159"
         morningOUT1 = "0901"
         morningOUT2 = "1259"
+        
+        aftelate = "1305"
         afteIN1 = "1201"
         afteIN2 = "1759"
         afteOUT1 = "1301"
         afteOUT2 = "1900"        
-        # MORNING
-        #     Timein  -   7:00AM to 11:59AM
-        #     Timeout -   9:01AM to 12:59PM
-
-
-        # AFTERNOON
-        #     Timein  -   12:01PM to 5:59PM
-        #     Timeout -   1:01PM to 7:00PM
-
-        # OVERTIME
-        #     Timein  -   6:01 to 9:59PM
-        #     Timeout -   7:01 to 10:00PM (AUTOMATIC OUT by 10:00PM)
 
         morningTimeIn1 = ''.join([now1, morningIN1])
         morningTimeIn2 = ''.join([now1, morningIN2])
@@ -240,87 +229,7 @@ def timein(user_id):
         lateafte = ''.join([now1, aftelate])
         latemorning = ''.join([now1, morninglate]) 
         times = datetime.time(datetime.now())
-        # timeins1 = "9:00:00"
-        # print time
-        # print times 
-        # print late
-        status1 = ""
-        if now < morningTimeIn1 and now > morningTimeIn2:
-            # 1 for timein and 
-            # 0 for timeout
-            if now < latemorning:
-                if attsID == 0:
-                    status = 1
-                    status1 = "not late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-            else:
-                
-                if attsID == 0:
-                    status = 1
-                    status1 = "late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-        elif now > morningTimeOut1 and now < morningTimeOut2   :
-            if now < latemorning:
-                if attsID == 0:
-                    status = 1
-                    status1 = "not late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-            else:
-                
-                if attsID == 0:
-                    status = 1
-                    status1 = "late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-        elif now > afteIn1 and now < afteIn2  :
-            if now < lateafte:
-                if attsID == 0:
-                    status = 1
-                    status1 = "not late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-            else:
-                
-                if attsID == 0:
-                    status = 1
-                    status1 = "late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-        elif now > afteOu1 and now < afteOut2  :
-            if now < lateafte:
-                if attsID == 0:
-                    status = 1
-                    status1 = "not late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-            else:
-                
-                if attsID == 0:
-                    status = 1
-                    status1 = "late"
-                else:
-                    status = 0
-                    status1 = "timeOut"
-                return jsonify({'message': status1})
-            print "dasdasd"
-            print status1
+
         # EmployeeTimeIn = Attendance(lateTotal, absentTotal, timeIn=now, timeOut, status, dailyStatus, employeeid)
         # dbase.session.add(EmployeeTimeIn)
         # dbase.session.commit()
