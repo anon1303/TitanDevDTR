@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Sign Out</title>
+		<title>Sign In</title>
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,24 +11,26 @@
 		<script type="text/javascript" src="js/bootstrap.min.js">
 		</script>
 
-		<link rel="stylesheet" type="text/css" href="css/sign-out.css">
-
-		<script type="text/javascript" src="js/time.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/login.css">
 	</head>
-	<body onload="startTime()">
-
-		<div id="time" class="time"></div>
+	<body>
 
 		<div class="bg"></div>
 
 		<div class="container">
 			<form>
 				<div class="form-group">
-					<input type="text" class="form-control" id="code" name="code" placeholder="Enter ID Code">
+					<input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+
+					<br>
+
+					<input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+
+					<br>
+
+					<button type="submit" class="btn btn-primary btn-block">Submit</button>
 				</div>
-				<button type="submit" class="btn btn-primary btn-block">Submit</button>
 			</form>
 		</div>
-
 	</body>
 </html>
