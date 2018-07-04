@@ -1,4 +1,4 @@
-from api import app, dbase, generate_password_hash
+from api import app, dbase, generate_password_hash, cross_origin
 from flask import request, jsonify
 from models import *
 from datetime import datetime, date
@@ -9,11 +9,13 @@ import pyqrcode
 # 
 
 @app.route('/login', methods=['GET', 'POST'])
+@cross_origin('*')
 def login():
     pass
 
 
 @app.route('/newEmployee', methods=['POST'])
+@cross_origin('*')
 def addemployee():
     data = request.get_json()
     
@@ -33,6 +35,7 @@ def addemployee():
         return jsonify({'message': 'Employee already created'})
 
 @app.route('/generate/qrcode', methods=['POST'])
+@cross_origin('*')
 def genereate_code():
     data = request.get_json()
     qr = pyqrcode.create(data['code'])
@@ -41,6 +44,7 @@ def genereate_code():
 
 
 @app.route('/deactivate', methods=['GET', 'POST'])
+@cross_origin('*')
 def delEmployee():
     
     data = request.get_json()
@@ -60,6 +64,7 @@ def delEmployee():
     	return jsonify({'message': 'Employee is not found'})
 
 @app.route('/activate', methods=['GET', 'POST'])
+@cross_origin('*')
 def ReActEmployee():
     
     data = request.get_json()
@@ -80,6 +85,7 @@ def ReActEmployee():
 
 
 @app.route('/edit/<string:user_id>', methods=['POST'])
+@cross_origin('*')
 def edit(user_id):
     data = request.get_json()
     employee = Employee.query.filter_by(code=user_id).first()
