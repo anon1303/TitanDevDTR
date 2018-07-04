@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
-from flask_cors import CORS, cross_domain
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 dbase = SQLAlchemy(app)
