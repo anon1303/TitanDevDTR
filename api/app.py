@@ -60,7 +60,7 @@ def login():
 
 
 @app.route('/newEmployee', methods=['POST'])
-@cross_origin(allow_headers=['Content-Type'])
+@crossdomain(origin='*')
 def addemployee():
     data = request.get_json()
     
