@@ -15,7 +15,7 @@ def login():
 
 
 @app.route('/newEmployee', methods=['POST'])
-@cross_origin('*')
+@cross_origin(allow_headers=['Content-Type'])
 def addemployee():
     data = request.get_json()
     
