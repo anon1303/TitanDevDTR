@@ -20,10 +20,10 @@ def addemployee():
     data = request.get_json()
     
     # birth_date = Strip the time!!!!!!!!
-    birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
+    # birthdate = datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
-                            birth_date= birthdate,  gender=data['gender'],address=data['address'], employeestatus=1)
+                            birth_date= data['birth_date'],  gender=data['gender'],address=data['address'], employeestatus=1)
     
     #search for employee using QRCODE
     employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
