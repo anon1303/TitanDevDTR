@@ -9,13 +9,13 @@ import pyqrcode
 # 
 
 @app.route('/login', methods=['GET', 'POST'])
-@cross_origin()
+@cross_origin('*')
 def login():
     pass
 
 
 @app.route('/newEmployee', methods=['POST'])
-@cross_origin()
+@cross_origin('*')
 def addemployee():
     data = request.get_json()
     
