@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>Sign In</title>
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-		<script type="text/javascript" src="js/jquery.min.js">
-		</script>
-		<script type="text/javascript" src="js/bootstrap.min.js">
-		</script>
+	
 
 		<link rel="stylesheet" type="text/css" href="css/login.css">
 	</head>
@@ -28,9 +25,51 @@
 
 					<br>
 
-					<button type="submit" class="btn btn-primary btn-block">Submit</button>
+					<button type="button" class="btn btn-primary btn-block" onclick="login()"> Login </button>
+					<button type="button" class="btn btn-primary btn-block" onclick="window.location.href='register.html'">Register</button>
 				</div>
 			</form>
 		</div>
+		<script type="text/javascript">              
+
+			function login(){
+			    var username = $("#username").val();
+			    var password = $("#password").val();
+			       $.ajax({
+			           async: true, 
+			           url: "https://mighty-cove-44634.herokuapp.com/login",
+			           contentType: 'application/json; charset=utf-8',
+			           data: JSON.stringify({
+			               'username': username,
+			               'password': password
+			           }),
+			           type: "POST",
+			           dataType: "json",
+			           crossDomain: true,
+			           headers: {
+			               'Authorization' : 'Basic ' + btoa(username + ':' + password)
+			           },
+
+			        error: function (data) {
+			          	console.log(data)
+			        },
+
+			        success: function (data)  {
+				           alert(username+ " logged innnnnnnn")
+				           localStorage.setItem('token', data.token);
+				           localStorage.setItem('username', username);
+				           window.location.assign('pages/attendance.html');
+			        },
+			    });
+			}
+
+		</script>
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
 	</body>
 </html>
