@@ -42,7 +42,7 @@
                     </div> 
 
                     <div class="panel-body" >
-                        <form>
+                        
                             <div class="form-group">
                                 <label for="fname">First Name:</label>
                                     <input type="text" name="fname" class="form-control" id="fname"><br><br>
@@ -67,49 +67,51 @@
                                     <input type="text" name="address" class="form-control" id="address"><br><br>  
                             </div>
                             <button type="submit" class="btn btn-default" onclick="submit();">Submit</button>
-                        </form>
+                        
                     </div>
                 </div>
             </div>
         </div>
 
-            <script type="text/javascript">
-                function submit(){
+ <script type="text/javascript">              
+function submit(){
+    $.ajax({
+        url: "https://mighty-cove-44634.herokuapp.com/newEmployee",
+        // url: "http://127.0.0.1:5050/newEmployee",
 
-                    var server_url = "https://mighty-cove-44634.herokuapp.com/newEmployee";
-               
-                    $.ajax({
-                      type:"POST",
-                      url: server_url,
-                      dataType: "json",
+        contentType: 'application/json; charset=utf-8',
+        method:  'POST',
+        dataType: 'json',
+        crossDomain: true,
+        data: JSON.stringify({
+        'fname':$('#fname').val(),
+        'mname':$('#mname').val(),
+        'lname':$('#lname').val(), 
+        'position':$('#position').val(),
+        'code':$('#code').val(), 
+        'contact':$('#contact_no').val(),
+        'email':$('#email').val(),
+        'birth_date':$('#birth_date').val(),
+        'gender':$('#gender').val(),
+        'address':$('#address').val()
+    }),
 
-                      data: JSON.stringify({'fname':$('#fname').val,
-                       'mname':$('#mname').val, 'lname':$('#lname').val, 
-                        'position':$('#position').val,'code':$('#code').val, 
-                        'contact':$('#contact_no').val, 'email':$('email').val,
-                        'birth_date':$('birth_date').val, 'gender':$('gender').val,
-                        'address':$('address').val}),
+      success: function(){
+        alert("Successfully Added!")
+            window.open('attendance.html','_self');
+        },   
+      error: function () {
+        alert("Failed to Add!")
+      }
 
-                      success: function(){
-                        alert("Successfully Added!")
-                            window.open('attendance.html','_self');
-                        },   
-                      error: function () {
-                        alert("Failed to Add!")
-                      }
-     
-                    });
-                };
-
-
-
-             
-        </script>
+    });
+}
+ </script>
     <!-- /#wrapper -->
 
     <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
-
+    <script src="../vendor/jquery/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 
