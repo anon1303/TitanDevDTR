@@ -2,10 +2,14 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_cors import CORS, cross_origin
+
 
 
 app = Flask(__name__)
 dbase = SQLAlchemy(app)
+CORS(app, support_credentials=True)
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/dtr'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

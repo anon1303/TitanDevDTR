@@ -49,30 +49,30 @@ class Attendance(dbase.Model):
     absentTotal = dbase.Column(dbase.Integer, default=0)
     morningTimeIn = dbase.Column(dbase.DateTime)
     morningTimeOut = dbase.Column(dbase.DateTime)
+    morningStatus = dbase.Column(dbase.Integer, default=0, nullable =False)
+    morningDailyStatus = dbase.Column(dbase.String(8))
+    morningRemark = dbase.Column(dbase.String(50))
     afterTimeIn = dbase.Column(dbase.DateTime)
     afterTimeOut = dbase.Column(dbase.DateTime)
-    morningStatus = dbase.Column(dbase.Integer, default=0)
-    afterStatus = dbase.Column(dbase.Integer, default=0)
-    morningDailyStatus = dbase.Column(dbase.String(8))
+    afterStatus = dbase.Column(dbase.Integer, default=0, nullable = False)
     afterDailyStatus = dbase.Column(dbase.String(8)) 
-    morningRemark = dbase.Column(dbase.String(50))
     afterRemamrk = dbase.Column(dbase.String(50))
+    date = dbase.Column(dbase.String(15))
 
-    def __init__(self, lateTotal, absentTotal, employeeid, morningRemark, afterRemamrk, morningTimeIn, morningTimeOut,
-                    afterTimeIn, afterTimeOut, morningStatus, afterStatus, morningDailyStatus, afterDailyStatus):
-        self.lateTotal = lateTotal
-        self.absentTotal = absentTotal
+    def __init__(self, employeeid):
+        # self.lateTotal = lateTotal
+        # self.absentTotal = absentTotal
         self.employeeid = employeeid
-        self.morningRemark = morningRemark
-        self.afterRemamrk = afterRemamrk
-        self.morningTimeIn = morningTimeIn
-        self.morningTimeOut = morningTimeOut
-        self.afterTimeIn = afterTimeIn
-        self.afterTimeOut = afterTimeOut
-        self.morningStatus = morningStatus
-        self.afterStatus = afterStatus
-        self.morningDailyStatus = morningDailyStatus
-        self.afterDailyStatus = afterDailyStatus
+        # self.morningRemark = morningRemark
+        # self.afterRemamrk = afterRemamrk
+        # self.morningTimeIn = morningTimeIn
+        # self.morningTimeOut = morningTimeOut
+        # self.afterTimeIn = afterTimeIn
+        # self.afterTimeOut = afterTimeOut
+        # self.morningStatus = morningStatus
+        # self.afterStatus = afterStatus
+        # self.morningDailyStatus = morningDailyStatus
+        # self.afterDailyStatus = afterDailyStatus
 
 
 class Logs(dbase.Model):

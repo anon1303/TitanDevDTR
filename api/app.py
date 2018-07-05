@@ -1,4 +1,4 @@
-from api import app, dbase, generate_password_hash, check_password_hash
+from api import app, dbase, generate_password_hash, cross_origin, CORS, check_password_hash
 from flask import request, jsonify
 from models import *
 # newly added
@@ -9,6 +9,9 @@ from sqlalchemy import and_, desc
 import png
 import pyqrcode
 from datetime import timedelta, date, datetime, time
+
+# TIME AND DATE FORMAT
+
 
 
 login_manager = LoginManager()
@@ -62,14 +65,15 @@ def newAdmin():
 
 @app.route('/newEmployee', methods=['POST'])
 # @login_required
+@cross_origin(allow_headers=['Content-Type'])
 def addemployee():
     data = request.get_json()
     
     # birth_date = Strip the time!!!!!!!!
-    birthdate = datetime.strptime(data['birth_date'], '%Y-%M-%d')
+    # birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
-                            birth_date=data['birth_date'],  gender=data['gender'],address=data['address'], employeestatus=1)
+                            birth_date=data['birth_date'],  gender=data['gender'], address=data['address'], employeestatus=1)
     
     #search for employee using QRCODE
     employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
@@ -191,45 +195,475 @@ def edit(user_id):
 
 @app.route('/TimeIn/<string:user_id>', methods=['POST'])
 def timein(user_id):
+    now = datetime.now().strftime("%m%d%Y%H%M")
+    datenow = datetime.now().strftime("%m%d%Y")
+    datenow1 = datetime.now().strftime("%m%d%Y")
+    now1 = datetime.now().strftime("%m%d%Y")
+    print now
+    morning7 = "0700"
+    morning9 = "0900"
+    morning12 = "1200"
+
+    afte1 = "1300"
+    afte6 = "1800"
+    afte7= "1900"
+        
+
+    m7 = ''.join([now1, morning7])
+    m9 = ''.join([now1, morning9])
+    m12 = ''.join([now1, morning12])
+    
+    a1 = ''.join([now1, afte1])
+    a6 = ''.join([now1, afte6])
+    a7 = ''.join([now1, afte7]) 
+
+    # 1 for active and 0 for inactive
 
     employee = Employee.query.filter_by(code=user_id).first()
-    print employee
-    empID = employee.employeeid
-    atts = Attendance.query.filter_by(employeeid=empID).order_by(Attendance.timeIn.desc()).first()
-    attsID = atts.status
-    print atts
-    print attsID
+    
     if employee is None:
         return jsonify({'message': 'user not found'})
-    else: 
-        now = datetime.now().strftime("%m%d%Y%H%M")
-        # print str(now)
-        now1 = datetime.now().strftime("%m%d%Y")
-        # # print str(now1)
-        morninglate = "0900"
-        morningIN1 = "0700"
-        morningIN2 = "1159"
-        morningOUT1 = "0901"
-        morningOUT2 = "1259"
-        
-        aftelate = "1305"
-        afteIN1 = "1201"
-        afteIN2 = "1759"
-        afteOUT1 = "1301"
-        afteOUT2 = "1900"        
+    else:    
+        empID = employee.employeeid
+        attendancenNew = Attendance(employeeid = empID)
+        atts = Attendance.query.filter_by(employeeid=empID).first()
+        print empID
+        print atts  
+        if atts is None:
+            dbase.session.add(attendancenNew)
+            dbase.session.commit()
+            atts = Attendance.query.filter_by(employeeid=empID).first()
+            atts.date = datenow
+            dbase.session.commit()
+            
+            if now >= m7 and now <= m9:
+                if atts.morningStatus == 0 and atts.afterStatus == 0:
+                    atts.morningStatus = 1
+                    atts.morningTimeIn = datetime.now()
+                    atts.morningDailyStatus = 'not late'
+                    print "dsjahsfdfkjdslafsjjkj"
+                    dbase.session.commit()
+                    return jsonify({'message': 'not late'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                    print 'aaaaaaaaa'
+                    return jsonify({'message':'no time out at this time'})
+                elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.morningStatus = 1
+                    atts.afterTimeOut = datetime.now()
+                    atts.morningTimeIn = datetime.now()
+                    atts.morningDailyStatus = 'not late'
+                    dbase.session.commit()
+                    return jsonify({'message':'not late, kindly dont forget to timeout in morning'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.afterTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'no time out at this time'})
 
-        morningTimeIn1 = ''.join([now1, morningIN1])
-        morningTimeIn2 = ''.join([now1, morningIN2])
-        morningTimeOut1 = ''.join([now1, morningOUT1])
-        morningTimeOut2 = ''.join([now1, morningOUT2])
-        afteIn1 = ''.join([now1, afteIN1])
-        afteIn2 = ''.join([now1, afteIN2])
-        afteOut1 = ''.join([now1, afteOUT1])
-        afteOut2 = ''.join([now1, afteOUT2])
-        lateafte = ''.join([now1, aftelate])
-        latemorning = ''.join([now1, morninglate]) 
-        times = datetime.time(datetime.now())
+            elif now > m9 and now <= m12:
+                if atts.morningStatus == 0 and atts.afterStatus == 0:
+                    atts.morningStatus = 1
+                    atts.lateTotal = atts.lateTotal + 1
+                    atts.morningDailyStatus = 'late'
+                    atts.morningTimeIn = datetime.now()
+                    # atts.morningRemark = wala pa nabutang
+                    print 'bbbbbbbbbbbb' 
+                    dbase.session.commit()
+                    return jsonify({'message': 'late'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                    atts.morningStatus = 0
+                    atts.morningTimeOut = datetime.now()
+                    # atts.morningRemark = wala pa nabutang
+                    print 'cccccccccccc'
+                    dbase.session.commit()
+                    return jsonify({'message': 'time out'})
+                elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.morningStatus = 1
+                    atts.afterTimeOut = datetime.now()
+                    atts.morningTimeIn = datetime.now()
+                    atts.morningDailyStatus = 'late'
+                    # atts.morningRemark = wala pa nabutang
+                    dbase.session.commit()
+                    return jsonify({'message':'late, kindly dont forget to timeout in morning'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.morningStatus = 0
+                    atts.afterTimeOut = datetime.now()
+                    atts.morningTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'time out'})
 
-        # EmployeeTimeIn = Attendance(lateTotal, absentTotal, timeIn=now, timeOut, status, dailyStatus, employeeid)
-        # dbase.session.add(EmployeeTimeIn)
-        # dbase.session.commit()
+            elif now > m12 and now <= a1: # 12 -7pm
+                if atts.morningStatus == 0 and atts.afterStatus == 0:
+                    atts.afterStatus = 1
+                    atts.afterDailyStatus = 'not late'
+                    atts.afterTimeIn = datetime.now()
+                    # atts.morningRemark = wala pa nabutang
+                    print 'ddddddddddddd' 
+                    dbase.session.commit()
+                    return jsonify({'message': 'time in for afternoon'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                    atts.morningStatus = 0
+                    atts.morningTimeOut = datetime.now()
+                    # atts.morningRemark = wala pa nabutang
+                    print 'eeeeeeeeeeeeeeee'
+                    dbase.session.commit()
+                    return jsonify({'message': 'time out for morning'})
+                elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                    return jsonify({'message':'no time out for afternoon at this time'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                    atts.morningStatus = 0
+                    atts.morningTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'no time out for afternoon at this time'})
+            elif now > a1 and now <= a6:
+                if atts.morningStatus == 0 and atts.afterStatus == 0:
+                    atts.afterStatus = 1
+                    atts.lateTotal = atts.lateTotal + 1
+                    atts.afterDailyStatus = 'late'
+                    atts.afterTimeIn = datetime.now()
+                    # atts.morningRemark = wala pa nabutang
+                    print 'fffffffffffff' 
+                    dbase.session.commit()
+                    return jsonify({'message': 'late'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                    atts.morningStatus = 0
+                    atts.afterStatus = 1
+                    atts.morningTimeOut = datetime.now()
+                    atts.lateTotal = atts.lateTotal + 1
+                    atts.afterDailyStatus = 'late'
+                    atts.afterTimeIn = datetime.now()
+                    # atts.morningRemark = wala pa nabutang
+                    print 'ggggggggggggg'
+                    dbase.session.commit()
+                    return jsonify({'message': 'time out'})
+                elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.afterTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'time out'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.morningStatus = 0
+                    atts.afterTimeOut = datetime.now()
+                    atts.morningTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'time out'})
+            elif now > a6 and now <= a7:
+                if atts.morningStatus == 0 and atts.afterStatus == 0:
+                    return jsonify({'message':'no time in for this time'})
+
+                elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                    atts.morningStatus = 0
+                    atts.morningTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'time out for morning'})
+
+                elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                    atts.afterStatus = 0
+                    atts.afterTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'time out for afternoon'})
+                elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                    atts.morningStatus = 0
+                    atts.afterStatus = 0
+                    atts.morningTimeOut = datetime.now()
+                    atts.afterTimeOut = datetime.now()
+                    dbase.session.commit()
+                    return jsonify({'message':'time out for afternoon and morning'})
+            else:
+                print datenow
+                return jsonify({'message':'OT napud siya'})
+
+        elif atts:
+
+            atts = Attendance.query.filter_by(employeeid=empID).first()
+            date1 = atts.date
+            if date1 == datenow1:
+    
+                if now >= m7 and now <= m9:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.morningStatus = 1
+                        atts.morningTimeIn = datetime.now()
+                        atts.morningDailyStatus = 'not late'
+                        print "dsjahsfdfkjdslafsjjkj"
+                        dbase.session.commit()
+                        return jsonify({'message': 'not late'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        print 'aaaaaaaaa'
+                        return jsonify({'message':'no time out at this time'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 1
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeIn = datetime.now()
+                        atts.morningDailyStatus = 'not late'
+                        dbase.session.commit()
+                        return jsonify({'message':'not late, kindly dont forget to timeout in morning'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'no time out at this time'})
+
+                elif now > m9 and now <= m12:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.morningStatus = 1
+                        atts.lateTotal = atts.lateTotal + 1
+                        atts.morningDailyStatus = 'late'
+                        atts.morningTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'bbbbbbbbbbbb' 
+                        dbase.session.commit()
+                        return jsonify({'message': 'late'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'cccccccccccc'
+                        dbase.session.commit()
+                        return jsonify({'message': 'time out'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 1
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeIn = datetime.now()
+                        atts.morningDailyStatus = 'late'
+                        # atts.morningRemark = wala pa nabutang
+                        dbase.session.commit()
+                        return jsonify({'message':'late, kindly dont forget to timeout in morning'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out'})
+
+                elif now > m12 and now <= a1: # 12 -7pm
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.afterStatus = 1
+                        atts.afterDailyStatus = 'not late'
+                        atts.afterTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'ddddddddddddd' 
+                        dbase.session.commit()
+                        return jsonify({'message': 'time in for afternoon'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'eeeeeeeeeeeeeeee'
+                        dbase.session.commit()
+                        return jsonify({'message': 'time out for morning'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        return jsonify({'message':'no time out for afternoon at this time'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'no time out for afternoon at this time'})
+                elif now > a1 and now <= a6:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.afterStatus = 1
+                        atts.lateTotal = atts.lateTotal + 1
+                        atts.afterDailyStatus = 'late'
+                        atts.afterTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'fffffffffffff' 
+                        dbase.session.commit()
+                        return jsonify({'message': 'late'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.afterStatus = 1
+                        atts.morningTimeOut = datetime.now()
+                        atts.lateTotal = atts.lateTotal + 1
+                        atts.afterDailyStatus = 'late'
+                        atts.afterTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'ggggggggggggg'
+                        dbase.session.commit()
+                        return jsonify({'message': 'time out'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out'})
+                elif now > a6 and now <= a7:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        return jsonify({'message':'no time in for this time'})
+
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out for morning'})
+
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out for afternoon'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.morningStatus = 0
+                        atts.afterStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out for afternoon and morning'})
+                else:
+                    return jsonify({'message':'OT napud siya'})
+            else:
+                dbase.session.add(attendancenNew)
+                dbase.session.commit()
+                atts = Attendance.query.filter_by(employeeid=empID).first()
+                atts.date = datenow
+                dbase.session.commit()
+                if now >= m7 and now <= m9:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.morningStatus = 1
+                        atts.morningTimeIn = datetime.now()
+                        atts.morningDailyStatus = 'not late'
+                        print "dsjahsfdfkjdslafsjjkj"
+                        dbase.session.commit()
+                        return jsonify({'message': 'not late'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        print 'aaaaaaaaa'
+                        return jsonify({'message':'no time out at this time'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 1
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeIn = datetime.now()
+                        atts.morningDailyStatus = 'not late'
+                        dbase.session.commit()
+                        return jsonify({'message':'not late, kindly dont forget to timeout in morning'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'no time out at this time'})
+
+                elif now > m9 and now <= m12:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.morningStatus = 1
+                        atts.lateTotal = atts.lateTotal + 1
+                        atts.morningDailyStatus = 'late'
+                        atts.morningTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'bbbbbbbbbbbb' 
+                        dbase.session.commit()
+                        return jsonify({'message': 'late'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'cccccccccccc'
+                        dbase.session.commit()
+                        return jsonify({'message': 'time out'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 1
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeIn = datetime.now()
+                        atts.morningDailyStatus = 'late'
+                        # atts.morningRemark = wala pa nabutang
+                        dbase.session.commit()
+                        return jsonify({'message':'late, kindly dont forget to timeout in morning'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out'})
+
+                elif now > m12 and now <= a1: # 12 -7pm
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.afterStatus = 1
+                        atts.afterDailyStatus = 'not late'
+                        atts.afterTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'ddddddddddddd' 
+                        dbase.session.commit()
+                        return jsonify({'message': 'time in for afternoon'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'eeeeeeeeeeeeeeee'
+                        dbase.session.commit()
+                        return jsonify({'message': 'time out for morning'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        return jsonify({'message':'no time out for afternoon at this time'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'no time out for afternoon at this time'})
+                elif now > a1 and now <= a6:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        atts.afterStatus = 1
+                        atts.lateTotal = atts.lateTotal + 1
+                        atts.afterDailyStatus = 'late'
+                        atts.afterTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'fffffffffffff' 
+                        dbase.session.commit()
+                        return jsonify({'message': 'late'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.afterStatus = 1
+                        atts.morningTimeOut = datetime.now()
+                        atts.lateTotal = atts.lateTotal + 1
+                        atts.afterDailyStatus = 'late'
+                        atts.afterTimeIn = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
+                        print 'ggggggggggggg'
+                        dbase.session.commit()
+                        return jsonify({'message': 'time out'})
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.morningStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out'})
+                elif now > a6 and now <= a7:
+                    if atts.morningStatus == 0 and atts.afterStatus == 0:
+                        return jsonify({'message':'no time in for this time'})
+
+                    elif atts.morningStatus == 1 and atts.afterStatus == 0:
+                        atts.morningStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out for morning'})
+
+                    elif atts.morningStatus == 0 and atts.afterStatus == 1:
+                        atts.afterStatus = 0
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out for afternoon'})
+                    elif atts.morningStatus == 1 and atts.afterStatus == 1:
+                        atts.morningStatus = 0
+                        atts.afterStatus = 0
+                        atts.morningTimeOut = datetime.now()
+                        atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
+                        return jsonify({'message':'time out for afternoon and morning'})
+                else:
+                    return jsonify({'message':'OT napud siya'})
