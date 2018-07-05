@@ -7,16 +7,15 @@ from sqlalchemy import and_
 import png
 import pyqrcode
 # 
-CORS(app, support_credentials=True)
 
 @app.route('/login', methods=['GET', 'POST'])
-@cross_origin('*')
+@cross_origin()
 def login():
     pass
 
 
 @app.route('/newEmployee', methods=['POST'])
-@cross_origin(supports_credentials=True)
+@cross_origin()
 def addemployee():
     data = request.get_json()
     
