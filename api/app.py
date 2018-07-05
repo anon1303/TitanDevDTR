@@ -1,4 +1,4 @@
-from api import app, dbase, generate_password_hash, cross_origin
+from api import app, dbase, generate_password_hash, cross_origin, CORS
 from flask import request, jsonify
 from models import *
 from datetime import datetime, date
@@ -7,6 +7,7 @@ from sqlalchemy import and_
 import png
 import pyqrcode
 # 
+CORS(app, support_credentials=True)
 
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin('*')
@@ -15,7 +16,7 @@ def login():
 
 
 @app.route('/newEmployee', methods=['POST'])
-@cross_origin(allow_headers=['Content-Type'])
+@cross_origin(supports_credentials=True)
 def addemployee():
     data = request.get_json()
     
