@@ -19,7 +19,7 @@ def login():
 @cross_origin(allow_headers=['Content-Type'])
 def addemployee():
     data = request.get_json()
-    
+    now = datetime.now().strftime("%m%d%Y%H%M")
     # birth_date = Strip the time!!!!!!!!
     # birthdate = datetime.datetime.strptime(data['birth_date'], '%Y-%M-%d')
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
@@ -30,6 +30,7 @@ def addemployee():
     employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
     print generate_password_hash(data['code'], method='sha256')
     if employee is None:
+        print now
         dbase.session.add(new_employee)
         dbase.session.commit()
         return jsonify({'message': 'New employee created!'})
