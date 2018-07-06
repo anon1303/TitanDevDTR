@@ -20,7 +20,7 @@ class Employee(dbase.Model):
     mname = dbase.Column(dbase.String(50))
     lname = dbase.Column(dbase.String(50))
     position = dbase.Column(dbase.String(30))
-    code = dbase.Column(dbase.String(100))
+    code = dbase.Column(dbase.String(100), unique = True)
     contact = dbase.Column(dbase.String(15))
     email = dbase.Column(dbase.String(30))
     birth_date = dbase.Column(dbase.DATE, nullable=False)
@@ -34,10 +34,10 @@ class Employee(dbase.Model):
         self.mname = mname
         self.lname = lname
         self.position = position
-        self.code = generate_password_hash(code, method='sha256')
+        self.code = code
         self.contact = contact
         self.email = email
-        self.birth_date = birth_date
+        self.birth_date = str(birth_date)
         self.gender = gender
         self.address = address
 
@@ -56,7 +56,7 @@ class Attendance(dbase.Model):
     afterTimeOut = dbase.Column(dbase.DateTime)
     afterStatus = dbase.Column(dbase.Integer, default=0, nullable = False)
     afterDailyStatus = dbase.Column(dbase.String(8)) 
-    afterRemamrk = dbase.Column(dbase.String(50))
+    afterRemark = dbase.Column(dbase.String(50))
     date = dbase.Column(dbase.String(15))
 
     def __init__(self, employeeid):
