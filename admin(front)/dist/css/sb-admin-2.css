@@ -434,51 +434,6 @@ table.dataTable thead .sorting:after {
   }
 }
 
-p>button{
-  position: relative;
-  left: 900px;
-}
-
-.topnav {
-    overflow: hidden;
-}
-
-input[type=text] {
-  padding: 6px;
-  margin-top: 8px;
-  font-size: 17px;
-  float: right;
-  border-radius: 5px;
-}
-
-button {
-  float: right;
-  padding: 6px;
-  margin-top: 8px;
-  background: #ddd;
-  font-size: 17px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.topnav .search-container button:hover {
-  background: #ccc;
-}
-
-@media screen and (max-width: 600px) {
-  .topnav .search-container {
-    float: none;
-  }
-  .topnav a, .topnav input[type=text], .topnav .search-container button {
-    float: none;
-    display: block;
-    text-align: left;
-    width: 100%;
-    margin: 0;
-    padding: 14px;
-  }
-  .topnav input[type=text] {
-    border: 1px solid #ccc;  
-  }
+.panel-heading > a{
+  float: left;
 }

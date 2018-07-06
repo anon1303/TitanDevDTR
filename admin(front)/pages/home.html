@@ -17,12 +17,6 @@
     <!-- MetisMenu CSS -->
     <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
-    <!-- DataTables CSS -->
-    <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-
-    <!-- DataTables Responsive CSS -->
-    <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
-
     <!-- Custom CSS -->
     <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
 
@@ -55,10 +49,21 @@
             </div>
             <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
+                        <ul class="nav navbar-top-links navbar-right">
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                        <a href="../logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="../loout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
                     <!-- /.dropdown-user -->
                 </li>
                 <!-- /.dropdown -->
@@ -68,11 +73,22 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-table fa-fw"></i> Attendance</a>
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="employees.html"><i class="fa fa-user fa-fw"></i> Employees</a>
+                            <a href="attendance.html" onclick="employeeAttendance()"><i class="fa fa-table fa-fw"></i> Attendance</a>
+                        </li>
+                        <li>
+                            <a href="employee.html"><i class="fa fa-user fa-fw"></i> Employees</a>
                         </li>
                     </ul>
                 </div>
@@ -82,67 +98,21 @@
         </nav>
 
         <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Attendace</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <p>
-                                <button type="button" id="employeeButton" class="btn btn-outline btn-success btn-sm" onclick="employeeAttendance()"><span class="glyphicon glyphicon-refresh"></span> Reload Attendance</button>
-                            </p>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="#name"></td>
-                                        <td id="#position"></td>
-                                        <td><a href="view.html">View</a></td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-6 -->
-            </div>
-            <!-- /.row -->
-        </div>
-        <!-- /#page-wrapper -->
-
+            <img src="../img/titan_dev-02.png" width="100%" height="100%">
+        </div>         
     </div>
     <!-- /#wrapper -->
 
-    <!-- JAVASCRIPT -->
+    <!-- Javascript -->
     <script type="text/javascript">
         function employeeAttendance(){
-
               $.ajax({
-                  url: "https://mighty-cove-44634.herokuapp.com/view/",
+                  url: "https://mighty-cove-44634.herokuapp.com/employee",
                   type: "GET",
                   contentType: 'application/json; charset=utf-8',
                   dataType: "json",
                     
                   success: function(data){
-                    alert(data.user.username)
-                    // user info in userprofile.html
                     $("#name").html('');
                     $("#name").append('<h1>'+data.user.fname+' '+data.user.mname+' '+data.user.lname+'</h1>');
                     $("#position").html('');
@@ -150,14 +120,14 @@
                   },
                   
                   error: function(data){
-                      alert("error");
+                      alert("empty");
                   }
              });
         }
     </script>
-
     <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/jquery/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -165,22 +135,8 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../vendor/metisMenu/metisMenu.min.js"></script>
 
-    <!-- DataTables JavaScript -->
-    <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
-
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
-
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-    <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
-        });
-    });
-    </script>
 
 </body>
 
