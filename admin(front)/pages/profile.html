@@ -32,7 +32,7 @@
 
 </head>
 
-<body>
+<body onload="employeeProfile()">
 
     <div id="wrapper">
 
@@ -68,10 +68,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="attendance.html"><i class="fa fa-table fa-fw"></i> Attendance</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Employees</a>
+                            <a href="edit.html"><i class="fa fa-edit fa-fw"></i> Edit Profile</a>
                         </li>
                     </ul>
                 </div>
@@ -81,8 +78,36 @@
         </nav>
 
         <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Employee Profile</h1>
+                        <p>
+                            <button type="button" id="disableBtn" class="btn btn-danger btn-sm" onclick="disableBtn()">
+                                <span class="glyphicon glyphicon-remove"></span> Deactivate</button>
+                            <button type="button" id="enableBtn" class="btn btn-success btn-sm" onclick="enableBtn()" disabled="true">
+                                <span class="glyphicon glyphicon-ok"></span> Activate</button>
+                        </p>
+                </div>
+            </div>
             <div>
-                
+                <p>
+                    <br>
+                    <b id="name">Name: </b>
+                    <br><br>
+                    <b id="code">Code ID: </b>
+                    <br><br>
+                    <b id="position">Position: </b>
+                    <br><br>
+                    <b id="contact">Contact No. : </b>
+                    <br><br>
+                    <b id="email">Email: </b>
+                    <br><br>
+                    <b id="birth_date">Birth Date: </b>
+                    <br><br>
+                    <b id="gender">Gender: </b>
+                    <br><br>
+                    <b id="address">Address: </b>
+                </p>
             </div>
         </div>
         <!-- /#page-wrapper -->
@@ -92,17 +117,97 @@
 
     <!-- Javascript -->
     <script type="text/javascript">
-        //Add Buttons
-        document.getElementById("employeeButton").onclick = function () {
-            location.href = "forms(employee).html";
-        };
 
-        document.getElementById("internButton").onclick =   function () {
-            location.href = "forms(intern).html";
-        };
+        //Activate/Deactivate Buttons
+        function disableBtn() {
+            document.getElementById("disableBtn").disabled = true;
+            document.getElementById("enableBtn").disabled = false;
 
-        //retrieved employee info.
+            alert("Employee Information Deactivated");
 
+            $.ajax({
+                  url: "https://mighty-cove-44634.herokuapp.com/deactivate",
+                  type: "POST",
+                  contentType: 'application/json; charset=utf-8',
+                  dataType: "json",
+                    
+                  success: function(data){
+                    alert(data.user.username)
+                    // user info in userprofile.html
+                    $("#code").html('');
+                  },
+                  
+                  error: function(data){
+                      alert("error");
+                  }
+            })
+        }
+
+        function enableBtn() {
+            document.getElementById("disableBtn").disabled = false;
+            document.getElementById("enableBtn").disabled = true;
+
+            alert("Employee Information Activated");
+
+            $.ajax({
+                  url: "https://mighty-cove-44634.herokuapp.com/activate",
+                  type: "POST",
+                  contentType: 'application/json; charset=utf-8',
+                  dataType: "json",
+                    
+                  success: function(data){
+                    alert(data.user.username)
+                    // user info in userprofile.html
+                    $("#code").html('');
+                  },
+                  
+                  error: function(data){
+                      alert("error");
+                  }
+            })
+        }
+
+        //Deactivate Employee
+
+
+    </script>
+
+
+    <script type="text/javascript">
+        function employeeProfile(){
+
+            $.ajax({
+                url: "https://mighty-cove-44634.herokuapp.com/view/",
+                method: "GET",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                    
+                success: function(data){
+                    alert(data.users.name)
+                        // $("#name").html('');
+                        $("#name").append(data.users[1].fname+' '+data.users[1].mname+' '+data.users[1].lname+"<br>")
+                        // $("#position").html('');
+                        $("#position").append(data.users[1].position+"<br>")
+                        // $("#code").html('');
+                        $("#code").append(data.users[1].code+"<br>")
+                        // $("#contact").html('');
+                        $("#contact").append(data.users[1].contact+"<br>")
+                        // $("#email").html('');
+                        $("#email").append(data.users[1].email+"<br>")
+                        // $("#birth_date").html('');
+                        $("#birth_date").append(data.users[1].birth_date+"<br>")
+                        // $("#gender").html('');
+                        $("#gender").append(data.users[1].gender+"<br>")
+                        // $("#address").html('');
+                        $("#address").append(data.users[1].address+"<br>")
+
+                },
+                  
+                error: function(data){
+                    alert("error");
+                }
+            });
+        }
     </script>
 
     <!-- jQuery -->

@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "address": "palao Iligan City Lanao", 
+      "birth_date": "1979-10-28", 
+      "code": "H72N2", 
+      "contact": "1234567890", 
+      "email": "jomari.daison@gmail.com", 
+      "fname": "jomary", 
+      "gender": "male", 
+      "lname": "Maulana", 
+      "mname": "Macalisang", 
+      "position": "sdfgh"
+    }, 
+    {
+      "address": "saray", 
+      "birth_date": "2018-07-01", 
+      "code": "1234", 
+      "contact": "1234", 
+      "email": "nicole_bugas@yahoo.com", 
+      "fname": "charlin", 
+      "gender": "male", 
+      "lname": "bugas", 
+      "mname": "nulo", 
+      "position": "intern"
+    }
+  ]
+}
