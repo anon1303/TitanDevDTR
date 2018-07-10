@@ -353,7 +353,7 @@ def timein():
     datenow = datetime.now().strftime("%m%d%Y")
     # datenow1 = datetime.now().strftime("%m%d%Y")
     timeAdmin = Admin.query.get(1)
-    
+
     morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
     morning9 = timeAdmin.morning_time_out_start.strftime("%H%M")
     morning12 = timeAdmin.morning_time_out_end.strftime("%H%M")
@@ -549,6 +549,7 @@ def timein():
                         atts.afterTimeIn = datetime.now()
                         # atts.morningRemark = wala pa nabutang
                         print'xxxxxxxxxxxxxxxxxxxxxx'
+                        dbase.session.commit()
                         return jsonify({'message': 'time out'})
                     else:
                         print'yyyyyyyyyyyyyyyyy'
@@ -1000,7 +1001,6 @@ def timein():
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.afterTimeOut = datetime.now()
-                        dbase.session.commit()
                         print'P`'
                         return jsonify({'message':'time out'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
@@ -1051,18 +1051,15 @@ def absents():
     employees = []
     for i in employs:
         employees.append(i.employeeid)
-    # print employees[0]
-    # print employees
+
     present = Attendance.query.filter(and_(Attendance.date == datenow1, Attendance.absentTotal == 0)).all()
     presents = []
+    
     if present:
         for e in present:
             presents.append(e.employeeid)
-        # print 'hjkbnmbnmhj'
-        # print presents[0]
-        # print 'hhhhhhhhhhhhhhhhhh'
+        
         absent = []
-
         for i in employees:
             # print "this" + str(i)
             for j in presents:
@@ -1072,14 +1069,16 @@ def absents():
                     absent.append(i)
 
         for i in absent:
-
-            absent =  Attendance(employeeid = i)
-            # absentstat = Attendance.query.filter(and_(absent.employeeid == None ,  )
-            dbase.session.add(absent)
-            dbase.session.commit()
-            absent.absentTotal = absent.absentTotal + 1
-            absent.date = datenow1
-            dbase.session.commit()
+            v = Attendance.query.filter(and_(Attendance.employeeid == i, Attendance.absentTotal == None)).first()
+            if v:    
+                absent =  Attendance(employeeid = i)
+                dbase.session.add(absent)
+                dbase.session.commit()
+                absent.absentTotal = absent.absentTotal + 1
+                absent.date = datenow1
+                dbase.session.commit()
+            else:
+                pass
         else:
             pass  
 
