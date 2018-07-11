@@ -83,6 +83,30 @@ def viewEmployee():
     else:
         return jsonify({'message': 'no employee found'})
 
+@app.route('/viewDeactivated/', methods=['GET', 'POST'])
+def viewEmployeeDeactivated():
+    employess = Employee.query.filter_by(employeestatus=0).all()
+
+    data = []
+    if employess:
+        for i in employess:
+            data1 = {}
+            data1['fname'] = i.fname
+            data1['mname'] = i.mname
+            data1['lname'] = i.lname
+            data1['position'] = i.position
+            data1['code'] = i.code
+            data1['contact'] = i.contact
+            data1['email'] = i.email
+            data1['birth_date'] = str(i.birth_date)
+            data1['gender'] = i.gender
+            data1['address'] = i.address
+            data.append(data1)
+        return jsonify({'users':data})
+    else:
+        return jsonify({'message': 'no employee found'})
+
+
 @app.route('/search/', methods =['GET', 'POST'])
 def searchEmployee():
     data = request.get_json()
