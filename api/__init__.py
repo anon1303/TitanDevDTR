@@ -19,7 +19,6 @@ app.debug = True
 from models import *
 from app import *
 
-
 dbase.create_all()
 
 
