@@ -20,10 +20,6 @@
 
 				<br>
 
-				<input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
-
-				<br>
-
 				<input name="password" class="form-control" type="password" placeholder="Enter Password"  id="pass1" onkeyup="checkPass(); return false;" />
 
 				<br>
@@ -78,28 +74,29 @@
 
 		<script type="text/javascript">              
 			function submit(){
-		        var username = $("#username").val();
-		        var password = $("#password").val();
-		        $.ajax({
-		          url: "https://mighty-cove-44634.herokuapp.com/signup",
-		          contentType: 'application/json; charset=utf-8',
-		          data: JSON.stringify({
-		            'username': username,
-		            'password': password
-		          }),
-		          method: "POST",
-		          dataType: "json",
-		          crossDomain: true,
-		          success: function(resp) {
-		            console.log("success");
-		            alert("Registered successfully!");
-		          },
-		          error: function (e) {
-		            alert(birthdate)
-		            console.log('error');
-		          }
-		        });
-		    }
+				    $.ajax({
+				        url: "https://mighty-cove-44634.herokuapp.com/newAdmin",
+				        // url: "http://127.0.0.1:5050/newAdmin",
+
+				        contentType: 'application/json; charset=utf-8',
+				        method:  'POST',
+				        dataType: 'json',
+				        crossDomain: true,
+				        data: JSON.stringify({
+				        'username':$('#username').val(),
+				        'password':$('#password').val()
+				    }),
+
+				      success: function(){
+				        alert("Registered Successfully!")
+				            window.open('login.html','_self');
+				        },   
+				      error: function () {
+				        alert("Failed to Register!")
+				      }
+
+				    });
+			    }
 		</script>
 
     <!-- jQuery -->

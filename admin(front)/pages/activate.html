@@ -38,7 +38,7 @@
 
 </head>
 
-<body onload="employeeAttendance()">
+<body onload="employeeList()">
 
     <div id="wrapper">
 
@@ -64,27 +64,13 @@
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-table fa-fw"></i> Attendance</a>
-                        </li>
-                        <li>
-                            <a href="employees.html"><i class="fa fa-user fa-fw"></i> Employees</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
             <!-- /.navbar-static-side -->
         </nav>
 
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Attendace</h1>
+                    <h1 class="page-header">Employee List</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -93,6 +79,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
+                    	<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Last Name..." title="Type in a name">
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -100,27 +87,27 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Position</th>
+                                        <th>Code Id</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <script type="text/javascript">
-                                        function employeeAttendance(){
+                                        function employeeList(){
                                         $(document).ready(function(){
-                                            $.getJSON("https://mighty-cove-44634.herokuapp.com/view/", function(data){
+                                            $.getJSON("https://mighty-cove-44634.herokuapp.com/viewDeactivated/", function(data){
                                                 var employee_data = "";
                                               
                                                 $.each(data, function(i, key){
                                                     for (var i = 0; i < key.length; i++) {     
-                                                    employee_data += '<tr>';
-                                                    employee_data += '<td>'+key[i].fname+' '+key[i].mname+' '+key[i].lname+'</td>';
-                                                    employee_data += '<td>'+key[i].position+'</td>';
-                                                    parseInt(i)
-                                                    employee_data += '<td>'+'<a href="view.html" onclick="get_one(\''+i+'\')">'+'View'+'</a>'+'</td>';
-                                                    employee_data += '</tr>';
+                                                                                                               
                                                     
-                    
+                                                    employee_data += '<tr class="header">';
+                                                    employee_data += '<td>'+key[i].fname+' '+key[i].mname+' '+key[i].lname+'</td>';
+                                                    employee_data += '<td>'+key[i].code+'</td>';
+                                                    parseInt(i)
+                            						employee_data += '<td>'+'<button type="button" onclick="get_one(\''+key[i].code+'\',\''+i+'\')" class="btn btn-outline btn-success btn-sm">Activate Employee</button>'+'</td>';
+                                                    employee_data += '</tr>';                                                    
                                                     }
                                                 });
                                               
@@ -129,17 +116,58 @@
                                         });
                                     }
 
-                                    function get_one(code){
-                                        alert(code);
-                                        
-                           
-                                        localStorage.setItem('index', code);
-                
-                                }
+                                    function get_one(i, lname){
+                                        localStorage.setItem('index', lname);
+                                        localStorage.setItem('index1', i);
 
+                                        if (confirm("Are you sure you want to Activate this employee?")) {
+											var y = localStorage.getItem('index1');
 
-</script> 
-                                    
+									        $.ajax({
+									            url: "https://mighty-cove-44634.herokuapp.com/activate",
+									            type: "POST",
+									            contentType: 'application/json; charset=utf-8',
+									            dataType: "json",
+									            data: JSON.stringify({
+									              "code": y
+									            }),
+									                    
+									            success: function(data){
+									              alert("Employee Information Activated");
+									              window.location.href = 'employees.html';
+									            },
+									                  
+									            error: function(data){
+									              alert("error");
+									            }
+									        })
+								    	}
+									    else {
+									        window.location.href = 'employees.html';
+									    }
+							        }
+
+									function myFunction() {
+									  // Declare variables 
+									  var input, filter, table, tr, td, i;
+									  input = document.getElementById("myInput");
+									  filter = input.value.toUpperCase();
+									  table = document.getElementById("employee_table");
+									  tr = table.getElementsByTagName("tr");
+
+									  // Loop through all table rows, and hide those who don't match the search query
+									  for (i = 0; i < tr.length; i++) {
+									    td = tr[i].getElementsByTagName("td")[0];
+									    if (td) {
+									      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+									        tr[i].style.display = "";
+									      } else {
+									        tr[i].style.display = "none";
+									      }
+									    } 
+									  }
+									}                               	
+								</script>
                                 </tbody>
                             </table>
                         </div>

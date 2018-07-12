@@ -81,12 +81,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Employee Profile</h1>
-                        <p>
-                            <button type="button" id="disableBtn" class="btn btn-danger btn-sm" onclick="disableBtn()">
-                                <span class="glyphicon glyphicon-remove"></span> Deactivate</button>
-                            <button type="button" id="enableBtn" class="btn btn-success btn-sm" onclick="enableBtn()" disabled="true">
-                                <span class="glyphicon glyphicon-ok"></span> Activate</button>
-                        </p>
                 </div>
             </div>
             <div>
@@ -117,65 +111,9 @@
 
     <!-- Javascript -->
     <script type="text/javascript">
-
-        //Activate/Deactivate Buttons
-        function disableBtn() {
-            document.getElementById("disableBtn").disabled = true;
-            document.getElementById("enableBtn").disabled = false;
-
-            alert("Employee Information Deactivated");
-
-            $.ajax({
-                  url: "https://mighty-cove-44634.herokuapp.com/deactivate",
-                  type: "POST",
-                  contentType: 'application/json; charset=utf-8',
-                  dataType: "json",
-                    
-                  success: function(data){
-                    alert(data.user.username)
-                    // user info in userprofile.html
-                    $("#code").html('');
-                  },
-                  
-                  error: function(data){
-                      alert("error");
-                  }
-            })
-        }
-
-        function enableBtn() {
-            document.getElementById("disableBtn").disabled = false;
-            document.getElementById("enableBtn").disabled = true;
-
-            alert("Employee Information Activated");
-
-            $.ajax({
-                  url: "https://mighty-cove-44634.herokuapp.com/activate",
-                  type: "POST",
-                  contentType: 'application/json; charset=utf-8',
-                  dataType: "json",
-                    
-                  success: function(data){
-                    alert(data.user.username)
-                    // user info in userprofile.html
-                    $("#code").html('');
-                  },
-                  
-                  error: function(data){
-                      alert("error");
-                  }
-            })
-        }
-
-        //Deactivate Employee
-
-
-    </script>
-
-
-    <script type="text/javascript">
         function employeeProfile(){
-
+            x = localStorage.getItem('index');
+            alert(x);
             $.ajax({
                 url: "https://mighty-cove-44634.herokuapp.com/view/",
                 method: "GET",
@@ -183,23 +121,22 @@
                 dataType: "json",
                     
                 success: function(data){
-                    alert(data.users.name)
                         // $("#name").html('');
-                        $("#name").append(data.users[1].fname+' '+data.users[1].mname+' '+data.users[1].lname+"<br>")
+                        $("#name").append(data.users[x].fname+' '+data.users[x].mname+' '+data.users[x].lname+"<br>")
                         // $("#position").html('');
-                        $("#position").append(data.users[1].position+"<br>")
+                        $("#position").append(data.users[x].position+"<br>")
                         // $("#code").html('');
-                        $("#code").append(data.users[1].code+"<br>")
+                        $("#code").append(data.users[x].code+"<br>")
                         // $("#contact").html('');
-                        $("#contact").append(data.users[1].contact+"<br>")
+                        $("#contact").append(data.users[x].contact+"<br>")
                         // $("#email").html('');
-                        $("#email").append(data.users[1].email+"<br>")
+                        $("#email").append(data.users[x].email+"<br>")
                         // $("#birth_date").html('');
-                        $("#birth_date").append(data.users[1].birth_date+"<br>")
+                        $("#birth_date").append(data.users[x].birth_date+"<br>")
                         // $("#gender").html('');
-                        $("#gender").append(data.users[1].gender+"<br>")
+                        $("#gender").append(data.users[x].gender+"<br>")
                         // $("#address").html('');
-                        $("#address").append(data.users[1].address+"<br>")
+                        $("#address").append(data.users[x].address+"<br>")
 
                 },
                   
@@ -208,20 +145,43 @@
                 }
             });
         }
+
+    /*    function disableBtn(){
+            var y = localStorage.getItem('index1');
+
+            $.ajax({
+                     url: "https://mighty-cove-44634.herokuapp.com/deactivate",
+                    type: "POST",
+                     contentType: 'application/json; charset=utf-8',
+                     dataType: "json",
+                     data: JSON.stringify({
+                    "code": y
+                    }),
+                       
+                    success: function(data){
+                     alert("Employee Information Deactivated");
+                     window.location.href = 'employees.html';
+                    },
+                                                  
+                     error: function(data){
+                      alert("error");
+                    }
+            })
+        }   */
     </script>
 
-    <!-- jQuery -->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/jquery/jquery.js"></script>
+            <!-- jQuery -->
+            <script src="../vendor/jquery/jquery.min.js"></script>
+            <script src="../vendor/jquery/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+            <!-- Bootstrap Core JavaScript -->
+            <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+            <!-- Metis Menu Plugin JavaScript -->
+            <script src="../vendor/metisMenu/metisMenu.min.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
+            <!-- Custom Theme JavaScript -->
+            <script src="../dist/js/sb-admin-2.js"></script>
 
 </body>
 

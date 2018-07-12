@@ -15,7 +15,7 @@
 		<div class="bg"></div>
 
 		<div class="container">
-			<form>
+			<form id="login_form">
 				<div class="form-group">
 					<input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
 
@@ -25,14 +25,14 @@
 
 					<br>
 
-					<button type="button" class="btn btn-primary btn-block" onclick="login()"> Login </button>
+					<button type="button" class="btn btn-primary btn-block" id="btn-login"> Login </button>
 					<button type="button" class="btn btn-primary btn-block" onclick="window.location.href='register.html'">Register</button>
 				</div>
 			</form>
 		</div>
 		<script type="text/javascript">              
 
-			function login(){
+		/*	function login(){
 			    var username = $("#username").val();
 			    var password = $("#password").val();
 			       $.ajax({
@@ -58,10 +58,67 @@
 				           alert(username+ " logged innnnnnnn")
 				           localStorage.setItem('token', data.token);
 				           localStorage.setItem('username', username);
-				           window.location.assign('pages/home.html');
+				           window.location.assign('pages/attendance.html');
 			        },
 			    });
-			}
+			}	*/
+
+
+		$('document').ready(function(){ 
+		     /* validation */
+		  	$("#login-form").validate({
+			  	rules:{
+			   		password: {
+			   			required: true,
+			   		},
+			   		username: {
+			            required: true,
+			            email: true
+			        },
+			    },
+			    messages:{
+			        password:{
+			             required: "please enter your password"
+			        },
+			        username: "please enter your email address",
+			       },
+			    submitHandler: submitForm 
+		    });  
+		    /* validation */
+		    
+		    /* login submit */
+		    function submitForm(){  
+		   		var data = $("#login-form").serialize();
+		    
+		   		$.ajax({		    
+				   type : 'POST',
+				   url  : "https://mighty-cove-44634.herokuapp.com/login",
+				   data : data,
+				   beforeSend: function()
+				   { 
+				    $("#error").fadeOut();
+				    $("#btn-login").html('<span class="glyphicon glyphicon-transfer"></span> &nbsp; sending ...');
+				   },
+				   success :  function(response)
+				      {      
+				     if(response=="ok"){
+				         
+				      $("#btn-login").html('<img src="btn-ajax-loader.gif" /> &nbsp; Signing In ...');
+				      setTimeout(' window.location.href = "pages/attendance.html"; ',4000);
+				     }
+				     else{
+				         
+				      $("#error").fadeIn(1000, function(){      
+				    $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response+' !</div>');
+				           $("#btn-login").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Sign In');
+				         });
+				     }
+				     }
+			   	});
+		    return false;
+		  }
+		    /* login submit */
+		});
 
 		</script>
 
