@@ -18,27 +18,29 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-   return Admin.query.get(user_id)
+  return Admin.query.get(user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
-@cross_origin('*')
+@cross_origin(allow_headers=['Content-Type'])
 def login():
    data = request.get_json()
    user = Admin.query.filter_by(username=data['username']).first()
    if user is None:
-       return jsonify({'message': 'Invalid username or password'})
+    return jsonify({'message': 'Invalid username or password'})
    else:
-       if check_password_hash(user.password, data['password']):
-           login_user(user)
-           return jsonify({'message': 'Login Successful!'})
+      print "ddhddhdh"
+      if check_password_hash(user.password, data['password']):
+        print "lllllllllllll"
+          login_user(user)
+          return jsonify({'message': 'Login Successful!'})
 
 
 @app.route('/logout', methods=['GET'])
 @cross_origin(allow_headers=['Content-Type'])
 @login_required
 def logout():
-   logout_user()
-   return jsonify({'message': 'Logged out'})
+  logout_user()
+  return jsonify({'message': 'Logged out'})
 
 
 @app.route('/newAdmin', methods=['POST'])
@@ -49,17 +51,17 @@ def newAdmin():
     new = Admin(username = data['username'], password = data['password'])
     try:
         if data['username'] == '' or data['username'] is None:
-            new.fname = new.fname
+          new.fname = new.fname
         else:
-            new.fname = data['username']
+          new.fname = data['username']
         if data['code'] == '':
-            new.code = new.code
+          new.code = new.code
         else:
-            new.code = generate_password_hash(data['code'], method='sha256')
+          new.code = generate_password_hash(data['code'], method='sha256')
         dbase.session.commit()
         return jsonify({'message': 'successfull!'})
     except:
-         return jsonify({'message': 'edit failed'})
+        return jsonify({'message': 'edit failed'})
 
 
 @app.route('/newEmployee', methods=['POST'])
