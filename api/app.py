@@ -21,6 +21,7 @@ def load_user(user_id):
    return Admin.query.get(user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
+@cross_origin(allow_headers=['Content-Type'])
 def login():
    data = request.get_json()
    user = Admin.query.filter_by(username=data['username']).first()
@@ -33,6 +34,7 @@ def login():
 
 
 @app.route('/logout', methods=['GET'])
+@cross_origin(allow_headers=['Content-Type'])
 @login_required
 def logout():
    logout_user()
@@ -40,6 +42,7 @@ def logout():
 
 
 @app.route('/newAdmin', methods=['POST'])
+@cross_origin(allow_headers=['Content-Type'])
 @login_required
 def newAdmin():
     data = request.get_json()
