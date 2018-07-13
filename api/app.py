@@ -38,6 +38,7 @@ def logout():
    logout_user()
    return jsonify({'message': 'Logged out'})
 
+
 @app.route('/newAdmin', methods=['POST'])
 @login_required
 def newAdmin():
