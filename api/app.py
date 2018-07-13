@@ -31,8 +31,8 @@ def login():
       print "ddhddhdh"
       if check_password_hash(user.password, data['password']):
         print "lllllllllllll"
-          login_user(user)
-          return jsonify({'message': 'Login Successful!'})
+        login_user(user)
+        return jsonify({'message': 'Login Successful!'})
 
 
 @app.route('/logout', methods=['GET'])
