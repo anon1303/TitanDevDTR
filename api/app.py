@@ -30,7 +30,8 @@ def login():
    else:
       print "ddhddhdh"
       print user.password
-      if check_password_hash(user.password, data['password']) == True:
+      print user.username
+      if check_password_hash(user.password, data['password']):
         print "lllllllllllll"
         login_user(user)
         return jsonify({'message': 'Login Successful!'})
