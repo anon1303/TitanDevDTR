@@ -24,6 +24,7 @@ def load_user(user_id):
 @cross_origin(allow_headers=['Content-Type'])
 def login():
   data = request.get_json()
+  code = str(data['password'])
   user = Admin.query.filter_by(username=data['username']).first()
   if user is None:
     return jsonify({'message': 'Invalid username or password'})
@@ -31,7 +32,7 @@ def login():
     print "ddhddhdh"
     print user.password
     print user.username
-    if generate_password_hash(data['password'], method="sha256") == user.password:
+    if check_password_hash(user.password, code):
       print "lllllllllllll"
       login_user(user)
       return jsonify({'message': 'Login Successful!'})
