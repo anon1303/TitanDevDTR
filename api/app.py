@@ -20,14 +20,6 @@ login_manager.init_app(app)
 def load_user(user_id):
    return Admin.query.get(user_id)
 
-
-@app.route('/', methods=['GET'])
-def admin_create():
-   admin_password = generate_password_hash('admin', method='sha256')
-   admin = Admin(username='admin', password=admin_password)
-   dbase.session.add(admin)
-   dbase.session.commit()
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
    data = request.get_json()
