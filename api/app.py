@@ -25,6 +25,7 @@ def admin_create():
   admin = Admin(username='admin', password=admin_password)
   dbase.session.add(admin)
   dbase.session.commit()
+
   
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin(allow_headers=['Content-Type'])
