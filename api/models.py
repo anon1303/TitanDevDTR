@@ -5,7 +5,7 @@ class Admin(UserMixin, dbase.Model):
     __tablename__ = 'admin'
     adminId = dbase.Column(dbase.Integer, primary_key=True)
     username = dbase.Column(dbase.String(50), nullable=False)
-    password = dbase.Column(dbase.String(100), nullable=False)
+    password = dbase.Column(dbase.String(256), nullable=False)
     morning_time_in_start = dbase.Column(dbase.Time)
     morning_time_out_start = dbase.Column(dbase.Time)
     morning_time_out_end = dbase.Column(dbase.Time)

@@ -36,14 +36,10 @@ def login():
   if user is None:
     return jsonify({'message': 'Invalid username or password'})
   else:
-    print "ddhddhdh"
-    print user.password
-    print user.username
     if check_password_hash(user.password, code):
-      print "lllllllllllll"
       login_user(user)
       return jsonify({'message': 'Login Successful!'})
-  return jsonify({'message': 'naa siya diri'})
+  return jsonify({'message': 'invalid password'})
 
 
 @app.route('/logout', methods=['GET'])
