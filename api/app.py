@@ -12,13 +12,41 @@ import pyqrcode
 from datetime import date, datetime, time
 import os
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+   return Admin.query.get(user_id)
+
+
+@app.route('/', methods=['GET'])
+def admin_create():
+   admin_password = generate_password_hash('admin', method='sha256')
+   admin = Admin(username='admin', password=admin_password)
+
+
 @app.route('/login', methods=['GET', 'POST'])
-@cross_origin('*')
 def login():
-    pass
+   data = request.get_json()
+   user = Admin.query.filter_by(username=data['username']).first()
+   if user is None:
+       return jsonify({'message': 'Invalid username or password'})
+   else:
+       if check_password_hash(user.password, data['password']):
+           login_user(user)
+           return jsonify({'message': 'Login Successful!'})
+
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+   logout_user()
+   return jsonify({'message': 'Logged out'})
 
 @app.route('/newAdmin', methods=['POST'])
-# @login_required
+@login_required
 def newAdmin():
     data = request.get_json()
     new = Admin(username = data['username'], password = data['password'])
@@ -38,7 +66,7 @@ def newAdmin():
 
 
 @app.route('/newEmployee', methods=['POST'])
-# @login_required
+@login_required
 @cross_origin(allow_headers=['Content-Type'])
 def addemployee():
     data = request.get_json()
@@ -61,6 +89,7 @@ def addemployee():
         return jsonify({'message': 'Employee already created'})
 
 @app.route('/view/', methods=['GET', 'POST'])
+@login_required
 def viewEmployee():
     employess = Employee.query.filter_by(employeestatus=1).all()
 
@@ -84,6 +113,7 @@ def viewEmployee():
         return jsonify({'message': 'no employee found'})
 
 @app.route('/viewDeactivated/', methods=['GET', 'POST'])
+@login_required
 def viewEmployeeDeactivated():
     employess = Employee.query.filter_by(employeestatus=0).all()
 
@@ -108,6 +138,7 @@ def viewEmployeeDeactivated():
 
 
 @app.route('/search/', methods =['GET', 'POST'])
+@login_required
 def searchEmployee():
     data = request.get_json()
     employee1 = data['lname']
@@ -136,6 +167,7 @@ def searchEmployee():
 
 @app.route('/generate/qrcode', methods=['POST'])
 @cross_origin('*')
+@login_required
 def genereate_code():
     data = request.get_json()
     qr = pyqrcode.create(data['code'])
@@ -145,6 +177,7 @@ def genereate_code():
 
 @app.route('/deactivate', methods=['GET', 'POST'])
 @cross_origin('*')
+@login_required
 def delEmployee():
     
     data = request.get_json()
@@ -165,6 +198,7 @@ def delEmployee():
 
 @app.route('/activate', methods=['GET', 'POST'])
 @cross_origin('*')
+@login_required
 def ReActEmployee():
     
     data = request.get_json()
@@ -186,6 +220,7 @@ def ReActEmployee():
 
 @app.route('/edit/<string:user_id>', methods=['POST'])
 @cross_origin('*')
+@login_required
 def edit(user_id):
     data = request.get_json()
     employee = Employee.query.filter_by(code=user_id).first()
@@ -241,6 +276,7 @@ def edit(user_id):
 
 
 @app.route('/company_summary/monthly/<string:dates>', methods=['GET'])
+@login_required
 def company_month(dates):
    dates = datetime.strptime(dates, "%Y-%m-%d")
    summary = Attendance.query.filter(extract('year', Attendance.dates) == (dates.strftime("%Y")))\
@@ -268,6 +304,7 @@ def company_month(dates):
 
 
 @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
+@login_required
 def company_week(sort_date):
    date_object = datetime.strptime(sort_date, "%Y-%m-%d").isocalendar()[1]
    year = datetime.strptime(sort_date, "%Y-%m-%d")
@@ -296,7 +333,8 @@ def company_week(sort_date):
        employees.append(employee_data)
    return jsonify({'Employee': employees})
 
-@app.route('/edit/login-time')
+@app.route('/edit/login-time', methods=['POST'])
+@login_required
 def edit_time():
    data = request.get_json()
    new_time = Admin.query.first()
@@ -339,7 +377,7 @@ def edit_time():
            dbase.session.commit()
            return jsonify({'message': 'Success!'})
        except:
-           return jsonify({'Message': 'Edit failed'})
+           return jsonify({'message': 'Edit failed'})
 
 
 @app.route('/TimeIn/', methods=['POST'])
