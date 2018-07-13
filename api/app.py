@@ -23,18 +23,19 @@ def load_user(user_id):
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin(allow_headers=['Content-Type'])
 def login():
-   data = request.get_json()
-   user = Admin.query.filter_by(username=data['username']).first()
-   if user is None:
+  data = request.get_json()
+  user = Admin.query.filter_by(username=data['username']).first()
+  if user is None:
     return jsonify({'message': 'Invalid username or password'})
-   else:
-      print "ddhddhdh"
-      print user.password
-      print user.username
-      if check_password_hash(user.password, str(data['password'])):
-        print "lllllllllllll"
-        login_user(user)
-        return jsonify({'message': 'Login Successful!'})
+  else:
+    print "ddhddhdh"
+    print user.password
+    print user.username
+    if check_password_hash(user.password, str(data['password'])):
+    print "lllllllllllll"
+    login_user(user)
+    return jsonify({'message': 'Login Successful!'})
+  return jsonify({'message': 'naa siya diri'})
 
 
 @app.route('/logout', methods=['GET'])
