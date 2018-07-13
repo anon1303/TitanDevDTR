@@ -29,6 +29,7 @@ def login():
     return jsonify({'message': 'Invalid username or password'})
    else:
       print "ddhddhdh"
+      print user.password
       if check_password_hash(user.password, data['password']) == True:
         print "lllllllllllll"
         login_user(user)
