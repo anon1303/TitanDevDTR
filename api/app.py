@@ -25,7 +25,8 @@ def load_user(user_id):
 def admin_create():
    admin_password = generate_password_hash('admin', method='sha256')
    admin = Admin(username='admin', password=admin_password)
-
+   dbase.session.add(admin)
+   dbase.session.commit()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
