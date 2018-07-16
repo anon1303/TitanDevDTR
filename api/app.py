@@ -21,12 +21,12 @@ login_manager.init_app(app)
 def load_user(user_id):
   return Admin.query.get(int(user_id))
 
-@app.route('/', methods=['GET'])
-def admin_create():
-  admin_password = 'admin'
-  admin = Admin(username='admin', password=admin_password)
-  dbase.session.add(admin)
-  dbase.session.commit()
+# @app.route('/', methods=['GET'])
+# def admin_create():
+#   admin_password = 'admin'
+#   admin = Admin(username='admin', password=admin_password)
+#   dbase.session.add(admin)
+#   dbase.session.commit()
  
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin('*')
