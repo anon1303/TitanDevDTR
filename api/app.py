@@ -103,7 +103,7 @@ def addemployee():
         print now
         dbase.session.add(new_employee)
         dbase.session.commit()
-        msg = data['code'] + "employee added"
+        msg = data['code'] + " employee added"
         logmessage = Logs(details = msg,log_date = lgdate)
         dbase.session.add(logmessage)
         dbase.session.commit()
