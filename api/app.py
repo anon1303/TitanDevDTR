@@ -37,7 +37,7 @@ def login():
     return jsonify({'message': 'Invalid username or password'})
   else:
     if check_password_hash(user.password, code):
-      login_user(user)
+      login_user(user, remember=True)
       return jsonify({'message': 'Login Successful!'})
   return jsonify({'message': 'invalid password'})
 
@@ -96,6 +96,7 @@ def addemployee():
 
 @app.route('/view/', methods=['GET', 'POST'])
 @login_required
+@cross_origin('*')
 def viewEmployee():
     employess = Employee.query.filter_by(employeestatus=1).all()
 
@@ -120,6 +121,7 @@ def viewEmployee():
 
 @app.route('/viewDeactivated/', methods=['GET', 'POST'])
 @login_required
+@cross_origin('*')
 def viewEmployeeDeactivated():
     employess = Employee.query.filter_by(employeestatus=0).all()
 
@@ -145,6 +147,7 @@ def viewEmployeeDeactivated():
 
 @app.route('/search/', methods =['GET', 'POST'])
 @login_required
+@cross_origin('*')
 def searchEmployee():
     data = request.get_json()
     employee1 = data['lname']
