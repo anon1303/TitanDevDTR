@@ -40,8 +40,7 @@ def login():
       login_user(user, remember=True)
       print(login_user(user, remember=True))
       msg = "Logged in"
-      logmessage = Logs(details = msg,
-                          log_date = lgdate)
+      logmessage = Logs(details = msg,log_date = lgdate)
       dbase.session.add(logmessage)
       dbase.session.commit()
       return jsonify({'message': 'Login Successful!'})
@@ -54,8 +53,7 @@ def login():
 def logout():
   logout_user()
   msg = "Logged out"
-  logmessage = Logs(details = msg,
-                      log_date = lgdate)
+  logmessage = Logs(details = msg,log_date = lgdate)
   dbase.session.add(logmessage)
   dbase.session.commit()
   return jsonify({'message': 'Logged out'})
@@ -78,8 +76,7 @@ def newAdmin():
           new.code = generate_password_hash(data['code'], method='sha256')
         dbase.session.commit()
         msg = "username or password updated"
-        logmessage = Logs(details = msg,
-                            log_date = lgdate)
+        logmessage = Logs(details = msg,log_date = lgdate)
         dbase.session.add(logmessage)
         dbase.session.commit()
         return jsonify({'message': 'successfull!'})
