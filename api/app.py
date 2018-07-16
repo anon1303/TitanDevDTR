@@ -39,6 +39,11 @@ def login():
     if check_password_hash(user.password, code):
       login_user(user, remember=True)
       print(login_user(user, remember=True))
+      msg = "Logged in"
+      logmessage = Logs(details = msg,
+                          log_date = lgdate)
+      dbase.session.add(logmessage)
+      dbase.session.commit()
       return jsonify({'message': 'Login Successful!'})
   return jsonify({'message': 'invalid password'})
 
@@ -48,6 +53,11 @@ def login():
 @login_required
 def logout():
   logout_user()
+  msg = "Logged out"
+  logmessage = Logs(details = msg,
+                      log_date = lgdate)
+  dbase.session.add(logmessage)
+  dbase.session.commit()
   return jsonify({'message': 'Logged out'})
 
 
@@ -66,6 +76,11 @@ def newAdmin():
           new.code = new.code
         else:
           new.code = generate_password_hash(data['code'], method='sha256')
+        dbase.session.commit()
+        msg = "username or password updated"
+        logmessage = Logs(details = msg,
+                            log_date = lgdate)
+        dbase.session.add(logmessage)
         dbase.session.commit()
         return jsonify({'message': 'successfull!'})
     except:
@@ -90,6 +105,10 @@ def addemployee():
         print now
         dbase.session.add(new_employee)
         dbase.session.commit()
+        msg = data['code'] + "employee added"
+        logmessage = Logs(details = msg,log_date = lgdate)
+        dbase.session.add(logmessage)
+        dbase.session.commit()
         return jsonify({'message': 'New employee created!'})
 
     else:
@@ -104,18 +123,18 @@ def viewEmployee():
     data = []
     if employess:
         for i in employess:
-            data1 = {}
-            data1['fname'] = i.fname
-            data1['mname'] = i.mname
-            data1['lname'] = i.lname
-            data1['position'] = i.position
-            data1['code'] = i.code
-            data1['contact'] = i.contact
-            data1['email'] = i.email
-            data1['birth_date'] = str(i.birth_date)
-            data1['gender'] = i.gender
-            data1['address'] = i.address
-            data.append(data1)
+          data1 = {}
+          data1['fname'] = i.fname
+          data1['mname'] = i.mname
+          data1['lname'] = i.lname
+          data1['position'] = i.position
+          data1['code'] = i.code
+          data1['contact'] = i.contact
+          data1['email'] = i.email
+          data1['birth_date'] = str(i.birth_date)
+          data1['gender'] = i.gender
+          data1['address'] = i.address
+          data.append(data1)
         return jsonify({'users':data})
     else:
         return jsonify({'message': 'no employee found'})
@@ -182,6 +201,10 @@ def genereate_code():
     data = request.get_json()
     qr = pyqrcode.create(data['code'])
     qr.png('code.png', scale=6)
+    msg = "generate new code: " + data['code']
+    logmessage = Logs(details = msg,log_date = lgdate)
+    dbase.session.add(logmessage)
+    dbase.session.commit()
     return jsonify({'message': 'QR Code Generated!'})
 
 
@@ -195,14 +218,17 @@ def delEmployee():
     employee = Employee.query.filter(and_(Employee.code==data['code'], Employee.employeestatus == 1)).first()
     # employee = Employee.query.filter_by(code=data['code']).first()
     if employee:
-        # 1 for active
-        # 0 for inactive
-        #change the status to 0
-    	employee.employeestatus = 0
-    	dbase.session.add(employee)
-    	dbase.session.commit()
-
-    	return jsonify({'message': 'Employee deactivated'})
+      # 1 for active
+      # 0 for inactive
+      #change the status to 0
+      employee.employeestatus = 0
+      dbase.session.add(employee)
+      dbase.session.commit()
+      msg = data['code'] + " deactivated"
+      logmessage = Logs(details = msg,log_date = lgdate)
+      dbase.session.add(logmessage)
+      dbase.session.commit()
+      return jsonify({'message': 'Employee deactivated'})
     else:
     	return jsonify({'message': 'Employee is not found'})
 
@@ -222,7 +248,10 @@ def ReActEmployee():
         employee.employeestatus = 1
         dbase.session.add(employee)
         dbase.session.commit()
-
+        msg = data['code'] + " activated"
+        logmessage = Logs(details = msg,log_date = lgdate)
+        dbase.session.add(logmessage)
+        dbase.session.commit()
         return jsonify({'message': 'Employee Activated'})
     else:
         return jsonify({'message': 'Employee is not found'})
@@ -279,6 +308,10 @@ def edit(user_id):
                 employee.address = employee.address
             else:
                 employee.address = data['address']
+            dbase.session.commit()
+            msg = user_id + " updated"
+            logmessage = Logs(details = msg,log_date = lgdate)
+            dbase.session.add(logmessage)
             dbase.session.commit()
             return jsonify({'message': 'Success!'})
         except:
@@ -385,6 +418,10 @@ def edit_time():
            else:
                new_time.afternoon_time_out_end = data['afternoon_time_out_end']
            dbase.session.commit()
+           msg = "timein or timeout edited"
+           logmessage = Logs(details = msg,log_date = lgdate)
+           dbase.session.add(logmessage)
+           dbase.session.commit()
            return jsonify({'message': 'Success!'})
        except:
            return jsonify({'message': 'Edit failed'})
@@ -490,7 +527,7 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.morningDailyStatus = 'late'
                         atts.morningTimeIn = datetime.now()
-                        # atts.morningRemark = wala pa nabutang
+                        add_remarks(atts.employeeid)
                         print 'ggggggggggg' 
                         dbase.session.commit()
                         return jsonify({'message': 'late'})
@@ -501,7 +538,6 @@ def timein():
                     if atts.morningTimeOut is None:
                         atts.morningStatus = 0
                         atts.morningTimeOut = datetime.now()
-                        # atts.morningRemark = wala pa nabutang
                         print 'iiiiiiiiiiii'
                         dbase.session.commit()
                         return jsonify({'message': 'time out'})
@@ -515,7 +551,7 @@ def timein():
                         atts.afterTimeOut = datetime.now()
                         atts.morningTimeIn = datetime.now()
                         atts.morningDailyStatus = 'late'
-                        # atts.morningRemark = wala pa nabutang
+                        add_remarks(atts.employeeid)
                         print 'kkkkkkkkkkkkk'
                         dbase.session.commit()
                         return jsonify({'message':'late, kindly dont forget to timeout in morning'})
@@ -575,7 +611,7 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
-                        # atts.morningRemark = wala pa nabutang
+                        add_remarks(atts.employeeid)
                         dbase.session.commit()
                         print'vvvvvvvvvvvvvvvvvv'
                         return jsonify({'message': 'late'})
@@ -590,7 +626,7 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
-                        # atts.morningRemark = wala pa nabutang
+                        add_remarks(atts.employeeid)
                         print'xxxxxxxxxxxxxxxxxxxxxx'
                         dbase.session.commit()
                         return jsonify({'message': 'time out'})
@@ -714,7 +750,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print 'GGGGGGGGGGGGGGGGGGGGGGGGG' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -739,7 +775,7 @@ def timein():
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeIn = datetime.now()
                             atts.morningDailyStatus = 'late'
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print'KKKKKKKKKKKK'
                             dbase.session.commit()
                             return jsonify({'message':'late, kindly dont forget to timeout in morning'})
@@ -798,7 +834,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print 'UUUUUUUUUUUUUUUUU' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -813,7 +849,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print 'WWWWWWWWWWWWWWWWWWWW'
                             dbase.session.commit()
                             return jsonify({'message': '"time in for afternoon." (time out for morning next time,) '})
@@ -879,20 +915,7 @@ def timein():
                 atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==datenow)).order_by(Attendance.date.desc()).first()
                 # atts.date = datenow
                 print "last"
-                # dates = Attendance.query.filter_by(date = datenow).first()
-                # print "1st"
-                # print dates.date
-                # if dates.date == datenow:
-                #     print '444546456646546465465465464654654654654'
 
-                # elif dates.date != datenow:
-                #     atts.morningStatus = 0
-                #     atts.afterStatus = 0
-                #     dbase.session.add(attendancenNew)
-                #     dbase.session.commit()
-                #     print '0987654321=-098765'
-                
-                # dbase.session.commit()
                 if now >= m7 and now <= m9:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.morningTimeOut is None:
@@ -935,7 +958,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print '3' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -960,7 +983,7 @@ def timein():
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeIn = datetime.now()
                             atts.morningDailyStatus = 'late'
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             dbase.session.commit()
                             print'B`'
                             return jsonify({'message':'late, kindly dont forget to timeout in morning'})
@@ -1019,7 +1042,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print 'L`' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -1034,7 +1057,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # atts.morningRemark = wala pa nabutang
+                            add_remarks(atts.employeeid)
                             print 'N`'
                             dbase.session.commit()
                             return jsonify({'message': 'time out'})
@@ -1088,6 +1111,7 @@ def timein():
                     print datenow
                     print'V`'
                     return jsonify({'message':'OT napud siya'})
+
 def absents():
     datenow1 = datetime.now().strftime("%m%d%Y")
     employs = Employee.query.filter_by(employeestatus = 1).all()
@@ -1124,3 +1148,19 @@ def absents():
                 pass
         else:
             pass  
+
+def add_remarks(atts):
+  data = request.get_json()
+  remarks = Attendance.query.filter_by(employeeId=atts).order_by(Attendance.date.desc()).first()
+  if remarks.morningDailyStatus == "late":
+    if remarks.morningRemark is None:
+      remarks.morningRemark = data['reason']
+      dbase.session.commit()
+    else:
+      pass
+  elif remarks.afterDailyStatus == "late":
+    if remarks.morningRemark is None:
+      remarks.morningRemark = data['reason']
+      dbase.session.commit()
+    else:
+      pass
