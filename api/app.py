@@ -38,6 +38,7 @@ def login():
   else:
     if check_password_hash(user.password, code):
       login_user(user, remember=True)
+      print(login_user(user, remember=True))
       return jsonify({'message': 'Login Successful!'})
   return jsonify({'message': 'invalid password'})
 
