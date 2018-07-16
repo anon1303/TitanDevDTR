@@ -12,6 +12,7 @@ import pyqrcode
 from datetime import date, datetime, time
 import os
 
+lgdate = datetime.now()
 login_manager = LoginManager()
 login_manager.init_app(app)
 
