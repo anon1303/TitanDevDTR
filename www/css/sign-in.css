@@ -1,0 +1,84 @@
+/*Split Screen*/
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.left {
+    left: 0;
+    /* The image used */
+    background-image: url("../img/development.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.left>.container{
+    position: relative; 
+}
+
+.left>.form-group{
+	position: absolute;
+	top: 500%;
+}
+
+.left>.form-control{
+    text-align: center;	
+}
+
+.left>.btn{
+	position: absolute;
+	left: 28%;
+	bottom: 1%;
+}
+
+.time{
+    position: absolute;
+    top: -200px;   
+    left: 100px;
+    transform: translateX(-50%) translateY(-50%);
+    color: #fff;
+    font-size: 80px;
+}
+
+.left>.scan-btn{
+	position: absolute;
+	bottom: 400px;
+	left: 50px;
+}
+
+.right {
+    right: 0;
+    background-image: url("../img/web.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.centered img {
+    width: 150px;
+    border-radius: 50%;
+}

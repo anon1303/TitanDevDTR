@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign In</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/sign-in.css">
+    </head>
+    <body onload="startTime()">
+
+        <div class="split left">
+          <div class="centered">
+                <div id="time" class="time"></div>
+                <div class="container">
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block scan-btn" onclick="scanner()">Click to Scan</button>
+
+                        <br>
+
+                        <input type="text" class="form-control" id="code" name="code" placeholder="Enter Code ID">
+
+                        <br>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="btn-submit" onclick="submit()"> Submit </button>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+        <div class="split right">
+          <div class="centered">
+                <div class="container">
+                    <div class="form-group">
+                        <b><span style="color: #fff;">ADMIN LOGIN</span></b>
+
+                        <br>
+
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+
+                        <br>
+
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+
+                        <br>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="btn-login" onclick="login()"> Login </button>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+
+        <script type="text/javascript">
+            function login(){
+                var username = $("#username").val();
+                var password = $("#password").val();
+                $.ajax({
+                    async: true, 
+                    url: 'https://mighty-cove-44634.herokuapp.com/login',
+                    contentType: 'application/json; charset=utf-8',
+                    method: "POST",
+                    data: JSON.stringify({
+                        'username': username,
+                        'password': password,
+                            }),
+                    dataType: "json",
+                    crossDomain: true,
+
+                    error: function (data) {
+                      console.log(data)
+                    },
+
+                    success: function (data)  {
+                        localStorage.setItem('username', username);
+                        window.location.assign('pages/attendance.html');
+                    },
+                });
+            }
+        </script>
+
+
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/time.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+
+    </body>
+</html>

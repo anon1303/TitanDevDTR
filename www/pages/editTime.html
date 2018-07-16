@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Edit Schedule</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	</head>
+	<body>
+<div class="container">
+    <input id="input-a" name="input-a" value="" data-default="20:48">
+    <button type="button" id="button-a">Check the  minutes</button>
+    <button type="button" id="button-b">Check the  hours</button>
+</div>
+		<table>
+			<thead></thead>
+				<tr>
+					<th></th>
+					<th>Login</th>
+					<th></th>
+					<th>Logout</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>AM: </td>
+					<td>
+					</td>
+					<td></td>
+					<td><input type="tel" name="timeOutAM" id="timeOutAM"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>PM: </td>
+					<td><input type="tel" name="timeInPM" id="timeInPM"></td>
+					<td></td>
+					<td><input type="tel" name="timeOutPM" id="timeOutPM"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<br><br>
+		<button type="button" id="editTimeBtn" class="btn btn-primary btn-lg" onclick="submit()">Edit Schedule</button>
+		
+<script type="text/javascript">
+var input = $('#input-a').val;
+input.clockpicker({
+    autoclose: true
+});
+
+// Manual operations
+$('#button-a').click(function(e){
+    // Have to stop propagation here
+    e.stopPropagation();
+    input.clockpicker('show')
+            .clockpicker('toggleView', 'minutes');
+});
+$('#button-b').click(function(e){
+    // Have to stop propagation here
+    e.stopPropagation();
+    input.clockpicker('show')
+            .clockpicker('toggleView', 'hours');
+});
+</script>
+		<script type="text/javascript">
+			function submit(){
+			    $.ajax({
+			        url: "https://mighty-cove-44634.herokuapp.com/edit/login-time",
+			        // url: "http://127.0.0.1:5050/newEmployee",
+
+			        contentType: 'application/json; charset=utf-8',
+			        method:  'POST',
+			        dataType: 'json',
+			        crossDomain: true,
+			        data: JSON.stringify({
+			        'morning_time_in_start':$('#timeInAM').val(),
+			        'morning_time_out_start':$('#timeOutAM').val(),
+			        'morning_time_out_start':$('#timeOutAM').val(),
+			        'afternoon_time_in_start':$('#timeInPM').val(), 
+			        'afternoon_time_out_start':$('#timeOutPM').val()
+			    }),
+
+			      success: function(data){
+			        alert(data.message)
+			            window.open('attendance.html','_self');
+			        },   
+			      error: function () {
+			        alert("Failed to Edit!")
+			      }
+
+			    });
+			}
+		</script>
+
+		<!--JQuery-->
+	    <script src="../vendor/jquery/jquery.min.js"></script>
+	    <script src="../vendor/jquery/jquery.js"></script>
+	    <script type="text/javascript" src="../vendor/bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+	</body>
+</html>
