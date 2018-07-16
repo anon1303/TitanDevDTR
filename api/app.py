@@ -21,7 +21,7 @@ def load_user(user_id):
   return Admin.query.get(user_id)
  
 @app.route('/login', methods=['GET', 'POST'])
-@cross_origin(allow_headers=['Content-Type'])
+@cross_origin('*')
 def login():
   data = request.get_json()
   code = str(data['password'])
