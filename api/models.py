@@ -3,7 +3,7 @@ from flask_login import UserMixin
 
 class Admin(UserMixin, dbase.Model):
     __tablename__ = 'admin'
-    adminId = dbase.Column(dbase.Integer, primary_key=True)
+    id = dbase.Column(dbase.Integer, primary_key=True)
     username = dbase.Column(dbase.String(50), nullable=False)
     password = dbase.Column(dbase.String(256), nullable=False)
     morning_time_in_start = dbase.Column(dbase.Time)
