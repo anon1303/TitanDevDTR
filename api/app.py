@@ -52,11 +52,12 @@ def login():
 @cross_origin(allow_headers=['Content-Type'])
 @login_required
 def logout():
-  logout_user()
+  
   msg = "Logged out"
   logmessage = Logs(details = msg,log_date = lgdate)
   dbase.session.add(logmessage)
   dbase.session.commit()
+  logout_user()
   return jsonify({'message': 'Logged out'})
 
 
