@@ -17,8 +17,8 @@ login_manager.init_app(app)
 
 
 @login_manager.user_loader
-def load_user(user_id):
-  return Admin.query.get(user_id)
+def load_user(id):
+  return Admin.query.get(id)
  
 @app.route('/login', methods=['GET', 'POST'])
 @cross_origin('*')
