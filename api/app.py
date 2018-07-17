@@ -526,7 +526,7 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.morningDailyStatus = 'late'
                         atts.morningTimeIn = datetime.now()
-                        add_remarks(atts.employeeid)
+                        # add_remarks(atts.employeeid)
                         print 'ggggggggggg' 
                         dbase.session.commit()
                         return jsonify({'message': 'late'})
@@ -550,10 +550,10 @@ def timein():
                         atts.afterTimeOut = datetime.now()
                         atts.morningTimeIn = datetime.now()
                         atts.morningDailyStatus = 'late'
-                        add_remarks(atts.employeeid)
+                        # add_remarks(atts.employeeid)
                         print 'kkkkkkkkkkkkk'
                         dbase.session.commit()
-                        return jsonify({'message':'late, kindly dont forget to timeout in morning'})
+                        return jsonify({'message':'late'})
                     else:
                         print'lllllllllllllllll'
                         return jsonify({'message':'you cannot time in twice'})
@@ -610,7 +610,7 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
-                        add_remarks(atts.employeeid)
+                        # add_remarks(atts.employeeid)
                         dbase.session.commit()
                         print'vvvvvvvvvvvvvvvvvv'
                         return jsonify({'message': 'late'})
@@ -625,7 +625,7 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
-                        add_remarks(atts.employeeid)
+                        # add_remarks(atts.employeeid)
                         print'xxxxxxxxxxxxxxxxxxxxxx'
                         dbase.session.commit()
                         return jsonify({'message': 'time out'})
@@ -731,7 +731,7 @@ def timein():
                             atts.morningDailyStatus = 'not late'
                             dbase.session.commit()
                             print'DDDDDDDDDDDDDDDDDD'
-                            return jsonify({'message':'not late, kindly dont forget to timeout in morning'})
+                            return jsonify({'message':'not late'})
                         else:
                             print'EEEEEEEEEEEEEEEEEE'
                             return jsonify({'message':'you cannot time in twice'})
@@ -749,7 +749,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print 'GGGGGGGGGGGGGGGGGGGGGGGGG' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -774,10 +774,10 @@ def timein():
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeIn = datetime.now()
                             atts.morningDailyStatus = 'late'
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print'KKKKKKKKKKKK'
                             dbase.session.commit()
-                            return jsonify({'message':'late, kindly dont forget to timeout in morning'})
+                            return jsonify({'message':'late'})
                         else:
                             print'LLLLLLLLLLLLLLLLLL'
                             return jsonify({'message':'you cannot time in twice'})
@@ -833,7 +833,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print 'UUUUUUUUUUUUUUUUU' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -848,7 +848,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print 'WWWWWWWWWWWWWWWWWWWW'
                             dbase.session.commit()
                             return jsonify({'message': '"time in for afternoon." (time out for morning next time,) '})
@@ -957,7 +957,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print '3' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -982,10 +982,10 @@ def timein():
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeIn = datetime.now()
                             atts.morningDailyStatus = 'late'
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             dbase.session.commit()
                             print'B`'
-                            return jsonify({'message':'late, kindly dont forget to timeout in morning'})
+                            return jsonify({'message':'late'})
                         else:
                             print'C`'
                             return jsonify({'message':'you cannot time in twice'})
@@ -1041,7 +1041,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print 'L`' 
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
@@ -1056,7 +1056,7 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            add_remarks(atts.employeeid)
+                            # add_remarks(atts.employeeid)
                             print 'N`'
                             dbase.session.commit()
                             return jsonify({'message': 'time out'})
@@ -1148,9 +1148,11 @@ def absents():
         else:
             pass  
 
-def add_remarks(atts):
+@app.route('/remark/<string:codes>', methods=['GET', 'POST'])
+def add_remarks(codes):
   data = request.get_json()
-  remarks = Attendance.query.filter_by(employeeId=atts).order_by(Attendance.date.desc()).first()
+  ids = Employee.query.filter_by(code=codes).first()
+  remarks = Attendance.query.filter_by(employeeId=ids.employeeid).order_by(Attendance.date.desc()).first()
   if remarks.morningDailyStatus == "late":
     if remarks.morningRemark is None:
       remarks.morningRemark = data['reason']
