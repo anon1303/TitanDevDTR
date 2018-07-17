@@ -1157,11 +1157,13 @@ def add_remarks(codes):
     if remarks.morningRemark is None:
       remarks.morningRemark = data['reason']
       dbase.session.commit()
+      return jsonify({'message':'Remark added'})
     else:
       pass
   elif remarks.afterDailyStatus == "late":
-    if remarks.morningRemark is None:
-      remarks.morningRemark = data['reason']
+    if remarks.afterRemark is None:
+      remarks.afterRemark = data['reason']
       dbase.session.commit()
+      return jsonify({'message':'Remark added'})
     else:
       pass
