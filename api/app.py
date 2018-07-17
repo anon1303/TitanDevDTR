@@ -399,7 +399,7 @@ def edit_time():
            else:
                new_time.morning_time_out_start = data['morning_time_out_start']
            # morning time out end
-           if new_time.morning_time_out_end == '':
+           if data['morning_time_out_end'] == '':
                new_time.morning_time_out_end = new_time.morning_time_out_end
            else:
                new_time.morning_time_out_end = data['morning_time_out_end']
@@ -426,7 +426,7 @@ def edit_time():
            dbase.session.commit()
            return jsonify({'message': 'Success!'})
        except:
-           return jsonify({'message': 'Edit failed'})
+           return jsonify({'message': 'xxxtentacles'})
 
 
 @app.route('/TimeIn/', methods=['POST'])
@@ -442,7 +442,7 @@ def timein():
 
     afte1 = timeAdmin.afternoon_time_in_start.strftime("%H%M")
     afte6 = timeAdmin.afternoon_time_out_start.strftime("%H%M")
-    afte7= timeAdmin.afternoon_time_out_end.strftime("%H%M")
+    afte7 = timeAdmin.afternoon_time_out_end.strftime("%H%M")
         
 
     m7 = ''.join([datenow, morning7])
