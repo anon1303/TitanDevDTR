@@ -29,7 +29,7 @@ def load_user(user_id):
 #   dbase.session.commit()
  
 @app.route('/login', methods=['GET', 'POST'])
-@cross_origin('*')
+@cross_origin(allow_headers=['Content-Type'])
 def login():
   data = request.get_json()
   code = str(data['password'])
@@ -113,9 +113,9 @@ def addemployee():
     else:
         return jsonify({'message': 'Employee already created'})
 
-@app.route('/view/', methods=['GET', 'POST'])
+@app.route('/view/', methods=['GET'])
 @login_required
-@cross_origin(allow_headers=['Content-Type'])
+@cross_origin('*')
 def viewEmployee():
     employess = Employee.query.filter_by(employeestatus=1).all()
 
