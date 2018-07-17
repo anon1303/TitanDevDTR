@@ -115,7 +115,7 @@ def addemployee():
 
 @app.route('/view/', methods=['GET', 'POST'])
 @login_required
-@cross_origin('*')
+@cross_origin(allow_headers=['Content-Type'])
 def viewEmployee():
     employess = Employee.query.filter_by(employeestatus=1).all()
 
