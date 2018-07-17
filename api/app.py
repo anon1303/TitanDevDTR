@@ -382,7 +382,7 @@ def company_week(sort_date):
 @login_required
 def edit_time():
    data = request.get_json()
-   new_time = Admin.query.get(1)
+   new_time = Admin.query.filter_by(id=1).first()
    if new_time is None:
        return jsonify({'Message': 'Edit failed'})
    else:
