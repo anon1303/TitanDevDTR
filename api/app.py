@@ -318,6 +318,7 @@ def edit(user_id):
 
 
 @app.route('/company_summary/monthly/<string:dates>', methods=['GET'])
+@cross_origin('*')
 @login_required
 def company_month(dates):
    dates = datetime.strptime(dates, "%Y-%m-%d")
@@ -346,6 +347,7 @@ def company_month(dates):
 
 
 @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
+@cross_origin('*')
 @login_required
 def company_week(sort_date):
    date_object = datetime.strptime(sort_date, "%Y-%m-%d").isocalendar()[1]
@@ -376,6 +378,7 @@ def company_week(sort_date):
    return jsonify({'Employee': employees})
 
 @app.route('/edit/login-time', methods=['POST'])
+@cross_origin('*')
 @login_required
 def edit_time():
    data = request.get_json()
