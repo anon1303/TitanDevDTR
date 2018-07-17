@@ -1152,7 +1152,7 @@ def absents():
 def add_remarks(codes):
   data = request.get_json()
   ids = Employee.query.filter_by(code=codes).first()
-  remarks = Attendance.query.filter_by(employeeId=ids.employeeid).order_by(Attendance.date.desc()).first()
+  remarks = Attendance.query.filter_by(employeeid=ids.employeeid).order_by(Attendance.date.desc()).first()
   if remarks.morningDailyStatus == "late":
     if remarks.morningRemark is None:
       remarks.morningRemark = data['reason']
