@@ -348,7 +348,7 @@ def company_month(dates):
 
 @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
 @cross_origin(allow_headers=['Content-Type'])
-@login_required
+# @login_required
 def company_week(sort_date):
    date_object = datetime.strptime(sort_date, "%Y-%m-%d").isocalendar()[1]
    year = datetime.strptime(sort_date, "%Y-%m-%d")
@@ -1170,3 +1170,13 @@ def add_remarks(codes):
       return jsonify({'message':'Remark added'})
     else:
       pass
+
+@app.route('/autoTimeOut/', methods=['GET', 'POST'])
+def auto_TimeOut():
+  timeout = Overtime.query.filter(and_(Overtime.overtimeid == 1, Overtime.overtimeDate == lgdate).order_by(Overtime.overtimeDate.desc())).all()
+  if timeout is None:
+    pass
+  else:
+    for i in timeout:
+      i.overtimeInStatus = 0
+      dbase.session.commit()
