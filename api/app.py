@@ -350,8 +350,10 @@ def company_month(dates):
 @cross_origin(allow_headers=['Content-Type'])
 # @login_required
 def company_week(sort_date):
-   date_object = datetime.strptime(str(sort_date), "%Y-%m-%d").isocalendar()[1]
-   year = datetime.strptime(sort_date, "%Y-%m-%d")
+   daTe = str(sort_date)
+   print daTe
+   date_object = datetime.strptime(daTe, "%Y-%m-%d").isocalendar()[1]
+   year = datetime.strptime(daTe, "%Y-%m-%d")
    summary = Attendance.query.filter(extract('year', Attendance.dates) == (year.strftime("%Y")))\
        .filter(Attendance.week_number == int(date_object)).all()
    employees = []
