@@ -317,45 +317,100 @@ def edit(user_id):
             return jsonify({'message': 'edit failed'})
 
 
-@app.route('/company_summary/monthly/<string:dates>', methods=['GET'])
-@cross_origin(allow_headers=['Content-Type'])
-# @login_required
-def company_month(dates):
-   dates = datetime.strptime(dates, "%Y-%m-%d")
-   summary = Attendance.query.filter(extract('year', Attendance.date) == (dates.strftime("%Y")))\
-       .filter(extract('month', Attendance.date) == (dates.strftime("%m"))).all()
-   employees = []
-   for employee in summary:
-       employee_data = {}
-       name = Employee.query.filter_by(employeeid=employee.employeeid).first()
-       employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
-       employee_data['employeeid'] = employee.employeeid
-       employee_data['lateTotal'] = employee.lateTotal
-       employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = employee.morningTimeIn
-       employee_data['morningTimeOut'] = employee.morningTimeOut
-       employee_data['afterTimeIn'] = employee.afterTimeIn
-       employee_data['afterTimeOut'] = employee.afterTimeOut
-       employee_data['morningStatus'] = employee.morningStatus
-       employee_data['afterStatus'] = employee.afterStatus
-       employee_data['morningDailyStatus'] = employee.morningDailyStatus
-       employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemark
-       employee_data['afterRemark'] = employee.afterRemark
-       employees.append(employee_data)
-   return jsonify({'Employee': employees})
+# @app.route('/company_summary/monthly/<string:dates>', methods=['GET'])
+# @cross_origin(allow_headers=['Content-Type'])
+# # @login_required
+# def company_month(dates):
+#    dates = datetime.strptime(dates, "%Y-%m-%d")
+#    summary = Attendance.query.filter(extract('year', Attendance.date) == (dates.strftime("%Y")))\
+#        .filter(extract('month', Attendance.date) == (dates.strftime("%m"))).all()
+#    employees = []
+#    for employee in summary:
+#        employee_data = {}
+#        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+#        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+#        employee_data['employeeid'] = employee.employeeid
+#        employee_data['lateTotal'] = employee.lateTotal
+#        employee_data['absentTotal'] = employee.absentTotal
+#        employee_data['morningTimeIn'] = employee.morningTimeIn
+#        employee_data['morningTimeOut'] = employee.morningTimeOut
+#        employee_data['afterTimeIn'] = employee.afterTimeIn
+#        employee_data['afterTimeOut'] = employee.afterTimeOut
+#        employee_data['morningStatus'] = employee.morningStatus
+#        employee_data['afterStatus'] = employee.afterStatus
+#        employee_data['morningDailyStatus'] = employee.morningDailyStatus
+#        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+#        employee_data['morningRemark'] = employee.morningRemark
+#        employee_data['afterRemark'] = employee.afterRemark
+#        employees.append(employee_data)
+#    return jsonify({'Employee': employees})
 
 
-@app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
-@cross_origin(allow_headers=['Content-Type'])
-# @login_required
-def company_week(sort_date):
-   daTe = str(sort_date)
-   print daTe
-   date_object = datetime.strptime(daTe, "%Y-%m-%d").isocalendar()[1]
-   year = datetime.strptime(daTe, "%Y-%m-%d")
-   summary = Attendance.query.filter(extract('year', Attendance.date) == (year.strftime("%Y")))\
-       .filter(Attendance.week_number == int(date_object)).all()
+# @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
+# @cross_origin(allow_headers=['Content-Type'])
+# # @login_required
+# def company_week(sort_date):
+#    daTe = str(sort_date)
+#    print daTe
+#    date_object = datetime.strptime(daTe, "%Y-%m-%d").isocalendar()[1]
+#    year = datetime.strptime(daTe, "%Y-%m-%d")
+#    summary = Attendance.query.filter(extract('year', Attendance.date) == (year.strftime("%Y")))\
+#        .filter(Attendance.week_number == int(date_object)).all()
+#    employees = []
+#    if summary is None:
+#        return jsonify({"message": "No data to show"})
+#    for employee in summary:
+#        employee_data = {}
+#        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+#        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+#        employee_data['employeeid'] = employee.employeeid
+#        employee_data['lateTotal'] = employee.lateTotal
+#        employee_data['absentTotal'] = employee.absentTotal
+#        employee_data['morningTimeIn'] = employee.morningTimeIn
+#        employee_data['morningTimeOut'] = employee.morningTimeOut
+#        employee_data['afterTimeIn'] = employee.afterTimeIn
+#        employee_data['afterTimeOut'] = employee.afterTimeOut
+#        employee_data['morningStatus'] = employee.morningStatus
+#        employee_data['afterStatus'] = employee.afterStatus
+#        employee_data['morningDailyStatus'] = employee.morningDailyStatus
+#        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+#        employee_data['morningRemark'] = employee.morningRemark
+#        employee_data['afterRemark'] = employee.afterRemark
+#        employees.append(employee_data)
+#    return jsonify({'Employee': employees})
+
+# @app.route('/employee_summary/monthly/<int:emp_id>', methods=['GET'])
+# def employee_monthly(emp_id):
+
+#    summary = Attendance.query.filter.filter(Attendance.employeeid == emp_id).all()
+#    employees = []
+#    for employee in summary:
+#        employee_data = {}
+#        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+#        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+#        employee_data['overtimeTotal'] = name.overTimeTotal
+#        employee_data['employeeid'] = employee.employeeid
+#        employee_data['lateTotal'] = employee.lateTotal
+#        employee_data['absentTotal'] = employee.absentTotal
+#        employee_data['morningTimeIn'] = employee.morningTimeIn
+#        employee_data['morningTimeOut'] = employee.morningTimeOut
+#        employee_data['afterTimeIn'] = employee.afterTimeIn
+#        employee_data['afterTimeOut'] = employee.afterTimeOut
+#        employee_data['morningStatus'] = employee.morningStatus
+#        employee_data['afterStatus'] = employee.afterStatus
+#        employee_data['morningDailyStatus'] = employee.morningDailyStatus
+#        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+#        employee_data['morningRemark'] = employee.morningRemark
+#        employee_data['afterRemark'] = employee.afterRemark
+#        employees.append(employee_data)
+#    return jsonify({'employee': employees})
+
+
+@app.route('/employee_summary/weekly/<string:dates>/<int:emp_id>', methods=['GET'])
+def employee_week(dates, emp_id):
+   dates = string.replace("W","") 
+   year, week_number = dates.split("-")
+   summary = Attendance.query.filter(Attendance.employeeid == emp_id).filter(Attendance.week_number = week_number).filter(extract('year', Attendance.date) == year).all()
    employees = []
    if summary is None:
        return jsonify({"message": "No data to show"})
@@ -363,6 +418,7 @@ def company_week(sort_date):
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+       employee_data['overtimeTotal'] = name.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -377,7 +433,7 @@ def company_week(sort_date):
        employee_data['morningRemark'] = employee.morningRemark
        employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
-   return jsonify({'Employee': employees})
+   return jsonify({'employee': employees})
 
 @app.route('/edit/login-time', methods=['POST'])
 @cross_origin(allow_headers=['Content-Type'])
@@ -428,7 +484,7 @@ def edit_time():
            dbase.session.commit()
            return jsonify({'message': 'Success!'})
        except:
-           return jsonify({'message': 'xxxtentacles'})
+           return jsonify({'message': 'failed'})
 
 
 @app.route('/TimeIn/', methods=['POST'])
