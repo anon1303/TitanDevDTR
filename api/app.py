@@ -6,7 +6,7 @@ from flask_login import login_user, login_required, LoginManager, logout_user
 import datetime as dt
 import time
 #pip install timedate, time
-from sqlalchemy import and_, desc
+from sqlalchemy import and_, desc, extract
 import png
 import pyqrcode
 from datetime import date, datetime, time
