@@ -33,6 +33,7 @@ class Employee(dbase.Model):
     gender = dbase.Column(dbase.String(6), nullable=False)
     address = dbase.Column(dbase.String(50))
     attendance1 = dbase.relationship('Attendance', backref='employee', lazy=True)
+    overtime = dbase.relationship('Overtime', backref='employee', lazy=True)
 
     def __init__(self, fname, mname, lname, position, code, contact, email, birth_date, gender, employeestatus, address):
         self.employeestatus = employeestatus
@@ -64,22 +65,24 @@ class Attendance(dbase.Model):
     afterDailyStatus = dbase.Column(dbase.String(8)) 
     afterRemark = dbase.Column(dbase.String(50))
     date = dbase.Column(dbase.String(15))
+    week_number = dbase.Column(dbase.Integer)
 
     def __init__(self, employeeid):
-        # self.lateTotal = lateTotal
-        # self.absentTotal = absentTotal
         self.employeeid = employeeid
-        # self.morningRemark = morningRemark
-        # self.afterRemamrk = afterRemamrk
-        # self.morningTimeIn = morningTimeIn
-        # self.morningTimeOut = morningTimeOut
-        # self.afterTimeIn = afterTimeIn
-        # self.afterTimeOut = afterTimeOut
-        # self.morningStatus = morningStatus
-        # self.afterStatus = afterStatus
-        # self.morningDailyStatus = morningDailyStatus
-        # self.afterDailyStatus = afterDailyStatus
 
+class Overtime(dbase.Model):
+    __tablename__ = 'overtime'
+    overtimeid = dbase.Column(dbase.Integer, primary_key=True)
+    employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey('employee.employeeid'))
+    overtimeDate = dbase.Column(dbase.DATE)
+    overtimeIn = dbase.Column(dbase.DateTime)
+    overtimeOut = dbase.Column(dbase.DateTime)
+    overtimeInStatus = dbase.Column(dbase.Integer, default=0)
+    overtimeStatus = dbase.Column(dbase.Integer, default=0)
+    overtimeTotal = dbase.Column(dbase.Integer, default=0)
+
+    def __init__(self, employeeid):
+        self.employeeid = employeeid
 
 class Logs(dbase.Model):
     __tablename__ = "logs"
