@@ -322,8 +322,8 @@ def edit(user_id):
 @login_required
 def company_month(dates):
    dates = datetime.strptime(dates, "%Y-%m-%d")
-   summary = Attendance.query.filter(extract('year', Attendance.dates) == (dates.strftime("%Y")))\
-       .filter(extract('month', Attendance.dates) == (dates.strftime("%m"))).all()
+   summary = Attendance.query.filter(extract('year', Attendance.date) == (dates.strftime("%Y")))\
+       .filter(extract('month', Attendance.date) == (dates.strftime("%m"))).all()
    employees = []
    for employee in summary:
        employee_data = {}
