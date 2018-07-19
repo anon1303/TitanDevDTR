@@ -10,7 +10,7 @@ from sqlalchemy import and_, desc, extract
 import png
 import pyqrcode
 from datetime import date, datetime, time
-import os
+import os, string
 
 lgdate = datetime.now()
 login_manager = LoginManager()
