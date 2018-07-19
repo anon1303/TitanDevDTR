@@ -444,12 +444,12 @@ def employee_week(dates, emp_id):
 def edit_time():
    data = request.get_json()
    
-   morning1 = dt.datetime.strptime(data['morning_time_in_start'], "%H%M").time()
-   morning2 = dt.datetime.strptime(data['morning_time_out_start'], "%H%M").time()
-   morning3 = dt.datetime.strptime(data['morning_time_out_end'], "%H%M").time()
-   after1 = dt.datetime.strptime(data['afternoon_time_in_start'], "%H%M").time()
-   after2 = dt.datetime.strptime(data['afternoon_time_out_start'], "%H%M").time()
-   after3 = dt.datetime.strptime(data['afternoon_time_out_end'], "%H%M").time()
+   morning1 = dt.datetime.strptime(data['morning_time_in_start'], "%H%M").date()
+   morning2 = dt.datetime.strptime(data['morning_time_out_start'], "%H%M").date()
+   morning3 = dt.datetime.strptime(data['morning_time_out_end'], "%H%M").date()
+   after1 = dt.datetime.strptime(data['afternoon_time_in_start'], "%H%M").date()
+   after2 = dt.datetime.strptime(data['afternoon_time_out_start'], "%H%M").date()
+   after3 = dt.datetime.strptime(data['afternoon_time_out_end'], "%H%M").date()
    new_time = Admin.query.filter_by(id=1).first()
    if new_time is None:
        return jsonify({'Message': 'Edit failed'})
