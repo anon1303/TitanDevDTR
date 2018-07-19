@@ -500,8 +500,8 @@ def edit_time():
 
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
-    now = dt.datetime.now().strftime("%m%d%Y%H%M")
-    datenow = dt.datetime.now().strftime("%m%d%Y")
+    now = datetime.now().strftime("%m%d%Y%H%M")
+    datenow = datetime.now().strftime("%m%d%Y")
     timeAdmin = Admin.query.get(1)
 
     morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
@@ -511,40 +511,40 @@ def timein():
     afte1 = timeAdmin.afternoon_time_in_start.strftime("%H%M")
     afte6 = timeAdmin.afternoon_time_out_start.strftime("%H%M")
     afte7 = timeAdmin.afternoon_time_out_end.strftime("%H%M")
-        
 
     m7 = ''.join([datenow, morning7])
     m9 = ''.join([datenow, morning9])
     m12 = ''.join([datenow, morning12])
-    
+
     a1 = ''.join([datenow, afte1])
     a6 = ''.join([datenow, afte6])
-    a7 = ''.join([datenow, afte7]) 
+    a7 = ''.join([datenow, afte7])
 
     # 1 for active and 0 for inactive
     data = request.get_json()
     employee = Employee.query.filter_by(code=data['code']).first()
     empID = employee.employeeid
-    attendancenNew = Attendance(employeeid = empID)
+    attendancenNew = Attendance(employeeid=empID)
 
     if employee is None:
         return jsonify({'message': 'user not found'})
-    else:    
+    else:
 
-        atts = Attendance.query.filter(Attendance.employeeid == empID & Attendance.date == datenow).order_by(Attendance.date.desc()).first()
-
+        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(
+            Attendance.date.desc()).first()
+        # print atts.employeeid
+        # ////////////////////////////IF ID IS NOT LISTED IN THE ATTENDACE CRETAE NEW///////////////////////////////#
         if atts is None:
 
             dbase.session.add(attendancenNew)
             dbase.session.commit()
 
-            atts = Attendance.query.filter_by(employeeid = empID).order_by(Attendance.date.desc()).first()
+            atts = Attendance.query.filter_by(employeeid=empID).order_by(Attendance.date.desc()).first()
             print atts
             print '1st'
-            atts.week_number = datetime.now().strftime("%m%d%Y").isocalendar()[1]
             atts.date = datenow
             dbase.session.commit()
-            dates = Attendance.query.filter_by(date = datenow).first()
+            dates = Attendance.query.filter_by(date=datenow).first()
             if dates:
                 print '444546456646546465465465464654654654654'
 
@@ -553,8 +553,8 @@ def timein():
                 dbase.session.commit()
                 print '0987654321=-098765'
 
-
-            if now >= m7 and now <= m9:
+            nowdate = atts.date
+            if (now >= m7) and (now <= m9):
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.morningTimeOut is None:
                         atts.morningStatus = 1
@@ -565,10 +565,10 @@ def timein():
                         return jsonify({'message': 'not late'})
                     else:
                         print 'bbbbbbbbbbbbbbbbbbbbbbb'
-                        return jsonify({'message':'you cannot time in twice'})           
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 0:
                     print 'ccccccccc'
-                    return jsonify({'message':'no time out at this time'})
+                    return jsonify({'message': 'no time out at this time'})
                 elif atts.morningStatus == 0 and atts.afterStatus == 1:
                     if atts.morningTimeOut is None:
                         atts.afterStatus = 0
@@ -578,41 +578,42 @@ def timein():
                         atts.morningDailyStatus = 'not late'
                         dbase.session.commit()
                         print'ddddddddddddd'
-                        return jsonify({'message':'not late, kindly dont forget to timeout in morning'})
+                        return jsonify({'message': 'not late, kindly dont forget to timeout in morning'})
                     else:
                         print'eeeeeeeeeeeeeee'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 1:
                     atts.afterStatus = 0
                     atts.afterTimeOut = datetime.now()
                     dbase.session.commit()
                     print'fffffffffffff'
-                    return jsonify({'message':'no time out at this time'})
+                    return jsonify({'message': 'no time out at this time'})
 
-            elif now > m9 and now <= m12:
+            elif (now > m9) and (now <= m12):
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.morningTimeOut is None:
                         atts.morningStatus = 1
                         atts.lateTotal = atts.lateTotal + 1
                         atts.morningDailyStatus = 'late'
                         atts.morningTimeIn = datetime.now()
-                        # add_remarks(atts.employeeid)
-                        print 'ggggggggggg' 
+                        # atts.morningRemark = wala pa nabutang
+                        print 'ggggggggggg'
                         dbase.session.commit()
                         return jsonify({'message': 'late'})
                     else:
                         print'hhhhhhhhhhhhhhhhhh'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 0:
                     if atts.morningTimeOut is None:
                         atts.morningStatus = 0
                         atts.morningTimeOut = datetime.now()
+                        # atts.morningRemark = wala pa nabutang
                         print 'iiiiiiiiiiii'
                         dbase.session.commit()
                         return jsonify({'message': 'time out'})
-                    else: 
+                    else:
                         print'jjjjjjjjjjjjjj'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 0 and atts.afterStatus == 1:
                     if atts.morningTimeOut is None:
                         atts.afterStatus = 0
@@ -620,26 +621,26 @@ def timein():
                         atts.afterTimeOut = datetime.now()
                         atts.morningTimeIn = datetime.now()
                         atts.morningDailyStatus = 'late'
-                        # add_remarks(atts.employeeid)
+                        # atts.morningRemark = wala pa nabutang
                         print 'kkkkkkkkkkkkk'
                         dbase.session.commit()
-                        return jsonify({'message':'late'})
+                        return jsonify({'message': 'late, kindly dont forget to timeout in morning'})
                     else:
                         print'lllllllllllllllll'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 1:
-                    if atts.morningTimeOut is None:  
+                    if atts.morningTimeOut is None:
                         atts.afterStatus = 0
                         atts.morningStatus = 0
                         atts.afterTimeOut = datetime.now()
                         atts.morningTimeOut = datetime.now()
                         print 'mmmmmmmmmmmmmmm'
                         dbase.session.commit()
-                        return jsonify({'message':'time out'})
+                        return jsonify({'message': 'time out'})
                     else:
                         print'nnnnnnnnnnnnnn'
-                        return jsonify({'message':'you cannot time in twice'})
-            elif now > m12 and now <= a1: # 12 -7pm
+                        return jsonify({'message': 'you cannot time in twice'})
+            elif (now > m12) and (now <= a1):  # 12 -7pm
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.afterTimeOut is None:
                         atts.afterStatus = 1
@@ -652,7 +653,7 @@ def timein():
                         return jsonify({'message': 'time in for afternoon'})
                     else:
                         print'qqqqqqqqqqqqqq'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 0:
                     if atts.afterTimeOut is None:
                         atts.morningStatus = 0
@@ -663,30 +664,30 @@ def timein():
                         return jsonify({'message': 'time out for morning'})
                     else:
                         print'ssssssssssssssss'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 0 and atts.afterStatus == 1:
                     print'tttttttttttttttttt'
-                    return jsonify({'message':'no time out for afternoon at this time'})
+                    return jsonify({'message': 'no time out for afternoon at this time'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 1:
                     atts.morningStatus = 0
                     atts.morningTimeOut = datetime.now()
                     dbase.session.commit()
                     print'uuuuuuuuuuuuuuuuuuuu'
-                    return jsonify({'message':'no time out for afternoon at this time'})
-            elif now > a1 and now <= a6:
+                    return jsonify({'message': 'no time out for afternoon at this time'})
+            elif (now > a1) and (now <= a6):
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.afterTimeOut is None:
                         atts.afterStatus = 1
                         atts.lateTotal = atts.lateTotal + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
-                        # add_remarks(atts.employeeid)
+                        # atts.morningRemark = wala pa nabutang
                         dbase.session.commit()
                         print'vvvvvvvvvvvvvvvvvv'
                         return jsonify({'message': 'late'})
                     else:
                         print'wwwwwwwwwwwwwwwwww'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 0:
                     if atts.afterTimeOut is None:
                         atts.morningStatus = 0
@@ -695,19 +696,18 @@ def timein():
                         atts.lateTotal = atts.lateTotal + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
-                        # add_remarks(atts.employeeid)
+                        # atts.morningRemark = wala pa nabutang
                         print'xxxxxxxxxxxxxxxxxxxxxx'
-                        dbase.session.commit()
                         return jsonify({'message': 'time out'})
                     else:
                         print'yyyyyyyyyyyyyyyyy'
-                        return jsonify({'message':'you cannot time in twice'})
+                        return jsonify({'message': 'you cannot time in twice'})
                 elif atts.morningStatus == 0 and atts.afterStatus == 1:
                     atts.afterStatus = 0
                     atts.afterTimeOut = datetime.now()
                     dbase.session.commit()
                     print'zzzzzzzzzzzzzzzzzzzzzz'
-                    return jsonify({'message':'time out'})
+                    return jsonify({'message': 'time out'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 1:
                     atts.afterStatus = 0
                     atts.morningStatus = 0
@@ -715,13 +715,13 @@ def timein():
                     atts.morningTimeOut = datetime.now()
                     dbase.session.commit()
                     print'1111111111111'
-                    return jsonify({'message':'time out'})
-            elif now > a6 and now <= a7:
+                    return jsonify({'message': 'time out'})
+            elif (now > a6) and (now <= a7):
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     print'2222222222222222222'
                     absents()
                     dbase.session.commit()
-                    return jsonify({'message':'no time in for this time'})
+                    return jsonify({'message': 'no time in for this time'})
 
                 elif atts.morningStatus == 1 and atts.afterStatus == 0:
                     atts.morningStatus = 0
@@ -729,7 +729,7 @@ def timein():
                     absents()
                     dbase.session.commit()
                     print'3333333333333333333'
-                    return jsonify({'message':'not time in for afternoon'})
+                    return jsonify({'message': 'not time in for afternoon'})
 
                 elif atts.morningStatus == 0 and atts.afterStatus == 1:
                     atts.afterStatus = 0
@@ -737,7 +737,7 @@ def timein():
                     absents()
                     dbase.session.commit()
                     print'4444444444444444'
-                    return jsonify({'message':'time out for afternoon'})
+                    return jsonify({'message': 'time out for afternoon'})
                 elif atts.morningStatus == 1 and atts.afterStatus == 1:
                     atts.morningStatus = 0
                     atts.afterStatus = 0
@@ -746,20 +746,19 @@ def timein():
                     absents()
                     dbase.session.commit()
                     print'555555555555555555555'
-                    return jsonify({'message':'time out for afternoon and morning'})
+                    return jsonify({'message': 'time out for afternoon and morning'})
             else:
-                print datenow
-                print'6666666666666666666'
-                return jsonify({'message':'OT napud siya'})
-#////////// ///////////////////////////////IF ID IS EXISTING///////////////////////////////////////////////////////////////#
+                pass
+# ////////// ///////////////////////////////IF ID IS EXISTING/////////////////////////////////////////////////////////
         elif atts:
-            dates = Attendance.query.filter_by(date = datenow).order_by(Attendance.date.desc()).first()
+            dates = Attendance.query.filter_by(date=datenow).order_by(Attendance.date.desc()).first()
             print dates
-            atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==datenow)).order_by(Attendance.date.desc()).first()
+            atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(
+                Attendance.date.desc()).first()
             # dbase.session.commit()
             # date1 = atts.date
             print "second"
-            dates = Attendance.query.filter_by(date = datenow).first()
+            dates = Attendance.query.filter_by(date=datenow).first()
             if dates:
                 pass
             else:
@@ -771,11 +770,13 @@ def timein():
 
                 print '1234567890-'
                 print datenow + "mkmkmkkmkkkmkmkmkkkmkmkmk"
-                atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==datenow)).order_by(Attendance.date.desc()).first()
-            #///////////////////////////////////////////CHECK IF THE DATE IS SAME//////////////////////////////////////#
+                atts = Attendance.query.filter(
+                    and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(
+                    Attendance.date.desc()).first()
+        # ///////////////////////////////////////////CHECK IF THE DATE IS SAME//////////////////////////////////////
             if atts.date == datenow:
 
-                #////////////////////////IF DATE IS SAME////////////////////////////#
+                # ////////////////////////IF DATE IS SAME////////////////////////////#
                 print atts.date + 'nabuang siya'
                 if now >= m7 and now <= m9:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
@@ -788,10 +789,10 @@ def timein():
                             return jsonify({'message': 'not late'})
                         else:
                             print'BBBBBBBBBBBBBBBBBBBBB'
-                            return jsonify({'message':'you cannot time in twice'})           
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         print 'CCCCCCCCCCCCCCCC'
-                        return jsonify({'message':'no time out at this time'})
+                        return jsonify({'message': 'no time out at this time'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         if atts.morningTimeOut is None:
                             atts.afterStatus = 0
@@ -801,16 +802,16 @@ def timein():
                             atts.morningDailyStatus = 'not late'
                             dbase.session.commit()
                             print'DDDDDDDDDDDDDDDDDD'
-                            return jsonify({'message':'not late'})
+                            return jsonify({'message': 'not late, kindly dont forget to timeout in morning'})
                         else:
                             print'EEEEEEEEEEEEEEEEEE'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.afterTimeOut = datetime.now()
                         dbase.session.commit()
                         print'FFFFFFFFFFFFFFFF'
-                        return jsonify({'message':'no time out at this time'})
+                        return jsonify({'message': 'no time out at this time'})
 
                 elif now > m9 and now <= m12:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
@@ -819,13 +820,13 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
-                            # add_remarks(atts.employeeid)
-                            print 'GGGGGGGGGGGGGGGGGGGGGGGGG' 
+                            # atts.morningRemark = wala pa nabutang
+                            print 'GGGGGGGGGGGGGGGGGGGGGGGGG'
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
                         else:
                             print'HHHHHHHHHHHHHHHHHHHHHHHHHHH'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         if atts.morningTimeOut is None:
                             atts.morningStatus = 0
@@ -836,7 +837,7 @@ def timein():
                             return jsonify({'message': 'time out'})
                         else:
                             print'JJJJJJJJJJJJJJJ'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         if atts.morningTimeOut is None:
                             atts.afterStatus = 0
@@ -844,38 +845,38 @@ def timein():
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeIn = datetime.now()
                             atts.morningDailyStatus = 'late'
-                            # add_remarks(atts.employeeid)
+                            # atts.morningRemark = wala pa nabutang
                             print'KKKKKKKKKKKK'
                             dbase.session.commit()
-                            return jsonify({'message':'late'})
+                            return jsonify({'message': 'late, kindly dont forget to timeout in morning'})
                         else:
                             print'LLLLLLLLLLLLLLLLLL'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
-                        if atts.morningTimeOut is None:  
+                        if atts.morningTimeOut is None:
                             atts.afterStatus = 0
                             atts.morningStatus = 0
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeOut = datetime.now()
                             dbase.session.commit()
                             print'MMMMMMMMMMMMMMMMMM'
-                            return jsonify({'message':'time out'})
+                            return jsonify({'message': 'time out'})
                         else:
                             print'NNNNNNNNNNNNNN'
-                            return jsonify({'message':'you cannot time in twice'})
-                elif now > m12 and now <= a1: # 12 -7pm
+                            return jsonify({'message': 'you cannot time in twice'})
+                elif now > m12 and now <= a1:  # 12 -7pm
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.afterStatus = 1
                             atts.afterDailyStatus = 'not late'
                             atts.afterTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
-                            print 'OOOOOOOOOOOOOOOOOO' 
+                            print 'OOOOOOOOOOOOOOOOOO'
                             dbase.session.commit()
                             return jsonify({'message': 'time in for afternoon'})
                         else:
                             print'PPPPPPPPPPPPPPPPPPPPPPP'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.morningStatus = 0
@@ -886,16 +887,16 @@ def timein():
                             return jsonify({'message': 'time out for morning'})
                         else:
                             print'RRRRRRRRRRRRRRR'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         print'SSSSSSSSSSSSSSSSSSSSS'
-                        return jsonify({'message':'no time out for afternoon at this time'})
+                        return jsonify({'message': 'no time out for afternoon at this time'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.morningStatus = 0
                         atts.morningTimeOut = datetime.now()
                         dbase.session.commit()
                         print'TTTTTTTTTTTTTTT'
-                        return jsonify({'message':'no time out for afternoon at this time'})
+                        return jsonify({'message': 'no time out for afternoon at this time'})
                 elif now > a1 and now <= a6:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
@@ -903,13 +904,13 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # add_remarks(atts.employeeid)
-                            print 'UUUUUUUUUUUUUUUUU' 
+                            # atts.morningRemark = wala pa nabutang
+                            print 'UUUUUUUUUUUUUUUUU'
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
                         else:
                             print'VVVVVVVVVVVV'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.morningStatus = 0
@@ -918,19 +919,19 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # add_remarks(atts.employeeid)
+                            # atts.morningRemark = wala pa nabutang
                             print 'WWWWWWWWWWWWWWWWWWWW'
                             dbase.session.commit()
                             return jsonify({'message': '"time in for afternoon." (time out for morning next time,) '})
                         else:
                             print'XXXXXXXXXXXXXXX'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.afterTimeOut = datetime.now()
                         dbase.session.commit()
                         print'YYYYYYYYYYYYYYYY'
-                        return jsonify({'message':'time out'})
+                        return jsonify({'message': 'time out'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.morningStatus = 0
@@ -938,12 +939,12 @@ def timein():
                         atts.morningTimeOut = datetime.now()
                         dbase.session.commit()
                         print'ZZZZZZZZZZZZZZZZZZZZ'
-                        return jsonify({'message':'time out'})
+                        return jsonify({'message': 'time out'})
                 elif now > a6 and now <= a7:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         print'!!!!!!!!!!!!!!!!!'
                         absents()
-                        return jsonify({'message':'no time in for this time'})
+                        return jsonify({'message': 'no time in for this time'})
 
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         atts.morningStatus = 0
@@ -951,7 +952,7 @@ def timein():
                         dbase.session.commit()
                         absents()
                         print'@@@@@@@@@@@@@@@'
-                        return jsonify({'message':'not time in for afternoon'})
+                        return jsonify({'message': 'not time in for afternoon'})
 
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         atts.afterStatus = 0
@@ -959,7 +960,7 @@ def timein():
                         dbase.session.commit()
                         absents()
                         print'#################'
-                        return jsonify({'message':'time out for afternoon'})
+                        return jsonify({'message': 'time out for afternoon'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.morningStatus = 0
                         atts.afterStatus = 0
@@ -968,24 +969,34 @@ def timein():
                         dbase.session.commit()
                         print'$$$$$$$$$$$$$$$$$$$$$'
                         absents()
-                        return jsonify({'message':'time out for afternoon and morning'})
+                        return jsonify({'message': 'time out for afternoon and morning'})
                 else:
-                    print datenow
-                    print'^^^^^^^^^^^^^^^^^^'
-                    return jsonify({'message':'OT napud siya'})
-       
+                    pass
 
-
-
-#///////////////////////////////////////IF DATE IS NOT THE SAME CREATE NEW ATTENDANCE//////////////////////////////////////////# 
+# ///////////////////////////////////////IF DATE IS NOT THE SAME CREATE NEW ATTENDANCE////////////////////////
             else:
                 # dbase.session.add(attendancenNew)
                 # dbase.session.commit()
-                atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==datenow)).order_by(Attendance.date.desc()).first()
+                atts = Attendance.query.filter(
+                    and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(
+                    Attendance.date.desc()).first()
                 # atts.date = datenow
                 print "last"
+                # dates = Attendance.query.filter_by(date = datenow).first()
+                # print "1st"
+                # print dates.date
+                # if dates.date == datenow:
+                #     print '444546456646546465465465464654654654654'
 
-                if now >= m7 and now <= m9:
+                # elif dates.date != datenow:
+                #     atts.morningStatus = 0
+                #     atts.afterStatus = 0
+                #     dbase.session.add(attendancenNew)
+                #     dbase.session.commit()
+                #     print '0987654321=-098765'
+
+                # dbase.session.commit()
+                if (now >= m7) and (now <= m9):
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.morningTimeOut is None:
                             atts.morningStatus = 1
@@ -996,10 +1007,10 @@ def timein():
                             return jsonify({'message': 'not late'})
                         else:
                             print'8888888888888888888888'
-                            return jsonify({'message':'you cannot time in twice'})           
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         print '777777777777777777777777'
-                        return jsonify({'message':'no time out at this time'})
+                        return jsonify({'message': 'no time out at this time'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         if atts.morningTimeOut is None:
                             atts.afterStatus = 0
@@ -1009,16 +1020,16 @@ def timein():
                             atts.morningDailyStatus = 'not late'
                             dbase.session.commit()
                             print'66666666666666666666665454565'
-                            return jsonify({'message':'not late, kindly dont forget to timeout in morning'})
+                            return jsonify({'message': 'not late, kindly dont forget to timeout in morning'})
                         else:
                             print'555555555555555555555555555'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.afterTimeOut = datetime.now()
                         dbase.session.commit()
                         print'444441254'
-                        return jsonify({'message':'no time out at this time'})
+                        return jsonify({'message': 'no time out at this time'})
 
                 elif now > m9 and now <= m12:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
@@ -1027,13 +1038,13 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
-                            # add_remarks(atts.employeeid)
-                            print '3' 
+                            # atts.morningRemark = wala pa nabutang
+                            print '3'
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
                         else:
                             print'2'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         if atts.morningTimeOut is None:
                             atts.morningStatus = 0
@@ -1044,7 +1055,7 @@ def timein():
                             return jsonify({'message': 'time out'})
                         else:
                             print'A`'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         if atts.morningTimeOut is None:
                             atts.afterStatus = 0
@@ -1052,38 +1063,38 @@ def timein():
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeIn = datetime.now()
                             atts.morningDailyStatus = 'late'
-                            # add_remarks(atts.employeeid)
+                            # atts.morningRemark = wala pa nabutang
                             dbase.session.commit()
                             print'B`'
-                            return jsonify({'message':'late'})
+                            return jsonify({'message': 'late, kindly dont forget to timeout in morning'})
                         else:
                             print'C`'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
-                        if atts.morningTimeOut is None:  
+                        if atts.morningTimeOut is None:
                             atts.afterStatus = 0
                             atts.morningStatus = 0
                             atts.afterTimeOut = datetime.now()
                             atts.morningTimeOut = datetime.now()
                             dbase.session.commit()
                             print'D`'
-                            return jsonify({'message':'time out'})
+                            return jsonify({'message': 'time out'})
                         else:
                             print'E`'
-                            return jsonify({'message':'you cannot time in twice'})
-                elif now > m12 and now <= a1: # 12 -7pm
+                            return jsonify({'message': 'you cannot time in twice'})
+                elif (now > m12) and (now <= a1):  # 12 -7pm
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.afterStatus = 1
                             atts.afterDailyStatus = 'not late'
                             atts.afterTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
-                            print 'F`' 
+                            print 'F`'
                             dbase.session.commit()
                             return jsonify({'message': 'time in for afternoon'})
                         else:
                             print'G`'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.morningStatus = 0
@@ -1094,16 +1105,16 @@ def timein():
                             return jsonify({'message': 'time out for morning'})
                         else:
                             print'I`'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         print'J`'
-                        return jsonify({'message':'no time out for afternoon at this time'})
+                        return jsonify({'message': 'no time out for afternoon at this time'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.morningStatus = 0
                         atts.morningTimeOut = datetime.now()
                         dbase.session.commit()
                         print'K`'
-                        return jsonify({'message':'no time out for afternoon at this time'})
+                        return jsonify({'message': 'no time out for afternoon at this time'})
                 elif now > a1 and now <= a6:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
@@ -1111,13 +1122,13 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # add_remarks(atts.employeeid)
-                            print 'L`' 
+                            # atts.morningRemark = wala pa nabutang
+                            print 'L`'
                             dbase.session.commit()
                             return jsonify({'message': 'late'})
                         else:
                             print'M`'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.morningStatus = 0
@@ -1126,18 +1137,19 @@ def timein():
                             atts.lateTotal = atts.lateTotal + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
-                            # add_remarks(atts.employeeid)
+                            # atts.morningRemark = wala pa nabutang
                             print 'N`'
                             dbase.session.commit()
                             return jsonify({'message': 'time out'})
                         else:
                             print'O`'
-                            return jsonify({'message':'you cannot time in twice'})
+                            return jsonify({'message': 'you cannot time in twice'})
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.afterTimeOut = datetime.now()
+                        dbase.session.commit()
                         print'P`'
-                        return jsonify({'message':'time out'})
+                        return jsonify({'message': 'time out'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.afterStatus = 0
                         atts.morningStatus = 0
@@ -1145,12 +1157,12 @@ def timein():
                         atts.morningTimeOut = datetime.now()
                         dbase.session.commit()
                         print'Q`'
-                        return jsonify({'message':'time out'})
+                        return jsonify({'message': 'time out'})
                 elif now > a6 and now <= a7:
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         print'R`'
                         absents()
-                        return jsonify({'message':'no time in for this time'})
+                        return jsonify({'message': 'no time in for this time'})
 
                     elif atts.morningStatus == 1 and atts.afterStatus == 0:
                         atts.morningStatus = 0
@@ -1158,7 +1170,7 @@ def timein():
                         dbase.session.commit()
                         print'S`'
                         absents()
-                        return jsonify({'message':'not time in for afternoon'})
+                        return jsonify({'message': 'not time in for afternoon'})
 
                     elif atts.morningStatus == 0 and atts.afterStatus == 1:
                         atts.afterStatus = 0
@@ -1166,7 +1178,7 @@ def timein():
                         dbase.session.commit()
                         print'T`'
                         absents()
-                        return jsonify({'message':'time out for afternoon'})
+                        return jsonify({'message': 'time out for afternoon'})
                     elif atts.morningStatus == 1 and atts.afterStatus == 1:
                         atts.morningStatus = 0
                         atts.afterStatus = 0
@@ -1175,11 +1187,9 @@ def timein():
                         dbase.session.commit()
                         print'U`'
                         absents()
-                        return jsonify({'message':'time out for afternoon and morning'})
+                        return jsonify({'message': 'time out for afternoon and morning'})
                 else:
-                    print datenow
-                    print'V`'
-                    return jsonify({'message':'OT napud siya'})
+                    pass
 
 def absents():
     datenow1 = datetime.now().strftime("%m%d%Y")
