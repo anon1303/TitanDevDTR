@@ -413,7 +413,7 @@ def employee_week(dates, emp_id):
    year, week_number = dates.split("-")
    print year
    print week_number
-   summa ry = Attendance.query.filter(Attendance.employeeid == emp_id).filter(Attendance.week_number = week_number).filter(extract('year', Attendance.date) == year).all()
+   summary = Attendance.query.filter(Attendance.employeeid == emp_id).filter(Attendance.week_number = week_number).filter(extract('year', Attendance.date) == year).all()
    employees = []
    if summary is None:
        return jsonify({"message": "No data to show"})
@@ -525,7 +525,6 @@ def timein():
 
         atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==datenow)).order_by(Attendance.date.desc()).first()
 
-#////////////////////////////IF ID IS NOT LISTED IN THE ATTENDACE CRETAE NEW///////////////////////////////#
         if atts is None:
 
             dbase.session.add(attendancenNew)
