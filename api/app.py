@@ -540,7 +540,7 @@ def timein():
             atts = Attendance.query.filter_by(employeeid = empID).order_by(Attendance.date.desc()).first()
             print atts
             print '1st'
-            atts.week_number = datetime.now().strftime("%m%d%Y").isocalendar()[1]
+            #atts.week_number = datetime.now().strftime("%m%d%Y").isocalendar()[1]
             atts.date = datenow
             dbase.session.commit()
             dates = Attendance.query.filter_by(date = datenow).first()
