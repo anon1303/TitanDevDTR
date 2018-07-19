@@ -438,18 +438,19 @@ def employee_week(dates, emp_id):
        employees.append(employee_data)
    return jsonify({'employee': employees})
 
+
 @app.route('/edit/login-time', methods=['POST'])
 @cross_origin(allow_headers=['Content-Type'])
 # @login_required
 def edit_time():
    data = request.get_json()
    
-   morning1 = dt.datetime.strptime(data['morning_time_in_start'], "%H%M").time()
-   morning2 = dt.datetime.strptime(data['morning_time_out_start'], "%H%M").time()
-   morning3 = dt.datetime.strptime(data['morning_time_out_end'], "%H%M").time()
-   after1 = dt.datetime.strptime(data['afternoon_time_in_start'], "%H%M").time()
-   after2 = dt.datetime.strptime(data['afternoon_time_out_start'], "%H%M").time()
-   after3 = dt.datetime.strptime(data['afternoon_time_out_end'], "%H%M").time()
+   morning1 = dt.datetime.strptime(data['morning_time_in_start'], "%H:%M")
+   morning2 = dt.datetime.strptime(data['morning_time_out_start'], "%H:%M")
+   morning3 = dt.datetime.strptime(data['morning_time_out_end'], "%H:%M")
+   after1 = dt.datetime.strptime(data['afternoon_time_in_start'], "%H:%M")
+   after2 = dt.datetime.strptime(data['afternoon_time_out_start'], "%H:%M")
+   after3 = dt.datetime.strptime(data['afternoon_time_out_end'], "%H:%M")
    new_time = Admin.query.filter_by(id=1).first()
    if new_time is None:
        return jsonify({'Message': 'Edit failed'})
@@ -530,7 +531,7 @@ def timein():
         return jsonify({'message': 'user not found'})
     else:    
 
-        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==datenow)).order_by(Attendance.date.desc()).first()
+        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(Attendance.date.desc()).first()
 
         if atts is None:
 
