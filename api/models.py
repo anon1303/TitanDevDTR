@@ -64,7 +64,7 @@ class Attendance(dbase.Model):
     afterStatus = dbase.Column(dbase.Integer, default=0, nullable = False)
     afterDailyStatus = dbase.Column(dbase.String(8)) 
     afterRemark = dbase.Column(dbase.String(50))
-    date = dbase.Column(dbase.DATE)
+    date = dbase.Column(dbase.String(20))
     week_number = dbase.Column(dbase.Integer)
 
     def __init__(self, employeeid):
