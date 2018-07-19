@@ -50,7 +50,7 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 @cross_origin(allow_headers=['Content-Type'])
-# @login_required
+@login_required
 def logout():
   
   msg = "Logged out"
