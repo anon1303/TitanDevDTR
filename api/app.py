@@ -443,6 +443,13 @@ def employee_week(dates, emp_id):
 # @login_required
 def edit_time():
    data = request.get_json()
+   
+   morning1 = dt.datetime.strptime(data['morning_time_in_start'], "%H%M").time()
+   morning2 = dt.datetime.strptime(data['morning_time_out_start'], "%H%M").time()
+   morning3 = dt.datetime.strptime(data['morning_time_out_end'], "%H%M").time()
+   after1 = dt.datetime.strptime(data['afternoon_time_in_start'], "%H%M").time()
+   after2 = dt.datetime.strptime(data['afternoon_time_out_start'], "%H%M").time()
+   after3 = dt.datetime.strptime(data['afternoon_time_out_end'], "%H%M").time()
    new_time = Admin.query.filter_by(id=1).first()
    if new_time is None:
        return jsonify({'Message': 'Edit failed'})
@@ -450,36 +457,36 @@ def edit_time():
        try:
            # new morning log time
            # morning time in start
-           if data['morning_time_in_start'] == '':
+           if morning1 == '':
                new_time.morning_time_in_start = new_time.morning_time_in_start
            else:
-               new_time.morning_time_in_start = data['morning_time_in_start']
+               new_time.morning_time_in_start = morning1
            # morning time out start
-           if data['morning_time_out_start'] == '':
+           if morning2 == '':
                new_time.morning_time_out_start = new_time.morning_time_out_start
            else:
-               new_time.morning_time_out_start = data['morning_time_out_start']
+               new_time.morning_time_out_start = morning2
            # morning time out end
-           if data['morning_time_out_end'] == '':
+           if morning3 == '':
                new_time.morning_time_out_end = new_time.morning_time_out_end
            else:
-               new_time.morning_time_out_end = data['morning_time_out_end']
+               new_time.morning_time_out_end = morning3
            # new afternoon log time
            # afternoon time in start
-           if data['afternoon_time_in_start'] == '':
+           if after1 == '':
                new_time.afternoon_time_in_start = new_time.afternoon_time_in_start
            else:
-               new_time.afternoon_time_in_start = data['afternoon_time_in_start']
+               new_time.afternoon_time_in_start = after1
            # afternoon time out start
-           if data['afternoon_time_out_start'] == '':
+           if after2 == '':
                new_time.afternoon_time_out_start = new_time.afternoon_time_out_start
            else:
-               new_time.afternoon_time_out_start = data['afternoon_time_out_start']
+               new_time.afternoon_time_out_start = after2
            # afternoon time out end
-           if data['afternoon_time_out_end'] == '':
+           if after3 == '':
                new_time.afternoon_time_out_end = new_time.afternoon_time_out_end
            else:
-               new_time.afternoon_time_out_end = data['afternoon_time_out_end']
+               new_time.afternoon_time_out_end = after3
            dbase.session.commit()
            msg = "timein or timeout edited"
            logmessage = Logs(details = msg,log_date = lgdate)
@@ -546,7 +553,6 @@ def timein():
                 print '0987654321=-098765'
 
 
-            nowdate = atts.date
             if now >= m7 and now <= m9:
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.morningTimeOut is None:
