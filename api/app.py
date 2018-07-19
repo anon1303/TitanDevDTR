@@ -501,7 +501,7 @@ def edit_time():
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
-    datenow = dt.datetime.now().strftime("%m%d%Y")
+    datenow = datetime.now().strftime("%m%d%Y")
     timeAdmin = Admin.query.get(1)
 
     morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
