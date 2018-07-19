@@ -9,7 +9,6 @@ import time
 from sqlalchemy import and_, desc
 import png
 import pyqrcode
-import  easy_date
 from datetime import date, datetime, time
 import os
 
@@ -27,7 +26,12 @@ def load_user(user_id):
 def load_user(user_id):
     return Admin.query.get(user_id)
 
-
+@app.route('/', methods=['GET'])
+def admin_create():
+  admin_password = 'admin'
+  admin = Admin(username='admin', password=admin_password)
+ 
+ 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     data = request.get_json()
@@ -69,12 +73,14 @@ def newAdmin():
 # @login_required
 @cross_origin(allow_headers=['Content-Type'])
 def addemployee():
+    weekNumber = s.isocalendar()[1]
+    print 'Week number:', weekNumber
     data = request.get_json()
     
     # birth_date = Strip the time!!!!!!!!
     # birthdate = dt.datetime.date()
     b = str(data['birth_date'])
-    print b
+    
     new_employee = Employee(fname=data['fname'], mname=data['mname'], lname=data['lname'], position=data['position'],
                             code=data['code'], contact=data['contact'], email=data['email'],
                             birth_date=b,  gender=data['gender'], address=data['address'], employeestatus=1)
@@ -108,9 +114,10 @@ def viewEmployee():
             data1['gender'] = i.gender
             data1['address'] = i.address
             data.append(data1)
-        return jsonify({data})
+        return jsonify({'users':data})
     else:
         return jsonify({'message': 'no employee found'})
+
 @app.route('/search/', methods =['GET', 'POST'])
 def searchEmployee():
     data = request.get_json()
@@ -271,7 +278,63 @@ def company_month(dates):
        employees.append(employee_data)
    return jsonify({'Employee': employees})
 
+@app.route('/employee_summary/monthly/<string:dates>/<int:emp_id>', methods=['GET'])
+def employee_monthly(dates, emp_id):
+   dates = datetime.strptime(dates, "%Y-%m-%d")
+   summary = Attendance.query.filter(extract('year', Attendance.date) == (dates.strftime("%Y")))\
+       .filter(extract('month', Attendance.date) == (dates.strftime("%m")))\
+       .filter(Attendance.employeeid == emp_id).all()
+   employees = []
+   for employee in summary:
+       employee_data = {}
+       name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+       employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+       employee_data['overtimeTotal'] = name.overTimeTotal
+       employee_data['employeeid'] = employee.employeeid
+       employee_data['lateTotal'] = employee.lateTotal
+       employee_data['absentTotal'] = employee.absentTotal
+       employee_data['morningTimeIn'] = employee.morningTimeIn
+       employee_data['morningTimeOut'] = employee.morningTimeOut
+       employee_data['afterTimeIn'] = employee.afterTimeIn
+       employee_data['afterTimeOut'] = employee.afterTimeOut
+       employee_data['morningStatus'] = employee.morningStatus
+       employee_data['afterStatus'] = employee.afterStatus
+       employee_data['morningDailyStatus'] = employee.morningDailyStatus
+       employee_data['afterDailyStatus'] = employee.afterDailyStatus
+       employee_data['morningRemark'] = employee.morningRemark
+       employee_data['afterRemark'] = employee.afterRemark
+       employees.append(employee_data)
+   return jsonify({'employee': employees})
 
+
+@app.route('/employee_summary/weekly/<string:dates>/<int:emp_id>', methods=['GET'])
+def employee_week(dates, emp_id):
+   dates = string.replace("W","") 
+   year, week_number = dates.split("-")
+   summary = Attendance.query.filter(Attendance.employeeid == emp_id).filter(Attendance.week_number = week_number).filter(extract('year', Attendance.dates) == year).all()
+   employees = []
+   if summary is None:
+       return jsonify({"message": "No data to show"})
+   for employee in summary:
+       employee_data = {}
+       name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+       employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+       employee_data['overtimeTotal'] = name.overTimeTotal
+       employee_data['employeeid'] = employee.employeeid
+       employee_data['lateTotal'] = employee.lateTotal
+       employee_data['absentTotal'] = employee.absentTotal
+       employee_data['morningTimeIn'] = employee.morningTimeIn
+       employee_data['morningTimeOut'] = employee.morningTimeOut
+       employee_data['afterTimeIn'] = employee.afterTimeIn
+       employee_data['afterTimeOut'] = employee.afterTimeOut
+       employee_data['morningStatus'] = employee.morningStatus
+       employee_data['afterStatus'] = employee.afterStatus
+       employee_data['morningDailyStatus'] = employee.morningDailyStatus
+       employee_data['afterDailyStatus'] = employee.afterDailyStatus
+       employee_data['morningRemark'] = employee.morningRemark
+       employee_data['afterRemark'] = employee.afterRemark
+       employees.append(employee_data)
+   return jsonify({'employee': employees})
 @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
 def company_week(sort_date):
    date_object = datetime.strptime(sort_date, "%Y-%m-%d").isocalendar()[1]
