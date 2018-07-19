@@ -501,7 +501,7 @@ def edit_time():
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
-    datenow = str(dt.datetime.now().strftime("%m%d%Y"))
+    datenow = dt.datetime.now().strftime("%m%d%Y")
     timeAdmin = Admin.query.get(1)
 
     morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
@@ -530,8 +530,7 @@ def timein():
         return jsonify({'message': 'user not found'})
     else:
 
-        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(
-            Attendance.date.desc()).first()
+        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == datenow)).order_by(Attendance.date.desc()).first()
         # print atts.employeeid
         # ////////////////////////////IF ID IS NOT LISTED IN THE ATTENDACE CRETAE NEW///////////////////////////////#
         if atts is None:
