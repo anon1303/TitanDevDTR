@@ -530,8 +530,8 @@ def timein():
         return jsonify({'message': 'user not found'})
     else:
 
-        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == str(datenow))).order_by(Attendance.date.desc()).first()
-        # print atts.employeeid
+        atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date ==str(datenow))).order_by(Attendance.date.desc()).first()
+        
         # ////////////////////////////IF ID IS NOT LISTED IN THE ATTENDACE CRETAE NEW///////////////////////////////#
         if atts is None:
 
