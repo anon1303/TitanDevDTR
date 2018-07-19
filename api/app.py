@@ -408,7 +408,7 @@ def edit(user_id):
 
 @app.route('/employee_summary/weekly/<string:dates>/<int:emp_id>', methods=['GET'])
 def employee_week(dates, emp_id):
-   dates = string.replace("W","")
+   dates = string.replace(dates,"W","")
    print dates
    year, week_number = dates.split("-")
    print year
