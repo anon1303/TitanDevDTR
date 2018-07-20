@@ -328,7 +328,12 @@ def company_month(dates):
    for employee in summary:
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+       overtimee = Overtime.query.filter_by(employeeid=employee.employeeid).order_by(Overtime.overtimeDate.desc()).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+       if overtimee is None:
+            employee_data['overtimeTotal'] = 0
+       else:
+            employee_data['overtimeTotal'] = overtimee.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -362,7 +367,12 @@ def company_week(sort_date):
    for employee in summary:
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+       overtimee = Overtime.query.filter_by(employeeid=employee.employeeid).order_by(Overtime.overtimeDate.desc()).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
+       if overtimee is None:
+            employee_data['overtimeTotal'] = 0
+       else:
+            employee_data['overtimeTotal'] = overtimee.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -427,8 +437,12 @@ def employee_week(dates, emp_id):
    for employee in summary:
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+       overtimee = Overtime.query.filter_by(employeeid=employee.employeeid).order_by(Overtime.overtimeDate.desc()).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
-       employee_data['overtimeTotal'] = name.overTimeTotal
+       if overtimee is None:
+            employee_data['overtimeTotal'] = 0
+       else:
+            employee_data['overtimeTotal'] = overtimee.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
