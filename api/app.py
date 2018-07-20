@@ -388,7 +388,10 @@ def employee_monthly(emp_id):
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
        overtimee = Overtime.query.filter_by(employeeid=employee.employeeid).order_by(Overtime.overtimeDate.desc()).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
-       employee_data['overtimeTotal'] = overtimee.overTimeTotal
+       if overtimee is None:
+            employee_data['overtimeTotal'] = 0
+       else:
+            employee_data['overtimeTotal'] = overtimee.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
