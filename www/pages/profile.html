@@ -1,188 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>TitanDev</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
-    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 150%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
 </head>
 
 <body onload="employeeProfile()">
 
-    <div id="wrapper">
-
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Titan Web Development Services</a>
-            </div>
-            <!-- /.navbar-header -->
-
-
-            <ul class="nav navbar-top-links navbar-right">
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                        <a href="../logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="edit.html"><i class="fa fa-edit fa-fw"></i> Edit Profile</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Employee Profile</h1>
-                </div>
-            </div>
-            <div>
-                <p>
-                    <br>
-                    <b id="name">Name: </b>
-                    <br><br>
-                    <b id="code">Code ID: </b>
-                    <br><br>
-                    <b id="position">Position: </b>
-                    <br><br>
-                    <b id="contact">Contact No. : </b>
-                    <br><br>
-                    <b id="email">Email: </b>
-                    <br><br>
-                    <b id="birth_date">Birth Date: </b>
-                    <br><br>
-                    <b id="gender">Gender: </b>
-                    <br><br>
-                    <b id="address">Address: </b>
-                </p>
-            </div>
-        </div>
-        <!-- /#page-wrapper -->
-
+<!--NAVIGATION-->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="employees.html"><span class="glyphicon glyphicon-circle-arrow-left"></span></a>
     </div>
-    <!-- /#wrapper -->
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Profile</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!--NAVIGATION-->
 
-    <!-- Javascript -->
-    <script type="text/javascript">
-        function employeeProfile(){
-            x = localStorage.getItem('index');
-            alert(x);
-            $.ajax({
-                url: "https://mighty-cove-44634.herokuapp.com/view/",
-                method: "GET",
-                contentType: 'application/json; charset=utf-8',
-                dataType: "json",
+<!--BODY-->  
+<div class="container-fluid text-center">    
+  <div class="row content">
+
+    <!--LEFT BODY-->
+    <div class="col-sm-2 sidenav">
+    </div>
+    <!--LEFT BODY-->
+
+    <div class="col-sm-8 text-left"> 
+      <h1>Profile</h1>
+      <p><a href="editProfile.html" onclick="get_one()"><span class="glyphicon glyphicon-edit"></span> Edit Profile</a></p>
+      <hr>
+        <p>
+          <br>
+          <b id="name">Name: </b>
+          <br><br>
+          <b id="code">Code ID: </b>
+          <br><br>
+          <b id="position">Position: </b>
+          <br><br>
+          <b id="contact">Contact No. : </b>
+          <br><br>
+          <b id="email">Email: </b>
+          <br><br>
+          <b id="birth_date">Birth Date: </b>
+          <br><br>
+          <b id="gender">Gender: </b>
+          <br><br>
+          <b id="address">Address: </b>
+        </p>
+      </table>
+    </div>
+
+    <!--RIGHT BODY-->
+    <div class="col-sm-2 sidenav">
+    </div>
+    <!--RIGHT BODY-->
+  </div>
+</div>
+<!--BODY-->
+
+<!--FOOTER-->
+<footer class="container-fluid text-center">
+  <p>Developed by: Jomary Daison, Jerald Talledo, and Charlin Bugas</p>
+</footer>
+<!--FOOTER-->
+
+<!--SCRIPTS-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+  function employeeProfile(){
+    x = localStorage.getItem('index');
+    $.ajax({
+      url: "https://mighty-cove-44634.herokuapp.com/view/",
+      method: "GET",
+      contentType: 'application/json; charset=utf-8',
+      dataType: "json",
                     
-                success: function(data){
-                        // $("#name").html('');
-                        $("#name").append(data.users[x].fname+' '+data.users[x].mname+' '+data.users[x].lname+"<br>")
-                        // $("#position").html('');
-                        $("#position").append(data.users[x].position+"<br>")
-                        // $("#code").html('');
-                        $("#code").append(data.users[x].code+"<br>")
-                        // $("#contact").html('');
-                        $("#contact").append(data.users[x].contact+"<br>")
-                        // $("#email").html('');
-                        $("#email").append(data.users[x].email+"<br>")
-                        // $("#birth_date").html('');
-                        $("#birth_date").append(data.users[x].birth_date+"<br>")
-                        // $("#gender").html('');
-                        $("#gender").append(data.users[x].gender+"<br>")
-                        // $("#address").html('');
-                        $("#address").append(data.users[x].address+"<br>")
+      success: function(data){
+        // $("#name").html('');
+        $("#name").append(data.users[x].fname+' '+data.users[x].mname+' '+data.users[x].lname+"<br>")
+        // $("#position").html('');
+        $("#position").append(data.users[x].position+"<br>")
+        // $("#code").html('');
+        $("#code").append(data.users[x].code+"<br>")
+        // $("#contact").html('');
+        $("#contact").append(data.users[x].contact+"<br>")
+        // $("#email").html('');
+        $("#email").append(data.users[x].email+"<br>")
+        // $("#birth_date").html('');
+        $("#birth_date").append(data.users[x].birth_date+"<br>")
+        // $("#gender").html('');
+        $("#gender").append(data.users[x].gender+"<br>")
+        // $("#address").html('');
+        $("#address").append(data.users[x].address+"<br>")
 
-                },
-                  
-                error: function(data){
-                    alert("error");
-                }
-            });
+        function get_one(code){ 
+          localStorage.setItem('index', code);
         }
 
-    /*    function disableBtn(){
-            var y = localStorage.getItem('index1');
-
-            $.ajax({
-                     url: "https://mighty-cove-44634.herokuapp.com/deactivate",
-                    type: "POST",
-                     contentType: 'application/json; charset=utf-8',
-                     dataType: "json",
-                     data: JSON.stringify({
-                    "code": y
-                    }),
-                       
-                    success: function(data){
-                     alert("Employee Information Deactivated");
-                     window.location.href = 'employees.html';
-                    },
-                                                  
-                     error: function(data){
-                      alert("error");
-                    }
-            })
-        }   */
-    </script>
-
-            <!-- jQuery -->
-            <script src="../vendor/jquery/jquery.min.js"></script>
-            <script src="../vendor/jquery/jquery.js"></script>
-
-            <!-- Bootstrap Core JavaScript -->
-            <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-
-            <!-- Metis Menu Plugin JavaScript -->
-            <script src="../vendor/metisMenu/metisMenu.min.js"></script>
-
-            <!-- Custom Theme JavaScript -->
-            <script src="../dist/js/sb-admin-2.js"></script>
+      },                  
+      error: function(data){
+        alert("error");
+      }
+    });
+  }
+</script>
+<script type="text/javascript">
+  function logout(){
+    $.ajax({
+      url: "https://mighty-cove-44634.herokuapp.com/logout",
+      method:  'GET',
+      crossDomain: true,
+      success: function(data){
+        alert(data.message);
+        window.location.assign('../index.html');
+      },
+      error: function () {
+        alert("Action Failed!");
+      }
+    });
+  }
+</script>
+<!--SCRIPTS-->
 
 </body>
-
 </html>

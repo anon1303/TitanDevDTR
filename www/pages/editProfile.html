@@ -19,7 +19,7 @@
     .sidenav {
       padding-top: 20px;
       background-color: #f1f1f1;
-      height: 100%;
+      height: 240%;
     }
     
     /* Set black background color, white text and some padding */
@@ -40,7 +40,7 @@
   </style>
 </head>
 
-<body onload="employeeAttendance()">
+<body>
 
 <!--NAVIGATION-->
 <nav class="navbar navbar-inverse">
@@ -51,14 +51,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand">Logo</a>
+      <a class="navbar-brand" href="#">Logo</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="employees.html">Employees</a></li>
-        <li class="active"><a href="#">Attendance</a></li>
-        <li><a href="editTime.html">Edit Time Schedule</a></li>
-        <li><a href="adminApproval.html">Admin Approval</a></li>
+        <li class="active"><a href="#">Edit Profile</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -78,53 +75,33 @@
     <!--LEFT BODY-->
 
     <div class="col-sm-8 text-left"> 
-      <h1>Attendance</h1>
-      <p>
-      </p>
+      <h1>Edit Employee Inforamtion</h1>
+      <p></p>
       <hr>
-      <table width="100%" class="table table-striped table-bordered table-hover" id="employee_table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <script type="text/javascript">
-            function employeeAttendance(){
-              $(document).ready(function(){
-                $.getJSON("https://mighty-cove-44634.herokuapp.com/view/", function(data){
-                  var employee_data = "";             
-                  $.each(data, function(i, key){
-                    for (var i = 0; i < key.length; i++) {  
-                      employee_data += '<tr>';
-                      employee_data += '<td>'+key[i].fname+' '+key[i].mname+' '+key[i].lname+'</td>';
-                      employee_data += '<td>'+key[i].position+'</td>';
-                      parseInt(i)
-                      employee_data += '<td>'+'<a href="#" onclick="get_one(\''+key[i].code+'\',\''+i+'\')">'+'View '+'</a>'+'</td>';
-                      employee_data += '</tr>';
-                    }
-                  });
-                  $('#employee_table').append(employee_data);
-                });
-              });
-            }
-
-            function get_one(i, code){                                    
-                localStorage.setItem('index', code);
-                localStorage.setItem('index1', i);
-            }
-          </script>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Actions</th>
-          </tr>
-        </tfoot>
-      </table>
+        <p>
+          <label for="fname">First Name:</label>
+            <input type="text" name="fname" class="form-control" id="fname"><br><br>
+          <label for="mname">Middle Name:</label>
+            <input type="text" name="mname" class="form-control" id="mname"><br><br>
+          <label for="lname">Last Name:</label>
+            <input type="text" name="lname" class="form-control" id="lname"><br><br>
+          <label for="position">Positions:</label>
+            <input type="text" name="position" class="form-control" id="position"><br><br>
+          <label for="contact">Contact No.:</label>
+            <input type="text" name="contact" class="form-control" id="contact"><br><br>
+          <label for="code">Employee Code:</label>
+            <input type="text" name="code" class="form-control" id="code"><br><br>
+          <label for="email">Email Address:</label>
+            <input type="text" name="email" class="form-control" id="email"><br><br>
+          <label for="birth_date">Birthdate:</label>
+            <input type="date" name="birth_date" class="form-control" id="birth_date"><br><br>
+          <label for="gender">Gender:</label>
+            <label><input type="radio" name="gender" id="gender" value="male"> Male </label>
+            <label><input type="radio" name="gender" id="gender" value="female"> Female </label><br><br> 
+          <label for="address">Address:</label>
+            <input type="text" name="address" class="form-control" id="address"><br>
+        </p>
+        <button type="submit" class="btn btn-primary btn-block" onclick="submit()">Edit</button>
     </div>
 
     <!--RIGHT BODY-->
@@ -143,13 +120,40 @@
 
 <!--SCRIPTS-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
-  $(document).ready(function() {
-    $('#employee_table').DataTable({
-      responsive: true
+  function submit(){
+    y = localStorage.getItem('index1'); 
+    $.ajax({
+      url: "https://mighty-cove-44634.herokuapp.com/edit/"+y,
+      // url: "http://127.0.0.1:5050/edit/login-time",
+
+      contentType: 'application/json; charset=utf-8',
+      method:  'POST',
+      dataType: 'json',
+      crossDomain: true,
+      data: JSON.stringify({
+        'fname':$('#fname').val(),
+        'mname':$('#mname').val(),
+        'lname':$('#lname').val(),
+        'position':$('#position').val(),
+        'contact':$('#contact').val(), 
+        'code':$('#code').val(),
+        'email':$('#email').val(),
+        'birth_date':$('#birth_date').val(),
+        'gender':$('#gender').val(),
+        'address':$('#address').val()
+      }),
+      success: function(data){
+        alert(data.message)
+        window.open('profile.html','_self');
+      },   
+      error: function () {
+        alert("Failed to Edit!")
+      }
     });
-  });
+  }
 </script>
 <script type="text/javascript">
   function logout(){

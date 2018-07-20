@@ -1,233 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>TitanDev</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
-    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- DataTables CSS -->
-    <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-
-    <!-- DataTables Responsive CSS -->
-    <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
 </head>
 
 <body onload="employeeList()">
 
-    <div id="wrapper">
-
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Titan Web Development Services</a>
-            </div>
-            <!-- /.navbar-header -->
-
-            <ul class="nav navbar-top-links navbar-right">
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                        <a href="../logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="attendance.html"><i class="fa fa-table fa-fw"></i> Attendance</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Employees</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Employee List</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <p>
-                                <button type="button" id="employeeButton" class="btn btn-success btn-sm">Add Employee</button>
-                                <button type="button" id="employeeActivateButton" class="btn btn-primary btn-sm">Activate Employee</button>
-                                <button type="button" id="employeeDeactivateButton" class="btn btn-danger btn-sm">Deactivate Employee</button>
-                            </p>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="employee_table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <script type="text/javascript">
-
-
-                                        function employeeList(){
-                                        $(document).ready(function(){
-                                            $.getJSON("https://mighty-cove-44634.herokuapp.com/view/", function(data){
-                                                var employee_data = "";
-                                              
-                                                $.each(data, function(i, key){
-                                                    for (var i = 0; i < key.length; i++) {     
-                                                                                                               
-                                                    
-                                                    employee_data += '<tr>';
-                                                    employee_data += '<td>'+key[i].fname+' '+key[i].mname+' '+key[i].lname+'</td>';
-                                                    employee_data += '<td>'+key[i].position+'</td>';
-                                                    parseInt(i)
-                                                    employee_data += '<td>'+'<a href="profile.html" onclick="get_one(\''+key[i].code+'\',\''+i+'\')">'+'View '+'</a>'+'</td>';
-                                                    employee_data += '</tr>';
-                                                    
-                    
-                                                    }
-                                                });
-                                              
-                                                $('#employee_table').append(employee_data);
-                                            });
-                                        });
-                                    }
-
-                                    function get_one(i, code){
-                                    //    alert(code);                                      
-                                        localStorage.setItem('index', code);
-                                        localStorage.setItem('index1', i);
-                                    }
-
-                                    function disableBtn(){
-                                        var y = localStorage.getItem('index1');
-
-                                        $.ajax({
-                                            url: "https://mighty-cove-44634.herokuapp.com/deactivate",
-                                            type: "POST",
-                                            contentType: "application/json; charset=utf-8",
-                                            dataType: "json",
-                                            data: JSON.stringify({
-                                                "code": y
-                                            }),
-
-                                            success: function(data){
-                                                alert("Employee is Deactivated");
-                                                window.location.href = "employees.html";
-                                            },
-
-                                            error: function(data){
-                                                alert("error");
-                                            }
-                                        })
-                                    }
-
-
-                                    </script> 
-
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-6 -->
-            </div>
-            <!-- /.row -->
-        </div>
-        <!-- /#page-wrapper -->
-
+<!--NAVIGATION-->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
     </div>
-    <!-- /#wrapper -->
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Employees</a></li>
+        <li><a href="attendance.html">Attendance</a></li>
+        <li><a href="editTime.html">Edit Time Schedule</a></li>
+        <li><a href="adminApproval.html">Admin Approval</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!--NAVIGATION-->
 
-    <!-- JAVASCRIPT -->
+<!--BODY-->  
+<div class="container-fluid text-center">    
+  <div class="row content">
 
-    <!-- jQuery -->
-    <script src="../vendor/jquery/jquery.min.js"></script>
+    <!--LEFT BODY-->
+    <div class="col-sm-2 sidenav">
+    </div>
+    <!--LEFT BODY-->
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <div class="col-sm-8 text-left"> 
+      <h1>Employees</h1>
+      <p>
+        <button type="button" id="employeeButton" class="btn btn-success btn-sm">Add Employee</button>
+        <button type="button" id="employeeActivateButton" class="btn btn-primary btn-sm">Activate Employee</button>
+        <button type="button" id="employeeDeactivateButton" class="btn btn-danger btn-sm">Deactivate Employee</button>
+      </p>
+      <hr>
+      <table width="100%" class="table table-striped table-bordered table-hover" id="employee_table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <script type="text/javascript">
+            function employeeList(){
+              $(document).ready(function(){
+                $.getJSON("https://mighty-cove-44634.herokuapp.com/view/", function(data){
+                  var employee_data = "";             
+                  $.each(data, function(i, key){
+                    for (var i = 0; i < key.length; i++) {  
+                      employee_data += '<tr>';
+                      employee_data += '<td>'+key[i].fname+' '+key[i].mname+' '+key[i].lname+'</td>';
+                      employee_data += '<td>'+key[i].position+'</td>';
+                      parseInt(i)
+                      employee_data += '<td>'+'<a href="profile.html" onclick="get_one(\''+key[i].code+'\',\''+i+'\')">'+'View '+'</a>'+'</td>';
+                      employee_data += '</tr>';
+                    }
+                  });
+                  $('#employee_table').append(employee_data);
+                });
+              });
+            }
 
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+            function get_one(i, code){                                    
+                localStorage.setItem('index', code);
+                localStorage.setItem('index1', i);
+            }
+          </script>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Actions</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
 
-    <!-- DataTables JavaScript -->
-    <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <!--RIGHT BODY-->
+    <div class="col-sm-2 sidenav">
+    </div>
+    <!--RIGHT BODY-->
+  </div>
+</div>
+<!--BODY-->
 
-    <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
+<!--FOOTER-->
+<footer class="container-fluid text-center">
+  <p>Developed by: Jomary Daison, Jerald Talledo, and Charlin Bugas</p>
+</footer>
+<!--FOOTER-->
 
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-    <script>
-        document.getElementById("employeeButton").onclick = function () {
-            location.href = "forms(employee).html";
-        };
-
-        document.getElementById("employeeActivateButton").onclick = function () {
-            location.href = "activate.html";
-        };
-
-        document.getElementById("employeeDeactivateButton").onclick = function () {
-            location.href = "deactivate.html";
-        };
-
-
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
-        });
+<!--SCRIPTS-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+  document.getElementById("employeeButton").onclick = function (){
+    location.href = "addEmployee.html";
+  };
+  document.getElementById("employeeActivateButton").onclick = function (){
+    location.href = "activateEmployee.html";
+  };
+  document.getElementById("employeeDeactivateButton").onclick = function (){
+    location.href = "deactivateEmployee.html";
+  };
+  $(document).ready(function() {
+    $('#employee_table').DataTable({
+      responsive: true
     });
-    </script>
+  });
+</script>
+<script type="text/javascript">
+  function logout(){
+    $.ajax({
+      url: "https://mighty-cove-44634.herokuapp.com/logout",
+      method:  'GET',
+      crossDomain: true,
+      success: function(data){
+        alert(data.message);
+        window.location.assign('../index.html');
+      },
+      error: function () {
+        alert("Action Failed!");
+      }
+    });
+  }
+</script>
+<!--SCRIPTS-->
 
 </body>
-
 </html>

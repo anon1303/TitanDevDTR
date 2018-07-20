@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>TitanDev</title>
+
+    <!-- Favicons
+        ================================================== -->
+    <link rel="shortcut icon" href="admin_login/img/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="admin_login/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="admin_login/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="admin_login/img/apple-touch-icon-114x114.png">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css"  href="admin_login/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="admin_login/fonts/font-awesome/css/font-awesome.css">
+
+    <!-- Stylesheet
+    ================================================== -->
+    <link rel="stylesheet" type="text/css"  href="admin_login/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+  <header id="header">
+    <div class="intro">
+      <div class="overlay">
+        <div class="container">
+          <div class="intro-text">
+            <h2><span style="color: #fff;">WHY ARE YOU LATE?</span></h2>
+
+            <select class="form-control" id = "remark">
+              <option value="singkaw ka?">traffic</option>
+              <option value="dugay kamata">dugay kamata</option>
+              <option value="Dugay kalakaw">Dugay kalakaw</option>
+              <option value="trip lang">trip lang</option>
+            </select><br>
+            <button type="submit" class="btn btn-primary" onclick="remark1()">Add Remark</button><br> 
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+<footer class="container-fluid text-center">
+	<p></p>
+  <p>© Developed by: Jomary Daison, Jerald Talledo, and Charlin Bugas</p>
+</footer>
+<script type="text/javascript">
+    
+      function remark1(){
+        z = localStorage.getItem("code1");
+        alert(z);
+        alert($('#remark').val());
+        $.ajax({
+          url: "https://mighty-cove-44634.herokuapp.com/remark/"+ z,
+          method:  'POST',
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'json',
+          crossDomain: true,
+          data: JSON.stringify({
+            'reason':$('#remark').val()
+          }),
+        success: function(data){
+           alert(data.message);
+           window.location.assign('index.html');
+         },
+       error: function () {
+           alert("Action Failed!");
+         }
+        });
+      }
+ 
+</script>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="admin_login/js/jquery.1.11.1.js"></script> 
+<script type="text/javascript" src="admin_login/js/bootstrap.js"></script> 
+<script type="text/javascript" src="admin_login/js/SmoothScroll.js"></script> 
+<script type="text/javascript" src="admin_login/js/jqBootstrapValidation.js"></script> 
+<script type="text/javascript" src="admin_login/js/contact_me.js"></script> 
+<script type="text/javascript" src="admin_login/js/main.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../dist/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>
