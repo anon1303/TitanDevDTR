@@ -335,7 +335,7 @@ def company_month(dates):
        if overtimee is None:
             employee_data['overtimeTotal'] = 0
        else:
-            employee_data['overtimeTotal'] = overtimee.overTimeTotal
+            employee_data['overtimeTotal'] = overtimee.overtimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -374,7 +374,7 @@ def company_week(sort_date):
        if overtimee is None:
             employee_data['overtimeTotal'] = 0
        else:
-            employee_data['overtimeTotal'] = overtimee.overTimeTotal
+            employee_data['overtimeTotal'] = overtimee.overtimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -405,7 +405,7 @@ def employee_monthly(emp_id):
        if overtimee is None:
             employee_data['overtimeTotal'] = 0
        else:
-            employee_data['overtimeTotal'] = overtimee.overTimeTotal
+            employee_data['overtimeTotal'] = overtimee.overtimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -444,7 +444,7 @@ def employee_week(dates, emp_id):
        if overtimee is None:
             employee_data['overtimeTotal'] = 0
        else:
-            employee_data['overtimeTotal'] = overtimee.overTimeTotal
+            employee_data['overtimeTotal'] = overtimee.overtimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
@@ -1295,7 +1295,7 @@ def request_overtime():
        dbase.session.add(new_overtime)
        dbase.session.commit()
        overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid)
-       overtime_date.overtimeDate = datetime.strptime(data['date'], "%m-%d-%Y")
+       overtime_date.overtimeDate = dt.date.strptime(data['date'], "%m-%d-%Y")
        dbase.session.commit()
        return jsonify({'message': 'Request Created'})
    else:
