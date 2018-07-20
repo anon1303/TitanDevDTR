@@ -128,6 +128,7 @@ def viewEmployee():
           data1['lname'] = i.lname
           data1['position'] = i.position
           data1['code'] = i.code
+          data1['employeeid'] = i.employeeid
           data1['contact'] = i.contact
           data1['email'] = i.email
           data1['birth_date'] = str(i.birth_date)
@@ -153,6 +154,7 @@ def viewEmployeeDeactivated():
             data1['lname'] = i.lname
             data1['position'] = i.position
             data1['code'] = i.code
+            data1['employeeid'] = i.employeeid
             data1['contact'] = i.contact
             data1['email'] = i.email
             data1['birth_date'] = str(i.birth_date)
@@ -1280,3 +1282,52 @@ def auto_TimeOut():
     for i in timeout:
       i.overtimeInStatus = 0
       dbase.session.commit()
+
+@app.route('/overtime/request', methods=['POST'])
+def request_overtime():
+   data = request.get_json()
+   employee = Employee.query.filter_by(code=data['code']).first()
+   if employee is None:
+        return jsonify({'message': 'Employee not found'})
+        overtime = Overtime.query.filter(Overtime.employeeid == employee.employeeid & Overtime.overtimeStatus == 0)\
+        .order_by(Overtime. overtimeDate.desc()).first()
+   if overtime is None:
+       new_overtime = Overtime(employeeid=employee.employeeid)
+       dbase.session.add(new_overtime)
+       dbase.session.commit()
+       overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid)
+       overtime_date.overtimeDate = datetime.strptime(str(data['date']), "%m-%d-%Y")
+       dbase.session.commit()
+       return jsonify({'message': 'Request Created'})
+   else:
+       return jsonify({'message': 'Request already sent, Please wait for the admin to approve'})
+
+
+@app.route('/view/overtime/requests', methods=['GET'])
+def view_requests():
+   overtime = Overtime.query.filter_by(overtimeStatus=0).all()
+   if overtime is None:
+       return jsonify({'message': 'No request found'})
+   else:
+       overtimers = []
+       for overtimee in overtime:
+           employee = Employee.query.filter_by(employeeid=overtimee.employeeid).first()
+           employee_data = {}
+           employee_data['name'] = employee.fname + " " + employee.mname + " " + employee.lname
+           employee_data['id'] = employee.employeeid
+           employee_data['date'] = overtimee.overtimeDate
+           overtimers.append(employee_data)
+           return jsonify({'employee': overtimers})
+
+
+@app.route('/approve/request', methods=['POST'])
+def approve():
+   data = request.get_json()
+   overtime = Overtime.query.filter(Overtime.overtimeStatus == 0 & Overtime.employeeid == data['id']).first()
+   if overtime is None:
+       return jsonify({'message': 'Error'})
+   else:
+       overtime.overtimeStatus = 1
+       overtime.overtimeTotal = overtime.overtimeTotal + 1
+       dbase.session.commit()
+       return jsonify({'message': 'Overtime approved successfuly!'})
