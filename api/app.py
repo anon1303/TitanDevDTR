@@ -510,6 +510,7 @@ def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
     datenow1 = datetime.now().strftime("%m%d%Y")
     datenow = datetime.strptime(str(datenow1), "%m%d%Y")
+    week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
     timeAdmin = Admin.query.get(1)
 
     morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
@@ -550,6 +551,7 @@ def timein():
             print atts
             print '1st'
             atts.date = datenow
+            atts.week_number = week_no
             dbase.session.commit()
             dates = Attendance.query.filter_by(date=datenow).first()
             if dates:
