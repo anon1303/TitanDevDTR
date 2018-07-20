@@ -347,7 +347,7 @@ def company_month(dates):
 
 
 @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
-@cross_origin(allow_headers=['Content-Type'])
+@cross_origin("*")
 # @login_required
 def company_week(sort_date):
    daTe = str(sort_date)
@@ -386,8 +386,9 @@ def employee_monthly(emp_id):
    for employee in summary:
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
+       overtimee = Overtime.query.filter_by(employeid=employee.employee.id).order_by(Overtime.overtimeDate.desc()).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
-       employee_data['overtimeTotal'] = name.overTimeTotal
+       employee_data['overtimeTotal'] = overtimee.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
