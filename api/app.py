@@ -386,7 +386,7 @@ def employee_monthly(emp_id):
    for employee in summary:
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
-       overtimee = Overtime.query.filter_by(employeid=employee.employee.id).order_by(Overtime.overtimeDate.desc()).first()
+       overtimee = Overtime.query.filter_by(employeid=employee.employeeid).order_by(Overtime.overtimeDate.desc()).first()
        employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
        employee_data['overtimeTotal'] = overtimee.overTimeTotal
        employee_data['employeeid'] = employee.employeeid
