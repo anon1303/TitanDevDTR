@@ -513,13 +513,13 @@ def timein():
     afte6 = timeAdmin.afternoon_time_out_start.strftime("%H%M")
     afte7 = timeAdmin.afternoon_time_out_end.strftime("%H%M")
 
-    m7 = ''.join([datenow, morning7])
-    m9 = ''.join([datenow, morning9])
-    m12 = ''.join([datenow, morning12])
+    m7 = ''.join([datenow1, morning7])
+    m9 = ''.join([datenow1, morning9])
+    m12 = ''.join([datenow1, morning12])
 
-    a1 = ''.join([datenow, afte1])
-    a6 = ''.join([datenow, afte6])
-    a7 = ''.join([datenow, afte7])
+    a1 = ''.join([datenow1, afte1])
+    a6 = ''.join([datenow1, afte6])
+    a7 = ''.join([datenow1, afte7])
 
     # 1 for active and 0 for inactive
     data = request.get_json()
