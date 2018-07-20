@@ -318,7 +318,7 @@ def edit(user_id):
 
 
 @app.route('/company_summary/monthly/<string:dates>', methods=['GET'])
-@cross_origin(allow_headers=['Content-Type'])
+@cross_origin("*")
 # @login_required
 def company_month(dates):
    dates = datetime.strptime(dates, "%Y-%m-%d")
