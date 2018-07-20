@@ -552,7 +552,7 @@ def timein():
                 dbase.session.commit()
                 print '0987654321=-098765'
 
-            nowdate = atts.date
+            # nowdate = atts.date
             if (now >= m7) and (now <= m9):
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.morningTimeOut is None:
