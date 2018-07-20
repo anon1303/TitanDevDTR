@@ -1295,7 +1295,8 @@ def request_overtime():
        dbase.session.add(new_overtime)
        dbase.session.commit()
        overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid)
-       overtime_date.overtimeDate = data['date']
+       dates = str(data['date'])
+       overtime_date.overtimeDate = datetime.strptime(dates, "%Y-%m-%d")
        dbase.session.commit()
        return jsonify({'message': 'Request Created'})
    else:
