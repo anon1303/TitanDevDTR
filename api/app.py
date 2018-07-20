@@ -392,10 +392,10 @@ def employee_monthly(emp_id):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = str(employee.morningTimeIn)
-       employee_data['morningTimeOut'] = str(employee.morningTimeOut)
-       employee_data['afterTimeIn'] = str(employee.afterTimeIn)
-       employee_data['afterTimeOut'] = str(employee.afterTimeOut)
+       employee_data['morningTimeIn'] = str(employee.morningTimeIn.strftime("%m-%d-%Y %H:%m"))
+       employee_data['morningTimeOut'] = str(employee.morningTimeOut.strftime("%m-%d-%Y %H:%m"))
+       employee_data['afterTimeIn'] = str(employee.afterTimeIn.strftime("%m-%d-%Y %H:%m"))
+       employee_data['afterTimeOut'] = str(employee.afterTimeOut.strftime("%m-%d-%Y %H:%m"))
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
