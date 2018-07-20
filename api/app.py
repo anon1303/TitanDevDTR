@@ -350,12 +350,12 @@ def company_month(dates):
 @cross_origin("*")
 # @login_required
 def company_week(sort_date):
-   daTe = str(sort_date)
-   print daTe
-   date_object = datetime.strptime(daTe, "%Y-%m-%d").isocalendar()[1]
-   year = datetime.strptime(daTe, "%Y-%m-%d")
-   summary = Attendance.query.filter(extract('year', Attendance.date) == (year.strftime("%Y")))\
-       .filter(Attendance.week_number == int(date_object)).all()
+   dates = string.replace(sort_date,"W","")
+   print dates
+   year, week_number = dates.split("-")
+   print year
+   print week_number
+   summary = Attendance.query.filter(Attendance.week_number == week_number).filter(extract('year', Attendance.date) == year).order_by(Attendance.week_number.desc()).all()
    employees = []
    if summary is None:
        return jsonify({"message": "No data to show"})
@@ -420,7 +420,7 @@ def employee_week(dates, emp_id):
    year, week_number = dates.split("-")
    print year
    print week_number
-   summary = Attendance.query.filter(Attendance.employeeid == emp_id).filter(Attendance.week_number == week_number).filter(extract('year', Attendance.date) == year).all()
+   summary = Attendance.query.filter(Attendance.employeeid == emp_id).filter(Attendance.week_number == week_number).filter(extract('year', Attendance.date) == year).   summary = Attendance.query.filter(Attendance.week_number == week_number).filter(extract('year', Attendance.date) == year).order_by(Attendance.week_number.desc()).all().all()
    employees = []
    if summary is None:
        return jsonify({"message": "No data to show"})
