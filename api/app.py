@@ -1289,7 +1289,7 @@ def request_overtime():
    employee = Employee.query.filter_by(code=data['code']).first()
    if employee is None:
         return jsonify({'message': 'Employee not found'})
-   overtime = Overtime.query.filter(Overtime.employeeid == employee.employeeid & Overtime.overtimeStatus == 0).order_by(Overtime.overtimeDate.desc()).first()
+   overtime = Overtime.query.filter(Overtime.employeeid == employee.employeeid).filter(Overtime.overtimeStatus == 0).order_by(Overtime.overtimeDate.desc()).first()
    if overtime is None:
        new_overtime = Overtime(employeeid=employee.employeeid)
        dbase.session.add(new_overtime)
@@ -1322,7 +1322,7 @@ def view_requests():
 @app.route('/approve/request', methods=['POST'])
 def approve():
    data = request.get_json()
-   overtime = Overtime.query.filter(Overtime.overtimeStatus == 0 & Overtime.employeeid == data['id']).first()
+   overtime = Overtime.query.filter(Overtime.overtimeStatus == 0).filter(Overtime.employeeid == data['id']).first()
    if overtime is None:
        return jsonify({'message': 'Error'})
    else:
