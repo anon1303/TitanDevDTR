@@ -381,8 +381,7 @@ def company_week(sort_date):
 
 @app.route('/employee_summary/monthly/<int:emp_id>', methods=['GET'])
 def employee_monthly(emp_id):
-
-   summary = Attendance.query.filter.filter(Attendance.employeeid == emp_id).all()
+   summary = Attendance.query.filter(Attendance.employeeid == emp_id).order_by(Attendance.date.desc()).all()
    employees = []
    for employee in summary:
        employee_data = {}
