@@ -27,8 +27,7 @@ def addemployee():
                             birth_date=data['birth_date'],  gender=data['gender'], address=data['address'], employeestatus=1)
     
     #search for employee using QRCODE
-    employee = Employee.query.filter_by(code=generate_password_hash(data['code'], method='sha256')).first()
-    print generate_password_hash(data['code'], method='sha256')
+    employee = Employee.query.filter_by(code=data['code']).first()
     if employee is None:
         print now
         dbase.session.add(new_employee)
