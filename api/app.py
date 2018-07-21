@@ -1,4 +1,4 @@
-from api import app, dbase, generate_password_hash, cross_origin, CORS
+from api import app, dbase, generate_password_hash, cross_origin, CORS, check_password_hash
 from flask import request, jsonify
 from models import *
 from datetime import datetime, date
@@ -37,6 +37,56 @@ def addemployee():
 
     else:
         return jsonify({'message': 'Employee already created'})
+
+@app.route('/view/', methods=['GET', 'POST'])
+def viewEmployee():
+    employess = Employee.query.filter_by(employeestatus=1).all()
+
+    data = []
+    if employess:
+        for i in employess:
+            data1 = {}
+            data1['fname'] = i.fname
+            data1['mname'] = i.mname
+            data1['lname'] = i.lname
+            data1['position'] = i.position
+            data1['code'] = i.code
+            data1['contact'] = i.contact
+            data1['email'] = i.email
+            data1['birth_date'] = str(i.birth_date)
+            data1['gender'] = i.gender
+            data1['address'] = i.address
+            data.append(data1)
+        return jsonify({'users':data})
+    else:
+        return jsonify({'message': 'no employee found'})
+
+@app.route('/search/', methods =['GET', 'POST'])
+def searchEmployee():
+    data = request.get_json()
+    employee1 = data['lname']
+    print employee1
+    notactive = []
+    activate =  Employee.query.filter(and_(Employee.lname == employee1 , Employee.employeestatus == 0)).all()
+    print activate
+    if activate is None:
+        return jsonify({'message':'not found'})
+    else:    
+        
+        for i in activate:
+            data = {}
+            data['fname'] = i.fname
+            data['mname'] = i.mname
+            data['lname'] = i.lname
+            data['position'] = i.position
+            data['code'] = i.code
+            data['contact'] = i.contact
+            data['email'] = i.email
+            data['birth_date'] = str(i.birth_date)
+            data['gender'] = i.gender
+            data['address'] = i.address
+            notactive.append(data)
+        return jsonify({'message': notactive})        
 
 
 @app.route('/generate/qrcode', methods=['POST'])

@@ -1,9 +1,10 @@
 from api import dbase, generate_password_hash
+from flask_login import UserMixin
 
-
-class Admin(dbase.Model):
+class Admin(UserMixin, dbase.Model):
     __tablename__ = 'admin'
-    username = dbase.Column(dbase.String(50), nullable=False, primary_key=True)
+    adminId = dbase.Column(dbase.Integer, primary_key=True)
+    username = dbase.Column(dbase.String(50), nullable=False)
     password = dbase.Column(dbase.String(100), nullable=False)
 
     def __init__(self, username, password):
@@ -13,13 +14,13 @@ class Admin(dbase.Model):
 
 class Employee(dbase.Model):
     __tablename__ = 'employee'
-    employeeid = dbase.Column(dbase.Integer, primary_key=True)
+    employeeid = dbase.Column(dbase.Integer, primary_key=True, autoincrement= True)
     employeestatus = dbase.Column(dbase.Integer, default=0)
     fname = dbase.Column(dbase.String(50))
     mname = dbase.Column(dbase.String(50))
     lname = dbase.Column(dbase.String(50))
     position = dbase.Column(dbase.String(30))
-    code = dbase.Column(dbase.String(100))
+    code = dbase.Column(dbase.String(100), unique = True)
     contact = dbase.Column(dbase.String(15))
     email = dbase.Column(dbase.String(30))
     birth_date = dbase.Column(dbase.DATE, nullable=False)
@@ -33,33 +34,45 @@ class Employee(dbase.Model):
         self.mname = mname
         self.lname = lname
         self.position = position
-        self.code = generate_password_hash(code, method='sha256')
+        self.code = code
         self.contact = contact
         self.email = email
-        self.birth_date = birth_date
+        self.birth_date = str(birth_date)
         self.gender = gender
         self.address = address
 
-
 class Attendance(dbase.Model):
     __tablename__ = 'attendance'
-    id = dbase.Column(dbase.Integer, primary_key=True)
+    AttendanceId = dbase.Column(dbase.Integer, primary_key=True)
     employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey('employee.employeeid'))
     lateTotal = dbase.Column(dbase.Integer, default=0)
     absentTotal = dbase.Column(dbase.Integer, default=0)
-    timeIn = dbase.Column(dbase.DateTime)
-    timeOut = dbase.Column(dbase.DateTime)
-    status = dbase.Column(dbase.Integer, default=0)
-    dailyStatus = dbase.Column(dbase.String(6))
+    morningTimeIn = dbase.Column(dbase.DateTime)
+    morningTimeOut = dbase.Column(dbase.DateTime)
+    morningStatus = dbase.Column(dbase.Integer, default=0, nullable =False)
+    morningDailyStatus = dbase.Column(dbase.String(8))
+    morningRemark = dbase.Column(dbase.String(50))
+    afterTimeIn = dbase.Column(dbase.DateTime)
+    afterTimeOut = dbase.Column(dbase.DateTime)
+    afterStatus = dbase.Column(dbase.Integer, default=0, nullable = False)
+    afterDailyStatus = dbase.Column(dbase.String(8)) 
+    afterRemark = dbase.Column(dbase.String(50))
+    date = dbase.Column(dbase.String(15))
 
-    def __init__(self, lateTotal, absentTotal, timeIn, timeOut, status, dailyStatus, employeeid):
-        self.lateTotal = lateTotal
-        self.absentTotal = absentTotal
-        self.timeIn = timeIn
-        self.timeOut = timeOut
-        self.status = 0
-        self.dailyStatus = dailyStatus
+    def __init__(self, employeeid):
+        # self.lateTotal = lateTotal
+        # self.absentTotal = absentTotal
         self.employeeid = employeeid
+        # self.morningRemark = morningRemark
+        # self.afterRemamrk = afterRemamrk
+        # self.morningTimeIn = morningTimeIn
+        # self.morningTimeOut = morningTimeOut
+        # self.afterTimeIn = afterTimeIn
+        # self.afterTimeOut = afterTimeOut
+        # self.morningStatus = morningStatus
+        # self.afterStatus = afterStatus
+        # self.morningDailyStatus = morningDailyStatus
+        # self.afterDailyStatus = afterDailyStatus
 
 
 class Logs(dbase.Model):
