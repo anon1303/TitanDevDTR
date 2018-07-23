@@ -1321,8 +1321,8 @@ def view_requests():
            employee = Employee.query.filter_by(employeeid=overtimee.employeeid).first()
            employee_data = {}
            employee_data['name'] = employee.fname + " " + employee.mname + " " + employee.lname
-           employee_data['id'] = employee.employeeid
-           employee_data['date'] = overtimee.overtimeDate
+           employee_data['id'] = str(employee.employeeid)
+           employee_data['date'] = str(overtimee.overtimeDate)
            overtimers.append(employee_data)
            return jsonify({'employee': overtimers})
 
