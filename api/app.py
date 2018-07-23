@@ -1354,7 +1354,7 @@ def approve():
 @cross_origin(allow_headers=['Content-Type'])
 def decline():
    data = request.get_json()
-   overtime = Overtime.query.filter(Overtime.overtimeStatus == 0 & Overtime.employeeid == int(data['id'])).order_by(Overtime.overtimeDate.desc()).first()
+   overtime = Overtime.query.filter(and_(Overtime.overtimeStatus == 0,Overtime.employeeid == int(data['id']))).order_by(Overtime.overtimeDate.desc()).first()
    if not overtime:
       return jsonify({'message': 'Error'})
    else:
