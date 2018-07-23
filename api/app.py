@@ -1345,7 +1345,7 @@ def approve():
        dbase.session.commit()
        return jsonify({'message': 'Overtime approved successfuly!'})
 
-@app.route('/decline/request', method=['POST'])
+@app.route('/decline/request', methods=['POST'])
 def decline():
    data = request.get_json()
    overtime = Overtime.query.filter(Overtime.overtimeStatus == 0 & Overtime.employeeid == data['id']).order_by(Overtime.overtimeDate.desc()).first()
