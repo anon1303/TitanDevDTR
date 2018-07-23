@@ -1312,14 +1312,14 @@ def request_overtime():
 
 @app.route('/view/overtime/requests', methods=['GET'])
 def view_requests():
-   overtime = Overtime.query.filter_by(overtimeStatus=0).all()
-   if overtime is None:
+   overtime1 = Overtime.query.filter_by(overtimeStatus=0).all()
+   if overtime1 is None:
        print('ddsdsdsdsd if')
        return jsonify({'message': 'No request found'})
    else:
        overtimers = []
        print('else')
-       for overtimee in overtime:
+       for overtimee in overtime1:
            print('ovahtime')
            employee = Employee.query.filter_by(employeeid=overtimee.employeeid).first()
            employee_data = {}
