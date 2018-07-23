@@ -1320,7 +1320,7 @@ def view_requests():
        overtimers = []
        print('else')
        for overtimee in overtime:
-           priny('ovahtime')
+           print('ovahtime')
            employee = Employee.query.filter_by(employeeid=overtimee.employeeid).first()
            employee_data = {}
            employee_data['name'] = employee.fname + " " + employee.mname + " " + employee.lname
