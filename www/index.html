@@ -109,6 +109,33 @@ cordova.plugins.barcodeScanner.scan(
    );
 }
 </script>
+<script type="text/javascript">
+  function submit(){
+        $.ajax({
+          url: "https://mighty-cove-44634.herokuapp.com/TimeIn/",
+          method:  'POST',
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'json',
+          crossDomain: true,
+          data: JSON.stringify({
+            'code':$('#code').val()
+          }),
+          
+          success: function(data){
+            localStorage.setItem('code1', codes);
+
+              if(data.message == 'late'){
+                  window.open('addremark.html','_self');
+              }else{
+                alert(data.message);
+              }
+          },
+          error: function (data) {
+            alert(data.message);
+          }
+        });
+}
+</script>
 <script type="text/javascript" src="index_login/js/jquery.1.11.1.js"></script> 
 <script type="text/javascript" src="index_login/js/bootstrap.js"></script>
  <script type="text/javascript" src="cordova.js"></script>

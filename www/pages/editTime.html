@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Edit Time</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -51,7 +51,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Logo</a>
+      <a class="navbar-brand"><img src="../img/icon.png"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -59,6 +59,7 @@
         <li><a href="attendance.html">Attendance</a></li>
         <li class="active"><a href="#">Edit Time Schedule</a></li>
         <li><a href="adminApproval.html">Admin Approval</a></li>
+        <li><a href="companyLogs.html">Company Logs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -85,10 +86,8 @@
         <thead>
           <tr>
             <th></th>
-            <th>Login</th>
-            <th></th>
-            <th>Logout</th>
-            <th></th>
+            <th style="text-align: center;">Login</th>
+            <th colspan="2" style="text-align: center;">Logout</th>
           </tr>
         </thead>
         <tbody>
@@ -98,7 +97,6 @@
               <label>Time-in Start</label><br>
               <input type="time" class="textfield" size="5" name="timeInAM" placeholder="hh:mm" id="timeInAM"/>
             </td>
-            <td></td>
             <td>
               <label>Time-out Start</label><br>
               <input type="time" class="textfield" size="5" name="timeOutAM" placeholder="hh:mm" id="timeOutAM">
@@ -120,7 +118,6 @@
               <label>Time-in Start</label><br>
               <input type="time" class="textfield" size="5" name="timeInPM" placeholder="hh:mm" id="timeInPM">
             </td>
-            <td></td>
             <td>
               <label>Time-out Start</label><br>
               <input type="time" class="textfield" size="5" name="timeOutPM" placeholder="hh:mm" id="timeOutPM">
@@ -150,8 +147,8 @@
 <!--FOOTER-->
 
 <!--SCRIPTS-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script>
   function submit(){
     $.ajax({

@@ -1,0 +1,211 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <style>
+      /* Remove the navbar's default margin-bottom and rounded borders */ 
+      .navbar {
+        margin-bottom: 0;
+        border-radius: 0;
+      }
+      
+      /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+      .row.content {height: 450px}
+      
+      /* Set gray background color and 100% height */
+      .sidenav {
+        padding-top: 20px;
+        background-color: #f1f1f1;
+        height: 100%;
+      }
+      
+      /* Set black background color, white text and some padding */
+      footer {
+        background-color: #555;
+        color: white;
+        padding: 15px;
+      }
+      
+      /* On small screens, set height to 'auto' for sidenav and grid */
+      @media screen and (max-width: 767px) {
+        .sidenav {
+          height: auto;
+          padding: 15px;
+        }
+        .row.content {height:auto;} 
+      }
+
+      tr:nth-child(even){background-color: #f2f2f2;}
+      tr:hover {background-color: #ddd;}
+      td:empty{display: none;}
+    </style>
+  </head>
+
+  <body>
+
+  <!--NAVIGATION-->
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand"><img src="../img/icon.png"></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="employees.html">Employees</a></li>
+          <li><a href="attendance.html">Attendance</a></li>
+          <li><a href="editTime.html">Edit Time Schedule</a></li>
+          <li><a href="adminApproval.html">Admin Approval</a></li>
+          <li class="active"><a href="companyLog.html">Company Logs</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!--NAVIGATION-->
+
+  <!--BODY-->  
+  <div class="container-fluid text-center">    
+    <div class="row content">
+
+      <!--LEFT BODY-->
+      <div class="col-sm-2 sidenav">
+      </div>
+      <!--LEFT BODY-->
+
+      <div class="col-sm-8 text-left"> 
+        <h1>Weekly Company Log</h1>
+        <p><a href="companyLogs.html"> Back to Monthly Logs</a></p>
+        <hr>
+        <p><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Last Name..." title="Type in a name">
+        <input type="week" id="week" name="week">
+        <button type="button" onclick="employeeLog()">OK</button></p>
+        <table width="100%" class="table table-striped table-bordered table-hover" id="employee_table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Time In(AM)</th>
+              <th>Time Out(AM)</th>
+              <th>Time In(PM)</th>
+              <th>Time Out(PM)</th>
+              <th>Late(s)</th>
+              <th>Absent(s)</th>            
+            </tr>
+          </thead>
+          <tbody>
+            <script type="text/javascript">
+              function employeeLog(){
+                $(document).ready(function(){
+                  var x = document.getElementById("week").value;
+                  localStorage.setItem("week", x);
+
+                  var y = localStorage.getItem('week');
+                  var dates = y + "-1";
+                  alert(y);
+                  $.getJSON("https://mighty-cove-44634.herokuapp.com/company_summary/weekly/"+dates, function(data){
+                    var employee_data = "";                                                        
+                    $.each(data, function(i, key){
+                      for (var i = 0; i < key.length; i++) {
+                        employee_data += '<tr>';
+                        employee_data += '<td>'+key[i].name+'</td>';
+                        employee_data += '<td>'+key[i].morningTimeIn+'</td>';
+                        employee_data += '<td>'+key[i].morningTimeOut+'</td>';
+                        employee_data += '<td>'+key[i].afterTimeIn+'<td>';
+                        employee_data += '<td>'+key[i].afterTimeOut+'<td>';
+                        employee_data += '<td>'+key[i].lateTotal+'<td>';
+                        employee_data += '<td>'+key[i].absentTotal+'<td>';
+                        employee_data += '</tr>';                                                    
+                      }
+                    });                   
+                    $('#employee_table').append(employee_data);
+                  });
+                });
+              }
+              function myFunction() {
+                // Declare variables 
+                var input, filter, table, tr, td, i;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("employee_table");
+                tr = table.getElementsByTagName("tr");
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                  td = tr[i].getElementsByTagName("td")[0];
+                  if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                      tr[i].style.display = "";
+                    } else {
+                      tr[i].style.display = "none";
+                    }
+                  } 
+                }
+              }                                   
+            </script>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Name</th>
+              <th>Time In(AM)</th>
+              <th>Time Out(AM)</th>
+              <th>Time In(PM)</th>
+              <th>Time Out(PM)</th>
+              <th>Late(s)</th>
+              <th>Absent(s)</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!--RIGHT BODY-->
+      <div class="col-sm-2 sidenav">
+      </div>
+      <!--RIGHT BODY-->
+    </div>
+  </div>
+  <!--BODY-->
+
+  <!--FOOTER-->
+  <footer class="container-fluid text-center">
+    <p>© Developed by: Jomary Daison, Jerald Talledo, and Charlin Bugas</p>
+  </footer>
+  <!--FOOTER-->
+
+  <!--SCRIPTS-->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#employee_table').DataTable({
+        responsive: true
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    function logout(){
+      $.ajax({
+        url: "https://mighty-cove-44634.herokuapp.com/logout",
+        method:  'GET',
+        crossDomain: true,
+        success: function(data){
+          alert(data.message);
+          window.location.assign('../index.html');
+        },
+        error: function () {
+          alert("Action Failed!");
+        }
+      });
+    }
+  </script>
+  <!--SCRIPTS-->
+
+  </body>
+  </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Employees</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -18,8 +18,9 @@
     /* Set gray background color and 100% height */
     .sidenav {
       padding-top: 20px;
-      background-color: #f1f1f1;
+      background-color: #f1f1f1; 
       height: 100%;
+      display: inline-block;
     }
     
     /* Set black background color, white text and some padding */
@@ -27,6 +28,7 @@
       background-color: #555;
       color: white;
       padding: 15px;
+      margin-top: 138px;
     }
     
     /* On small screens, set height to 'auto' for sidenav and grid */
@@ -51,7 +53,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Logo</a>
+      <a class="navbar-brand"><img src="../img/icon.png"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -59,6 +61,7 @@
         <li><a href="attendance.html">Attendance</a></li>
         <li><a href="editTime.html">Edit Time Schedule</a></li>
         <li><a href="adminApproval.html">Admin Approval</a></li>
+        <li><a href="companyLogs.html">Company Logs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -74,11 +77,11 @@
 
     <!--LEFT BODY-->
     <div class="col-sm-2 sidenav">
+      <a></a>
     </div>
     <!--LEFT BODY-->
-
     <div class="col-sm-8 text-left"> 
-      <h1>Employees</h1>
+      <h1 style="color: #000;">Employees</h1>
       <p>
         <button type="button" id="employeeButton" class="btn btn-success btn-sm">Add Employee</button>
         <button type="button" id="employeeActivateButton" class="btn btn-primary btn-sm">Activate Employee</button>
@@ -140,13 +143,13 @@
 
 <!--FOOTER-->
 <footer class="container-fluid text-center">
-  <p>Developed by: Jomary Daison, Jerald Talledo, and Charlin Bugas</p>
+  <p>© Developed by: Jomary Daison, Jerald Talledo, and Charlin Bugas</p>
 </footer>
 <!--FOOTER-->
 
 <!--SCRIPTS-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script>
   document.getElementById("employeeButton").onclick = function (){
     location.href = "addEmployee.html";

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Attendance</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -51,7 +51,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand">Logo</a>
+      <a class="navbar-brand"><img src="../img/icon.png"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -59,6 +59,7 @@
         <li class="active"><a href="#">Attendance</a></li>
         <li><a href="editTime.html">Edit Time Schedule</a></li>
         <li><a href="adminApproval.html">Admin Approval</a></li>
+        <li><a href="companyLogs.html">Company Logs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -87,7 +88,7 @@
           <tr>
             <th>Name</th>
             <th>Position</th>
-            <th>Actions</th>
+            <th>Attendance Logs</th>
           </tr>
         </thead>
         <tbody>
@@ -102,7 +103,7 @@
                       employee_data += '<td>'+key[i].fname+' '+key[i].mname+' '+key[i].lname+'</td>';
                       employee_data += '<td>'+key[i].position+'</td>';
                       parseInt(i)
-                      employee_data += '<td>'+'<a href="#" onclick="get_one(\''+key[i].code+'\',\''+i+'\')">'+'View '+'</a>'+'</td>';
+                      employee_data += '<td>'+'<a href="employeeLog.html" onclick="get_one(\''+i+'\')">'+'Monthly Logs '+'</a>'+'|'+'<a href="employeeweeklylogs.html" onclick="get_one(\''+i+'\')">'+' Weekly Logs'+'</a>'+'</td>';
                       employee_data += '</tr>';
                     }
                   });
@@ -111,8 +112,7 @@
               });
             }
 
-            function get_one(i, code){                                    
-                localStorage.setItem('index', code);
+            function get_one(i){               
                 localStorage.setItem('index1', i);
             }
           </script>
@@ -121,7 +121,7 @@
           <tr>
             <th>Name</th>
             <th>Position</th>
-            <th>Actions</th>
+            <th>Attendance Logs</th>
           </tr>
         </tfoot>
       </table>
@@ -142,8 +142,9 @@
 <!--FOOTER-->
 
 <!--SCRIPTS-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function() {
     $('#employee_table').DataTable({
