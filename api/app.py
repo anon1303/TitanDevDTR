@@ -1299,7 +1299,7 @@ def request_overtime():
        dates = str(data['dates'])
        y, m, d = dates.split("-")
        if dates is not None:
-            overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid)
+            overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid).first()
             print(dates)
             overtime_date.overtimeDate = dt.date(int(y), int(m), int(d))
             print(dt.date(int(y),int(m),int(d)))
