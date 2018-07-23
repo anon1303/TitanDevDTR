@@ -1347,11 +1347,11 @@ def approve():
 
 @app.route('/decline/request', method=['POST'])
 def decline():
-    data = request.get_json()
-   overtime = Overtime.query.filter(Overtime.overtimeStatus == 0 & Overtime.employeeid == data['id'])).order_by(Overtime.overtimeDate.desc()).first()
-  if not overtime:
+   data = request.get_json()
+   overtime = Overtime.query.filter(Overtime.overtimeStatus == 0 & Overtime.employeeid == data['id']).order_by(Overtime.overtimeDate.desc()).first()
+   if not overtime:
        return jsonify({'message': 'Error'})
-  else:
+   else:
        overtime.overtimeStatus = 2
        dbase.session.commit()
        return jsonify({'message': 'Overtime declined successfuly!'})
