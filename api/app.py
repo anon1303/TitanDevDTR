@@ -1313,6 +1313,7 @@ def request_overtime():
 @app.route('/view/overtime/requests', methods=['GET'])
 def view_requests():
    overtime1 = Overtime.query.filter_by(overtimeStatus=0).all()
+   print(overtime1)
    if overtime1 is None:
        print('ddsdsdsdsd if')
        return jsonify({'message': 'No request found'})
