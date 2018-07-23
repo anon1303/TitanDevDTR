@@ -436,7 +436,7 @@ def employee_week(dates, emp_id):
    employees = []
 #    if summary is None:
 #        return jsonify({"message": "No data to show"})
-   if len(employees) < 1:
+   if len(summary) < 1:
        return jsonify({"message": "No data to show"})
    for employee in summary:
        employee_data = {}
