@@ -1289,7 +1289,7 @@ def auto_TimeOut():
 def request_overtime():
    data = request.get_json()
    employee = Employee.query.filter_by(code=data['code']).first()
-   if employee is None:
+   if not employee:
         return jsonify({'message': 'Employee not found'})
    overtime = Overtime.query.filter(and_(Overtime.employeeid == employee.employeeid, Overtime.overtimeStatus == 0)).order_by(Overtime.overtimeDate.desc()).first()
    if overtime is None:
@@ -1313,7 +1313,7 @@ def request_overtime():
 @app.route('/view/overtime/requests', methods=['GET'])
 def view_requests():
    overtime1 = Overtime.query.filter_by(overtimeStatus=0).all()
-   print(overtime1)
+   print(overtime1.name)
    if not overtime1:
        print('ddsdsdsdsd if')
        return jsonify({'message': 'No request found'})
