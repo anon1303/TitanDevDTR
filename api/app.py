@@ -1296,15 +1296,16 @@ def request_overtime():
        new_overtime = Overtime(employeeid=employee.employeeid)
        dbase.session.add(new_overtime)
        dbase.session.commit()
-       overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid)
        dates = str(data['dates'])
        y, m, d = dates.split("-")
-       print(dates)
-       overtime_date.overtimeDate = dt.date(int(y), int(m), int(d))
-       print(dt.date(int(y),int(m),int(d)))
-       print('ssdsdsds')
-       dbase.session.commit()
-       return jsonify({'message': 'Request Created'})
+       if dates is not None:
+            overtime_date = Overtime.query.filter_by(employeeid = employee.employeeid)
+            print(dates)
+            overtime_date.overtimeDate = dt.date(int(y), int(m), int(d))
+            print(dt.date(int(y),int(m),int(d)))
+            print('ssdsdsds')
+            dbase.session.commit()
+            return jsonify({'message': 'Request Created'})
    else:
        return jsonify({'message': 'Request already sent, Please wait for the admin to approve'})
 
