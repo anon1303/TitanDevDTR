@@ -459,7 +459,7 @@ def employee_week(dates, emp_id):
        employee_data['morningRemark'] = employee.morningRemark
        employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
-    if len(employees) < 1:
+   if len(employees) < 1:
         return jsonify({"message": "No data to show"})
    return jsonify({'employee': employees})
 
