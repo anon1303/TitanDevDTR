@@ -1428,5 +1428,6 @@ def counterunseen():
         seen=[]
         for i in log:
             i.counter = 0
+            dbase.session.commit()
         return jsonify({'adminlogs': 'done'})
 
