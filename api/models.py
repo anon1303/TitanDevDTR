@@ -81,8 +81,9 @@ class Overtime(dbase.Model):
     overtimeStatus = dbase.Column(dbase.Integer, default=0)
     overtimeTotal = dbase.Column(dbase.Integer, default=0)
 
-    def __init__(self, employeeid):
+    def __init__(self, employeeid, overtimeDate):
         self.employeeid = employeeid
+        self.overtimeDate = overtimeDate
 
 class Logs(dbase.Model):
     __tablename__ = "logs"
