@@ -1292,8 +1292,9 @@ def request_overtime():
    if not employee:
         return jsonify({'message': 'Employee not found'})
    overtime = Overtime.query.filter(and_(Overtime.employeeid == employee.employeeid, Overtime.overtimeStatus == 0)).order_by(Overtime.overtimeDate.desc()).first()
-   if str(overtime.overtimeDate) == data['dates']:
-       return jsonify({'message': 'Request already sent, Please wait for the admin to approve'})
+   if overtime:
+       if str(overtime.overtimeDate) == data['dates']:
+           return jsonify({'message': 'Request already sent, Please wait for the admin to approve'})
    else:
        new_overtime = Overtime(employeeid=employee.employeeid)
        dbase.session.add(new_overtime)
