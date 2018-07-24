@@ -1300,7 +1300,7 @@ def request_overtime():
        dates = dt.date(int(y), int(m), int(d))
        datetostring = dates.strftime("%m%d%Y")
        datenow = datetime.now().strftime("%m%d%Y")
-       if datetostring < datenow:
+       if datetostring >= datenow:
             if dates is not None:
                 new_overtime = Overtime(employeeid=employee.employeeid, overtimeDate=dates)
                 dbase.session.add(new_overtime)
