@@ -1394,8 +1394,8 @@ def view_logs():
     return jsonify({'logs', logs})
 
 @app.route('/view/notifications', methods=['GET'])
-@login_required
-@cross_origin("*")
+# @login_required
+# @cross_origin("*")
 def notification():
     notif = Logs.query.filter_by(logStatus=1).all()
     if notif is None:
