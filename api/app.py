@@ -6,7 +6,7 @@ from flask_login import login_user, login_required, LoginManager, logout_user
 import datetime as dt
 import time
 #pip install timedate, time
-from sqlalchemy import and_, desc, extract, order_by
+from sqlalchemy import and_, desc, extract
 import png
 import pyqrcode
 from datetime import date, datetime, time
@@ -1353,7 +1353,7 @@ def approve():
        dbase.session.add(logmessage)
        dbase.session.commit()
        logsid = Logs.query.filter_by(logStatus=0).all()
-       logsid1 = logsid.order_by(desc(Logs.log_date)).first()
+       logsid1 = logsid.query.order_by(desc(Logs.log_date)).first()
        logsid1.logStatus = 1
        dbase.session.commit()
        return jsonify({'message': 'Overtime approved successfuly!'})
@@ -1375,7 +1375,7 @@ def decline():
       dbase.session.add(logmessage)
       dbase.session.commit()
       logsid = Logs.query.filter_by(logStatus=0).all()
-      logsid1 = logsid.order_by(desc(Logs.log_date)).first()
+      logsid1 = logsid.query.order_by(desc(Logs.log_date)).first()
       logsid1.logStatus = 1
       dbase.session.commit()
       return jsonify({'message': 'Overtime declined successfuly!'})
