@@ -1347,6 +1347,13 @@ def approve():
        overtime.overtimeStatus = 1
        overtime.overtimeTotal = int(overtime.overtimeTotal) + 1
        dbase.session.commit()
+       msg = data['id'] + " overtime request has been approved"
+       logmessage = Logs(details = msg,log_date = lgdate)
+       dbase.session.add(logmessage)
+       dbase.session.commit()
+       logsid = Logs.query.filter_by(logStatus = 0).order_by(Logs.log_date.desc).first()
+       logsid.logStatus = 1
+       dbase.session.commit()
        return jsonify({'message': 'Overtime approved successfuly!'})
 
 @app.route('/decline/request', methods=['POST'])
@@ -1360,4 +1367,26 @@ def decline():
    else:
       overtime.overtimeStatus = 2
       dbase.session.commit()
+      msg = data['id'] + " overtime request has been approved"
+      logmessage = Logs(details = msg,log_date = lgdate)
+      dbase.session.add(logmessage)
+      dbase.session.commit()
+      logsid = Logs.query.filter_by(logStatus = 0).order_by(Logs.log_date.desc).first()
+      logsid.logStatus = 1
+      dbase.session.commit()
       return jsonify({'message': 'Overtime declined successfuly!'})
+
+@app.route('/view/logs', method=['GET'])
+@cross_origin("*")
+@login_required
+def view_logs():
+    log = Logs.query.filter_by(logStatus=1).all()
+    if not log:
+        return jsonify({'message': 'No logs to show'})
+    logs = []
+    for i in log:
+        log_data = {}
+        log_data['log-details'] = i.details
+        log_data['log-date'] = i.log_date
+        logs.append(log_data)
+    return jsonify({'logs', logs})
