@@ -1403,6 +1403,6 @@ def notification():
     update = []
     for i in notif:
         update_date = {}
-        update_date['details'] = i.details
+        update_date['log-details'] = i.details
         notif.append(update_date)
     return jsonify({'notification': update_date})
