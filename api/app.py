@@ -1373,7 +1373,7 @@ def decline():
       logmessage = Logs(details = msg,log_date = lgdate)
       dbase.session.add(logmessage)
       dbase.session.commit()
-      logsid = Logs.query.filter_by(logStatus=0).order_by(desc(Logs.log_date)).first()
+      logsid = Logs.query.filter_by(logStatus=0).first()
       logsid.logStatus = 1
       dbase.session.commit()
       return jsonify({'message': 'Overtime declined successfuly!'})
