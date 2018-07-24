@@ -1348,11 +1348,11 @@ def approve():
        overtime.overtimeTotal = int(overtime.overtimeTotal) + 1
        dbase.session.commit()
        name = Employee.query.filter_by(employeeid = data['id']).first()
-       msg = name.fname+ " " + name.lname + "overtime request has been approved"
+       msg = name.fname+ " " + name.lname + " overtime request has been approved"
        logmessage = Logs(details = msg,log_date = lgdate)
        dbase.session.add(logmessage)
        dbase.session.commit()
-       logsid = Logs.query.filter_by(logStatus=0).order_by(desc(Logs.log_date)).first()
+       logsid = Logs.query.filter_by(logStatus=0).order_by(desc(Logs.logID)).first()
        logsid.logStatus = 1
        dbase.session.commit()
        return jsonify({'message': 'Overtime approved successfuly!'})
@@ -1369,7 +1369,7 @@ def decline():
       overtime.overtimeStatus = 2
       dbase.session.commit()
       name = Employee.query.filter_by(employeeid = data['id']).first()
-      msg = name.fname+ " " + name.lname + "overtime request has been declined"
+      msg = name.fname+ " " + name.lname + " overtime request has been declined"
       logmessage = Logs(details = msg,log_date = lgdate)
       dbase.session.add(logmessage)
       dbase.session.commit()
@@ -1392,3 +1392,17 @@ def view_logs():
         log_data['log-date'] = i.log_date
         logs.append(log_data)
     return jsonify({'logs', logs})
+
+@app.route('/view/notifications', methods=['GET'])
+@login_required
+@cross_origin("*")
+def notification():
+    notif = Logs.query.filter_by(logStatus=1).all()
+    if notif is None:
+        return jsonify({'message': 'No update'})
+    update = []
+    for i in notif:
+        update_date = {}
+        update_date['details'] = i.details
+        notif.append(update_date)
+    return jsonify({'notification': update_date})
