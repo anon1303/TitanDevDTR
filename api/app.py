@@ -1297,12 +1297,17 @@ def request_overtime():
    else:
        dates = str(data['dates'])
        y, m, d = dates.split("-")
-       if dates is not None:
-            dates = dt.date(int(y), int(m), int(d))
-            new_overtime = Overtime(employeeid=employee.employeeid, overtimeDate=dates)
-            dbase.session.add(new_overtime)
-            dbase.session.commit()
-            return jsonify({'message': 'Request Created'})
+       dates = dt.date(int(y), int(m), int(d))
+       datetostring = dates.strftime("%m%d%Y")
+       datenow = datetime.now().strftime("%m%d%Y")
+       if datetostring < datenow:
+            if dates is not None:
+                new_overtime = Overtime(employeeid=employee.employeeid, overtimeDate=dates)
+                dbase.session.add(new_overtime)
+                dbase.session.commit()
+                return jsonify({'message': 'Request Created'})
+       else:
+            return jsonify({'message': 'Date requested is not valid'})
  
 
 @app.route('/view/overtime/requests', methods=['GET'])
