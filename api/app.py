@@ -1384,7 +1384,7 @@ def decline():
 # @login_required
 # @cross_origin("*")
 def notifications():
-    log = Logs.query.filter(and_(Logs.logStatus==1,Logs.counter==0)).all()
+    log = Logs.query.filter(and_(Logs.logStatus==1,Logs.counter==1)).all()
     if not log:
         return jsonify({'message': 'No logs to show'})
     count = 0
