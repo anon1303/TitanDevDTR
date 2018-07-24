@@ -1393,6 +1393,8 @@ def notifications():
     return jsonify({'Notification': logs})
 
 @app.route('/view/admin/logs', methods=['GET'])
+@login_required
+@cross_origin("*")
 def view_logs():
     log = Logs.query.all()
     if not log:
