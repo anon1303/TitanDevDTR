@@ -1388,7 +1388,7 @@ def notifications():
     logs = []
     for i in log:
         log_data = {}
-        log_data['log-details'] = i.details
+        log_data['logdetails'] = i.details
         logs.append(log_data)
     return jsonify({'Notification': logs})
 
@@ -1402,7 +1402,7 @@ def view_logs():
     logs = []
     for i in log:
         log_data = {}
-        log_data['log-details'] = i.details
-        log_data['log-date'] = i.log_date
+        log_data['logdetails'] = i.details
+        log_data['logdate'] = i.log_date
         logs.append(log_data)
     return jsonify({'adminlogs': logs})
