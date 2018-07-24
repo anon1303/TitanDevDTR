@@ -1348,12 +1348,12 @@ def approve():
        overtime.overtimeTotal = int(overtime.overtimeTotal) + 1
        dbase.session.commit()
        name = Employee.query.filter_by(employeeid = data['id']).first()
-       msg = name.fname+ " " + name.lname + "overtime request has been declined"
+       msg = name.fname+ " " + name.lname + "overtime request has been approved"
        logmessage = Logs(details = msg,log_date = lgdate)
        dbase.session.add(logmessage)
        dbase.session.commit()
        logsid = Logs.query.filter_by(logStatus=0).all()
-       logsid1 = logsid.query.order_by(Logs.log_date.desc()).first()
+       logsid1 = logsid.query.order_by(Logs.log_date).first()
        logsid1.logStatus = 1
        dbase.session.commit()
        return jsonify({'message': 'Overtime approved successfuly!'})
@@ -1375,7 +1375,7 @@ def decline():
       dbase.session.add(logmessage)
       dbase.session.commit()
       logsid = Logs.query.filter_by(logStatus=0).all()
-      logsid1 = logsid.query.order_by(Logs.log_date.desc()).first()
+      logsid1 = logsid.query.order_by(Logs.log_date).first()
       logsid1.logStatus = 1
       dbase.session.commit()
       return jsonify({'message': 'Overtime declined successfuly!'})
