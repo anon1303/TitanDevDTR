@@ -1377,8 +1377,8 @@ def decline():
       return jsonify({'message': 'Overtime declined successfuly!'})
 
 @app.route('/view/logs', method=['GET'])
-@cross_origin("*")
 @login_required
+@cross_origin("*")
 def view_logs():
     log = Logs.query.filter_by(logStatus=1).all()
     if not log:
