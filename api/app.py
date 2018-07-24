@@ -1376,7 +1376,7 @@ def decline():
       dbase.session.commit()
       return jsonify({'message': 'Overtime declined successfuly!'})
 
-@app.route('/view/logs', method=['GET'])
+@app.route('/view/logs', methods=['GET'])
 @login_required
 @cross_origin("*")
 def view_logs():
