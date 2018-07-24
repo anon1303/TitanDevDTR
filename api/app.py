@@ -1381,7 +1381,7 @@ def decline():
 @app.route('/view/logs', methods=['GET'])
 # @login_required
 # @cross_origin("*")
-def view_logs():
+def notifications():
     log = Logs.query.filter_by(logStatus=1).all()
     if not log:
         return jsonify({'message': 'No logs to show'})
