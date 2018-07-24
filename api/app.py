@@ -1379,8 +1379,8 @@ def decline():
       return jsonify({'message': 'Overtime declined successfuly!'})
 
 @app.route('/view/logs', methods=['GET'])
-@login_required
-@cross_origin("*")
+# @login_required
+# @cross_origin("*")
 def view_logs():
     log = Logs.query.filter_by(logStatus=1).all()
     if not log:
@@ -1392,17 +1392,3 @@ def view_logs():
         log_data['log-date'] = i.log_date
         logs.append(log_data)
     return jsonify({'logs', logs})
-
-@app.route('/view/notifications', methods=['GET'])
-# @login_required
-# @cross_origin("*")
-def notification():
-    notif = Logs.query.filter_by(logStatus=1).all()
-    if notif is None:
-        return jsonify({'message': 'No update'})
-    update = []
-    for i in notif:
-        update_date = {}
-        update_date['log-details'] = i.details
-        notif.append(update_date)
-    return jsonify({'notification': update_date})
