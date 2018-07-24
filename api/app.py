@@ -1354,6 +1354,7 @@ def approve():
        dbase.session.commit()
        logsid = Logs.query.filter_by(logStatus=0).order_by(desc(Logs.logID)).first()
        logsid.logStatus = 1
+       logsid.counter = 1
        dbase.session.commit()
        return jsonify({'message': 'Overtime approved successfuly!'})
 
@@ -1375,6 +1376,7 @@ def decline():
       dbase.session.commit()
       logsid = Logs.query.filter_by(logStatus = 0).order_by(desc(Logs.logID)).first()
       logsid.logStatus = 1
+      logsid.counter = 1
       dbase.session.commit()
       return jsonify({'message': 'Overtime declined successfuly!'})
 
@@ -1382,7 +1384,8 @@ def decline():
 # @login_required
 # @cross_origin("*")
 def notifications():
-    log = Logs.query.filter_by(logStatus=1).all()
+    log = Logs.query.filter(and_(Logs.logStatus==1,Logs.counter==0)).all()
+    count = Logs.query.count(counter=1)
     if not log:
         return jsonify({'message': 'No logs to show'})
     logs = []
@@ -1390,7 +1393,7 @@ def notifications():
         log_data = {}
         log_data['logdetails'] = i.details
         logs.append(log_data)
-    return jsonify({'Notification': logs})
+    return jsonify({'Notification': logs, 'count': count})
 
 @app.route('/view/admin/logs', methods=['GET'])
 @login_required
@@ -1406,3 +1409,23 @@ def view_logs():
         log_data['logdate'] = i.log_date
         logs.append(log_data)
     return jsonify({'adminlogs': logs})
+
+# @app.route('/unseencounter', methods=['GET'])
+# def counterunseen():
+#     log = Logs.query.count(counter=1)
+#     if not log:
+#         return jsonify({'message': 'No logs to show'})
+#     else:
+#         return jsonify({'adminlogs': log})
+
+@app.route('/seen', methods=['GET'])
+def counterunseen():
+    log = Logs.query.filter_by(counter=1).all()
+    if not log:
+        return jsonify({'message': 'No logs to show'})
+    else:
+        seen=[]
+        for i in log:
+            i.counter = 0
+        return jsonify({'adminlogs': 'done'})
+

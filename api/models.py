@@ -91,6 +91,7 @@ class Logs(dbase.Model):
     details = dbase.Column(dbase.String(60))
     log_date = dbase.Column(dbase.DateTime)
     logStatus = dbase.Column(dbase.Integer, default=0)
+    counter = dbase.Column(dbase.Integer, default=0)
 
     def __init__(self, details, log_date):
         self.details = details
