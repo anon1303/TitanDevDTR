@@ -1389,6 +1389,18 @@ def view_logs():
     for i in log:
         log_data = {}
         log_data['log-details'] = i.details
+        logs.append(log_data)
+    return jsonify({'Notification', logs})
+
+@app.route('/view/admin/logs', method=['GET'])
+def view_logs():
+    log = Logs.query.all()
+    if not log:
+        return jsonify({'message': 'No logs to show'})
+    logs = []
+    for i in log:
+        log_data = {}
+        log_data['log-details'] = i.details
         log_data['log-date'] = i.log_date
         logs.append(log_data)
     return jsonify({'logs', logs})
