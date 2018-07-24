@@ -1386,6 +1386,8 @@ def decline():
 def notifications():
     log = Logs.query.filter(and_(Logs.logStatus==1,Logs.counter==0)).all()
     count = Logs.query.count(counter=1)
+    if count is None:
+        pass
     if not log:
         return jsonify({'message': 'No logs to show'})
     logs = []
