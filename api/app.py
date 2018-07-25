@@ -1429,8 +1429,19 @@ def counterunseen():
             dbase.session.commit()
         return jsonify({'adminlogs': 'done'})
 
-@app.route('/autotimeout/', mothods=['POST'])
+@app.route('/autotimeout/', methods=['POST'])
 def otTimeout():
-    now = datetime.now().strftime("%H%M")
+    nowtime = datetime.now().strftime("%H%M")
+    nowdate = datetime.now().strftime("%Y-%d-%m")
     timeout = "2200"
+    emp = Overtime.query.filter_by(overtimeStatus=1).all()
+    timeInEmp = []
+    if emp:
+        for i in emp:
+            i.overtimeStatus = 0
+            dbase.session.commit()
+    else:
+        # pass
+        print nowdate + " date ni siya"
+        print nowtime + " time ni siya"
     return jsonify({"time":now})
