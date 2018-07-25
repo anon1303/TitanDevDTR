@@ -1444,4 +1444,4 @@ def otTimeout():
         # pass
         print nowdate + " date ni siya"
         print nowtime + " time ni siya"
-    return jsonify({"time":now})
+    return jsonify({"time":nowdate , "date":nowtime})
