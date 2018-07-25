@@ -524,9 +524,10 @@ def edit_time():
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
-    datenow1 = datetime.now().strftime("%Y-%m-%d")
-    datenow = datetime.strptime(str(datenow1), "%m%d%Y")
-    week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
+    datenow2 = datetime.now().strftime("%Y-%m-%d")
+    datenow1 = datetime.now().strftime("%m%d%Y")
+    datenow = datetime.strptime(str(datenow2), "%m%d%Y")
+    week_no = datetime.strptime(str(datenow2), "%m%d%Y").isocalendar()[1]
     timeAdmin = Admin.query.get(1)
 
     morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
@@ -570,7 +571,7 @@ def timein():
             atts.date = datenow
             atts.week_number = week_no
             dbase.session.commit()
-            employee = Overtime.query.filter(and_(Overtime.employeeid == atts.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow1)).first()
+            employee = Overtime.query.filter(and_(Overtime.employeeid == atts.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow2)).first()
             dates = Attendance.query.filter_by(date=datenow).first()
             if dates:
                 print '444546456646546465465465464654654654654'
@@ -802,7 +803,7 @@ def timein():
             # date1 = atts.date
             print "second"
             dates = Attendance.query.filter_by(date=datenow).first()
-            employee = Overtime.query.filter(and_(Overtime.employeeid == atts.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow1)).first()
+            employee = Overtime.query.filter(and_(Overtime.employeeid == atts.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow2)).first()
 
             if dates:
                 pass
@@ -1055,7 +1056,7 @@ def timein():
                 #     dbase.session.add(attendancenNew)
                 #     dbase.session.commit()
                 #     print '0987654321=-098765'
-                employee = Overtime.query.filter(and_(Overtime.employeeid == atts.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow1)).first()
+                employee = Overtime.query.filter(and_(Overtime.employeeid == atts.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow2)).first()
 
                 # dbase.session.commit()
                 if (now >= m7) and (now <= m9):
