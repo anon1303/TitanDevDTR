@@ -1423,7 +1423,6 @@ def counterunseen():
     if not log:
         return jsonify({'message': 'No logs to show'})
     else:
-        # seen=[]
         for i in log:
             i.counter = 0
             dbase.session.commit()
@@ -1432,16 +1431,16 @@ def counterunseen():
 @app.route('/autotimeout/', methods=['POST'])
 def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
-    nowdate = datetime.now().strftime("%Y-%d-%m")
-    timeout = "2200"
-    emp = Overtime.query.filter_by(overtimeInStatus=0).all()
-    # timeInEmp = []
+    # nowdate = datetime.now().strftime("%Y-%d-%m")
+    timeout = "1030"
+    emp = Overtime.query.filter_by(overtimeInStatus=1).all()
     if emp:
-        for i in emp:
-            i.overtimeInStatus = 1
-            dbase.session.commit()
-        return jsonify({"time": nowdate})
+        if timeout == nowtime:
+            for i in emp:
+                i.overtimeInStatus = 0
+                dbase.session.commit()
+            return jsonify({"time": nowdate})
     else:
         pass
-
+        return jsonify({"time": 'not time yet'})
     return jsonify({"time":nowdate , "date":nowtime})
