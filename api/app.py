@@ -1434,11 +1434,11 @@ def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
     nowdate = datetime.now().strftime("%Y-%d-%m")
     timeout = "2200"
-    emp = Overtime.query.filter_by(overtimeStatus=0).all()
+    emp = Overtime.query.filter_by(overtimeInStatus=0).all()
     # timeInEmp = []
     if emp:
         for i in emp:
-            i.overtimeStatus = 1
+            i.overtimeInStatus = 1
             dbase.session.commit()
         return jsonify({"time": nowdate})
     else:
