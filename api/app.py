@@ -1,11 +1,9 @@
 from api import app, dbase, generate_password_hash, cross_origin, CORS, check_password_hash
 from flask import request, jsonify
 from models import *
-# newly added
 from flask_login import login_user, login_required, LoginManager, logout_user
 import datetime as dt
 import time
-#pip install timedate, time
 from sqlalchemy import and_, desc, extract
 import png
 import pyqrcode
@@ -1431,3 +1429,8 @@ def counterunseen():
             dbase.session.commit()
         return jsonify({'adminlogs': 'done'})
 
+@app.route('/autotimeout/', mothods=['POST'])
+def otTimeout():
+    now = datetime.now().strftime("%H%M")
+    timeout = "2200"
+    return jsonify({"time":now})
