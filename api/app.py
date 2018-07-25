@@ -1432,12 +1432,12 @@ def counterunseen():
 def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
     # nowdate = datetime.now().strftime("%Y-%d-%m")
-    timeout = "2200"
-    emp = Overtime.query.filter_by(overtimeInStatus=0).all()
+    timeout = "1057"
+    emp = Overtime.query.filter_by(overtimeInStatus=1).all()
     if emp:
         if timeout == nowtime:
             for i in emp:
-                i.overtimeInStatus = 1
+                i.overtimeInStatus = 0
                 dbase.session.commit()
             return jsonify({"message": "timeout "})
     else:
