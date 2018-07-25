@@ -525,7 +525,8 @@ def edit_time():
 def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
     datenow1 = datetime.now().strftime("%m%d%Y")
-    datenow2 = datetime.strptime(now, "%Y-%m-%d")
+    datenow3 = datetime.now().strftime("%Y-%m-%d")
+    datenow2 = datetime.strptime(str(datenow3), "%Y-%m-%d")
     datenow = datetime.strptime(str(datenow1), "%m%d%Y")
     week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
     timeAdmin = Admin.query.get(1)
