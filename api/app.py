@@ -524,7 +524,7 @@ def edit_time():
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
-    datenow1 = datetime.now().strftime("%m%d%Y")
+    datenow1 = datetime.now().strftime("%Y-%m-%d")
     datenow = datetime.strptime(str(datenow1), "%m%d%Y")
     week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
     timeAdmin = Admin.query.get(1)
