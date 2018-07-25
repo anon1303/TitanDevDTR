@@ -1443,4 +1443,4 @@ def otTimeout():
     else:
         pass
         return jsonify({"time": 'not time yet'})
-    return jsonify({"time":nowdate , "date":nowtime})
+    return jsonify({"date":nowtime})
