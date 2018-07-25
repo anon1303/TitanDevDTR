@@ -1423,7 +1423,7 @@ def counterunseen():
     if not log:
         return jsonify({'message': 'No logs to show'})
     else:
-        seen=[]
+        # seen=[]
         for i in log:
             i.counter = 0
             dbase.session.commit()
@@ -1434,8 +1434,8 @@ def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
     nowdate = datetime.now().strftime("%Y-%d-%m")
     timeout = "2200"
-    emp = Overtime.query.filter(and_(Overtime.overtimeStatus==0, Overtime.overtimeDate == nowdate)).all()
-    timeInEmp = []
+    emp = Overtime.query.filter_by(overtimeStatus=0).all()
+    # timeInEmp = []
     if emp:
         for i in emp:
             i.overtimeStatus = 1
