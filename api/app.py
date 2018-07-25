@@ -1432,10 +1432,11 @@ def counterunseen():
 def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
     # nowdate = datetime.now().strftime("%Y-%d-%m")
-    timeout = "1057"
+    timeout = "2200"
+    timeout1 = "2300"
     emp = Overtime.query.filter_by(overtimeInStatus=1).all()
     if emp:
-        if timeout == nowtime:
+        if nowtime >= timeout and nowtime <= timeout1:
             for i in emp:
                 i.overtimeInStatus = 0
                 dbase.session.commit()
