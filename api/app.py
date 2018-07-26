@@ -140,6 +140,23 @@ def viewEmployee():
     else:
         return jsonify({'message': 'no employee found'})
 
+
+@app.route('/absentandlate/total', method=['GET'])
+def view_total():
+  total = Employee.query.all()
+  if not total:
+     return jsonify({'message': 'No data to show'})
+  else:
+     total_data = []
+     for i in total:
+        data = {}
+        data['name'] = i.fname + " " + i.mname + " " + i.lname
+        data['late_total'] = i.late
+        data['absent_total'] = i.absent
+        data['overtime_total'] = i.overtimes
+        total_data.append(data)
+     return jsonify({'total_data', total_data})
+
 @app.route('/viewDeactivated/', methods=['GET', 'POST'])
 # @login_required
 @cross_origin('*')
