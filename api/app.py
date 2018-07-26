@@ -573,7 +573,7 @@ def timein():
             atts.date = datenow
             atts.week_number = week_no
             dbase.session.commit()
-            employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
+            employee1 = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
             dates = Attendance.query.filter_by(date=datenow).first()
             if dates:
                 print '444546456646546465465465464654654654654'
@@ -752,9 +752,9 @@ def timein():
                     return jsonify({'message': 'time out'})
 
             elif now > a6 and now <= a7:
-                if employee.overtimeInStatus == 0:
-                    employee.overtimeInStatus = 1
-                    employee.overtimeIn = datetime.now()
+                if employee1.overtimeInStatus == 0:
+                    employee1.overtimeInStatus = 1
+                    employee1.overtimeIn = datetime.now()
 
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     print'R`'
@@ -789,14 +789,14 @@ def timein():
                     return jsonify({'message': 'time out for afternoon and morning'})
 
             elif now > a7 and now <= o10:
-                if employee:
-                        if employee.overtimeInStatus == 0:
-                            employee.overtimeInStatus = 1
-                            employee.overtimeIn = datetime.now()
+                if employee1:
+                        if employee1.overtimeInStatus == 0:
+                            employee1.overtimeInStatus = 1
+                            employee1.overtimeIn = datetime.now()
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time in success'})
-                        elif employee.overtimeInStatus == 1:
-                            employee.overtimeOut = datetime.now()
+                        elif employee1.overtimeInStatus == 1:
+                            employee1.overtimeOut = datetime.now()
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time out success'})
 # ////////// ///////////////////////////////IF ID IS EXISTING/////////////////////////////////////////////////////////
@@ -809,7 +809,7 @@ def timein():
             # date1 = atts.date
             print "second"
             dates = Attendance.query.filter_by(date=datenow).first()
-            employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
+            employee1 = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
 
             if dates:
                 pass
@@ -997,9 +997,9 @@ def timein():
                         return jsonify({'message': 'time out'})
 
                 elif now > a6 and now <= a7:
-                    if employee.overtimeInStatus == 0:
-                        employee.overtimeInStatus = 1
-                        employee.overtimeIn = datetime.now()
+                    if employee1.overtimeInStatus == 0:
+                        employee1.overtimeInStatus = 1
+                        employee1.overtimeIn = datetime.now()
 
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         print'R`'
@@ -1034,14 +1034,14 @@ def timein():
                         return jsonify({'message': 'time out for afternoon and morning'})
 
                 elif now > a7 and now <= o10:
-                    if employee:
-                        if employee.overtimeInStatus == 0:
-                            employee.overtimeInStatus = 1
-                            employee.overtimeIn = datetime.now()
+                    if employee1:
+                        if employee1.overtimeInStatus == 0:
+                            employee1.overtimeInStatus = 1
+                            employee1.overtimeIn = datetime.now()
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time in success'})   
-                        elif employee.overtimeInStatus == 1:
-                            employee.overtimeOut = datetime.now()
+                        elif employee1.overtimeInStatus == 1:
+                            employee1.overtimeOut = datetime.now()
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time out success'})
 
@@ -1066,7 +1066,7 @@ def timein():
                 #     dbase.session.add(attendancenNew)
                 #     dbase.session.commit()
                 #     print '0987654321=-098765'
-                employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
+                employee1 = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
 
                 # dbase.session.commit()
                 if (now >= m7) and (now <= m9):
@@ -1236,9 +1236,9 @@ def timein():
                         return jsonify({'message': 'time out'})
                 
                 elif now > a6 and now <= a7:
-                    if employee.overtimeInStatus == 0:
-                        employee.overtimeInStatus = 1
-                        employee.overtimeIn = datetime.now()
+                    if employee1.overtimeInStatus == 0:
+                        employee1.overtimeInStatus = 1
+                        employee1.overtimeIn = datetime.now()
              
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         print'R`'
@@ -1272,15 +1272,15 @@ def timein():
                         absents()
                         return jsonify({'message': 'time out for afternoon and morning'})
                 elif now > a7 and now <= o10:
-                    if employee:
-                        if employee.overtimeInStatus == 0:
-                            employee.overtimeInStatus = 1
-                            employee.overtimeIn = datetime.now()
+                    if employee1:
+                        if employee1.overtimeInStatus == 0:
+                            employee1.overtimeInStatus = 1
+                            employee1.overtimeIn = datetime.now()
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time in success'})
-                        elif employee.overtimeInStatus == 1:
-                            employee.overtimeOut = datetime.now()
-                            employee.overtimeInStatus == 2
+                        elif employee1.overtimeInStatus == 1:
+                            employee1.overtimeOut = datetime.now()
+                            employee1.overtimeInStatus == 2
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time out success'})
                         else:
