@@ -132,6 +132,9 @@ def viewEmployee():
           data1['birth_date'] = str(i.birth_date)
           data1['gender'] = i.gender
           data1['address'] = i.address
+          data1['late'] = i.late
+          data1['absent'] = i.absent
+          data1['overtime'] = i.overtimes
           data.append(data1)
         return jsonify({'users':data})
     else:
