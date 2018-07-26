@@ -526,7 +526,8 @@ def timein():
     now = datetime.now().strftime("%m%d%Y%H%M")
     datenow1 = datetime.now().strftime("%m%d%Y")
     datenow3 = datetime.now().strftime("%Y-%m-%d")
-    datenow2 = datetime.strptime(str(datenow3), "%Y-%m-%d")
+    y, m, d = datenow3.split("-")
+    datenow2 = dt.date(int(y), int(m), int(d))
     datenow = datetime.strptime(str(datenow1), "%m%d%Y")
     week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
     timeAdmin = Admin.query.get(1)
@@ -572,7 +573,7 @@ def timein():
             atts.date = datenow
             atts.week_number = week_no
             dbase.session.commit()
-            employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow2)).first()
+            employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
             dates = Attendance.query.filter_by(date=datenow).first()
             if dates:
                 print '444546456646546465465465464654654654654'
@@ -805,7 +806,7 @@ def timein():
             # date1 = atts.date
             print "second"
             dates = Attendance.query.filter_by(date=datenow).first()
-            employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow2)).first()
+            employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
 
             if dates:
                 pass
@@ -1059,7 +1060,7 @@ def timein():
                 #     dbase.session.add(attendancenNew)
                 #     dbase.session.commit()
                 #     print '0987654321=-098765'
-                employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 0, Overtime.overtimeDate == datenow2)).first()
+                employee = Overtime.query.filter(and_(Overtime.employeeid == empID, Overtime.overtimeStatus == 1, Overtime.overtimeDate == datenow2)).first()
 
                 # dbase.session.commit()
                 if (now >= m7) and (now <= m9):
@@ -1270,8 +1271,13 @@ def timein():
                             return jsonify({'message': 'Overtime time in success'})
                         elif employee.overtimeInStatus == 1:
                             employee.overtimeOut = datetime.now()
+                            employee.overtimeInStatus == 2
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time out success'})
+                        else:
+                            return jsonify({'message': 'Request for overtime'})
+                    else:
+                        return jsonify({'message': 'Please request overtime first!'})
 
 def absents():
     datenow1 = datetime.now().strftime("%m%d%Y")
@@ -1346,7 +1352,7 @@ def request_overtime():
    employee = Employee.query.filter_by(code=data['code']).first()
    if not employee:
         return jsonify({'message': 'Employee not found'})
-   overtime = Overtime.query.filter(and_(Overtime.employeeid == employee.employeeid, Overtime.overtimeStatus == 0, Overtime.overtimeDate == data['dates'])).first()
+   overtime = Overtime.query.filter(and_(Overtime.employeeid == employee.employeeid, Overtime.overtimeStatus == 1, Overtime.overtimeDate == data['dates'])).first()
    if overtime:
        return jsonify({'message': 'Request already sent, Please wait for the admin to approve'})
    else:
