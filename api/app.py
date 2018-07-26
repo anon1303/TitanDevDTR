@@ -141,7 +141,7 @@ def viewEmployee():
         return jsonify({'message': 'no employee found'})
 
 
-@app.route('/absentandlate/total', method=['GET'])
+@app.route('/absentandlate/total', methods=['GET'])
 def view_total():
   total = Employee.query.all()
   if not total:
