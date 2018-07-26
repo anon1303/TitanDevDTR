@@ -32,6 +32,9 @@ class Employee(dbase.Model):
     birth_date = dbase.Column(dbase.DATE, nullable=False)
     gender = dbase.Column(dbase.String(6), nullable=False)
     address = dbase.Column(dbase.String(50))
+    late = dbase.Column(dbase.Integer, default=0)
+    absent = dbase.Column(dbase.Integer, default=0)
+    overtimes = dbase.Column(dbase.Integer, default=0)
     attendance1 = dbase.relationship('Attendance', backref='employee', lazy=True)
     overtime = dbase.relationship('Overtime', backref='employee', lazy=True)
 

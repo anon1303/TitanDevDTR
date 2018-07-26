@@ -623,7 +623,8 @@ def timein():
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.morningTimeOut is None:
                         atts.morningStatus = 1
-                        atts.lateTotal = atts.lateTotal + 1
+                        atts.lateTotal = 1
+                        employee.late = employee.late + 1
                         atts.morningDailyStatus = 'late'
                         atts.morningTimeIn = datetime.now()
                         # atts.morningRemark = wala pa nabutang
@@ -709,7 +710,8 @@ def timein():
                 if atts.morningStatus == 0 and atts.afterStatus == 0:
                     if atts.afterTimeOut is None:
                         atts.afterStatus = 1
-                        atts.lateTotal = atts.lateTotal + 1
+                        atts.lateTotal = 1
+                        employee.late = employee.late + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
                         # atts.morningRemark = wala pa nabutang
@@ -724,7 +726,8 @@ def timein():
                         atts.morningStatus = 0
                         atts.afterStatus = 1
                         atts.morningTimeOut = datetime.now()
-                        atts.lateTotal = atts.lateTotal + 1
+                        atts.lateTotal = 1
+                        employee.late = employee.late + 1
                         atts.afterDailyStatus = 'late'
                         atts.afterTimeIn = datetime.now()
                         # atts.morningRemark = wala pa nabutang
@@ -866,7 +869,8 @@ def timein():
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.morningTimeOut is None:
                             atts.morningStatus = 1
-                            atts.lateTotal = atts.lateTotal + 1
+                            atts.lateTotal = 1
+                            employee.late = employee.late + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
@@ -950,7 +954,8 @@ def timein():
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.afterStatus = 1
-                            atts.lateTotal = atts.lateTotal + 1
+                            atts.lateTotal = 1
+                            employee.late = employee.late + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
@@ -965,7 +970,8 @@ def timein():
                             atts.morningStatus = 0
                             atts.afterStatus = 1
                             atts.morningTimeOut = datetime.now()
-                            atts.lateTotal = atts.lateTotal + 1
+                            atts.lateTotal = 1
+                            employee.late = employee.late + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
@@ -1102,7 +1108,8 @@ def timein():
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.morningTimeOut is None:
                             atts.morningStatus = 1
-                            atts.lateTotal = atts.lateTotal + 1
+                            atts.lateTotal = 1
+                            employee.late = employee.late + 1
                             atts.morningDailyStatus = 'late'
                             atts.morningTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
@@ -1186,7 +1193,8 @@ def timein():
                     if atts.morningStatus == 0 and atts.afterStatus == 0:
                         if atts.afterTimeOut is None:
                             atts.afterStatus = 1
-                            atts.lateTotal = atts.lateTotal + 1
+                            atts.lateTotal = 1
+                            employee.late = employee.late + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
@@ -1201,7 +1209,8 @@ def timein():
                             atts.morningStatus = 0
                             atts.afterStatus = 1
                             atts.morningTimeOut = datetime.now()
-                            atts.lateTotal = atts.lateTotal + 1
+                            atts.lateTotal = 1
+                            employee.late = employee.late + 1
                             atts.afterDailyStatus = 'late'
                             atts.afterTimeIn = datetime.now()
                             # atts.morningRemark = wala pa nabutang
@@ -1275,7 +1284,7 @@ def timein():
                             dbase.session.commit()
                             return jsonify({'message': 'Overtime time out success'})
                         else:
-                            return jsonify({'message': 'Request for overtime'})
+                            return jsonify({'message': 'Request for overtime '})
                     else:
                         return jsonify({'message': 'Please request overtime first!'})
 
@@ -1304,11 +1313,13 @@ def absents():
 
         for i in absent:
             v = Attendance.query.filter(and_(Attendance.employeeid == i, Attendance.absentTotal == None)).first()
+            emp_ = Employee.query.filter_by(employeeid = i).first()
             if v:    
                 absent =  Attendance(employeeid = i)
                 dbase.session.add(absent)
                 dbase.session.commit()
-                absent.absentTotal = absent.absentTotal + 1
+                absent.absentTotal = 1
+                emp_.absent = emp_.absent + 1
                 absent.date = datenow1
                 dbase.session.commit()
             else:
@@ -1402,11 +1413,13 @@ def view_requests():
 def approve():
    data = request.get_json()
    overtime = Overtime.query.filter(and_(Overtime.overtimeStatus == 0,Overtime.employeeid == int(data['id']))).first()
+   emp_ = Employee.query.filter_by(employeeid = data['id']).first()
    if overtime is None:
        return jsonify({'message': 'Error'})
    else:
        overtime.overtimeStatus = 1
-       overtime.overtimeTotal = int(overtime.overtimeTotal) + 1
+       overtime.overtimeTotal = 1
+       emp_.overtimes = emp_.overtimes + 1
        dbase.session.commit()
        name = Employee.query.filter_by(employeeid = data['id']).first()
        msg = name.fname+ " " + name.lname + " overtime request has been approved"
