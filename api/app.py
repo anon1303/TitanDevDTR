@@ -148,9 +148,8 @@ def viewOneEmployee():
     data = request.get_json()
     employess = Employee.query.filter_by(employeeid=data['id']).first()
 
-    data = []
+
     if employess:
-        for i in employess:
           data1 = {}
           data1['fname'] = i.fname
           data1['mname'] = i.mname
@@ -166,8 +165,7 @@ def viewOneEmployee():
           data1['late'] = i.late
           data1['absent'] = i.absent
           data1['overtime'] = i.overtimes
-          data.append(data1)
-        return jsonify({'users': data})
+          return jsonify({'users': data1})
     else:
         return jsonify({'message': 'no employee found'})
 
