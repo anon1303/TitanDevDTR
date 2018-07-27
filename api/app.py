@@ -311,7 +311,7 @@ def ReActEmployee():
 # @login_required
 def edit(user_id):
     data = request.get_json()
-    employee = Employee.query.filter_by(code=user_id).first()
+    employee = Employee.query.filter_by(employeeid=user_id).first()
     if employee is None:
         return jsonify({'message': 'user not found'})
     else:
