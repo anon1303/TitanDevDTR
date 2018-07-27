@@ -151,20 +151,18 @@ def viewOneEmployee():
 
     if employess:
           data1 = {}
-          data1['fname'] = i.fname
-          data1['mname'] = i.mname
-          data1['lname'] = i.lname
-          data1['position'] = i.position
-          data1['code'] = i.code
-          data1['employeeid'] = i.employeeid
-          data1['contact'] = i.contact
-          data1['email'] = i.email
-          data1['birth_date'] = str(i.birth_date)
-          data1['gender'] = i.gender
-          data1['address'] = i.address
-          data1['late'] = i.late
-          data1['absent'] = i.absent
-          data1['overtime'] = i.overtimes
+          data1['fname'] = employess.lname
+          data1['posemployesstemployesson'] = employess.position
+          data1['code'] = employess.code
+          data1['employeeid'] = employess.employeeid
+          data1['contact'] = employess.contact
+          data1['email'] = employess.email
+          data1['birth_date'] = str(employess.birth_date)
+          data1['gender'] = employess.gender
+          data1['address'] = employess.address
+          data1['late'] = employess.late
+          data1['absent'] = employess.absent
+          data1['overtime'] = employess.overtimes
           return jsonify({'users': data1})
     else:
         return jsonify({'message': 'no employee found'})
