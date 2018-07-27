@@ -141,7 +141,7 @@ def viewEmployee():
         return jsonify({'message': 'no employee found'})
 
 
-@app.route('/viewOne/', methods=['GET'])
+@app.route('/viewOne/', methods=['GET', 'POST'])
 # @login_required
 # @cross_origin('*')
 def viewOneEmployee():
