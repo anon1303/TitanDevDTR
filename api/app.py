@@ -113,7 +113,7 @@ def addemployee():
 
 @app.route('/view/', methods=['GET'])
 # @login_required
-@cross_origin('*')
+# @cross_origin('*')
 def viewEmployee():
     employess = Employee.query.filter_by(employeestatus=1).all()
 
@@ -139,6 +139,38 @@ def viewEmployee():
         return jsonify({'users':data})
     else:
         return jsonify({'message': 'no employee found'})
+
+
+@app.route('/viewOne/', methods=['GET'])
+# @login_required
+# @cross_origin('*')
+def viewOneEmployee():
+    data = request.get_json()
+    employess = Employee.query.filter_by(employeeid=data['id']).first()
+
+    data = []
+    if employess:
+        for i in employess:
+          data1 = {}
+          data1['fname'] = i.fname
+          data1['mname'] = i.mname
+          data1['lname'] = i.lname
+          data1['position'] = i.position
+          data1['code'] = i.code
+          data1['employeeid'] = i.employeeid
+          data1['contact'] = i.contact
+          data1['email'] = i.email
+          data1['birth_date'] = str(i.birth_date)
+          data1['gender'] = i.gender
+          data1['address'] = i.address
+          data1['late'] = i.late
+          data1['absent'] = i.absent
+          data1['overtime'] = i.overtimes
+          data.append(data1)
+        return jsonify({'users': data})
+    else:
+        return jsonify({'message': 'no employee found'})
+
 
 
 @app.route('/absentandlate/total', methods=['GET'])
