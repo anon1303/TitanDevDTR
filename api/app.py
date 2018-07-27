@@ -151,7 +151,9 @@ def viewOneEmployee():
 
     if employess:
           data1 = {}
-          data1['fname'] = employess.lname
+          data1['lname'] = employess.lname
+          data1['fname'] = employess.fname
+          data1['mname'] = employess.mname
           data1['position'] = employess.position
           data1['code'] = employess.code
           data1['employeeid'] = employess.employeeid
