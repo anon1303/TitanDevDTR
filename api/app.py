@@ -211,7 +211,7 @@ def viewEmployeeDeactivated():
             data.append(data1)
         return jsonify({'users':data})
     else:
-        return jsonify({'users':data})
+        return jsonify({'users': data})
 
 
 @app.route('/search/', methods =['GET', 'POST'])
