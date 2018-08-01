@@ -1439,11 +1439,12 @@ def request_overtime():
 def view_requests():
    overtime1 = Overtime.query.filter_by(overtimeStatus=0).all()
    print(overtime1)
+   overtimers = []
    if not overtime1:
        print('ddsdsdsdsd if')
-       return jsonify({'message': 'No request found'})
+       return jsonify({'employee': overtimers})
    else:
-       overtimers = []
+       
        print('else')
        for overtimee in overtime1:
            print('ovahtime')
