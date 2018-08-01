@@ -138,7 +138,7 @@ def viewEmployee():
           data.append(data1)
         return jsonify({'users':data})
     else:
-        return jsonify({'message': 'no employee found'})
+        return jsonify({'users': data})
 
 
 @app.route('/viewOne/', methods=['GET', 'POST'])
@@ -175,7 +175,7 @@ def viewOneEmployee():
 def view_total():
   total = Employee.query.all()
   if not total:
-     return jsonify({'message': 'No data to show'})
+     return jsonify({'total_data': totaldata})
   else:
      totaldata = []
      for i in total:
@@ -1455,7 +1455,7 @@ def view_requests():
            overtimers.append(employee_data)
        return jsonify({'employee': overtimers})
    print('random return')
-   return jsonify({'message': 'No request found'})
+   return jsonify({'employee': overtimers})
 
 
 @app.route('/approve/request', methods=['POST'])
