@@ -1509,15 +1509,17 @@ def decline():
 @app.route('/view/logs', methods=['GET'])
 def notifications():
     log = Logs.query.filter(and_(Logs.logStatus==1,Logs.counter==1)).all()
-    if not log:
-        return jsonify({'message': 'No logs to show'})
     count = 0
+    if not log:
+        return jsonify({'message': 'No logs to show', 'count': count})
+
     logs = []
     for i in log:
         log_data = {}
         log_data['logdetails'] = i.details
         logs.append(log_data)
         count = count + 1
+
     return jsonify({'Notification': logs, 'count': count})
 
 @app.route('/view/admin/logs', methods=['GET'])
