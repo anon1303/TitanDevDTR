@@ -1360,12 +1360,18 @@ def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
     week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
 
     morning7 = morning7.strftime("%H%M")
+    print(morning7)
     morning9 = morning9.strftime("%H%M")
+    print(morning9)
     morning12 = morning12.strftime("%H%M")
+    print(morning12)
 
     afte1 = afte1.strftime("%H%M")
+    print(afte1)
     afte6 = afte6.strftime("%H%M")
+    print(afte6)
     afte7 = afte7.strftime("%H%M")
+    print(afte7)
 
     m7 = ''.join([datenow1, morning7])
     m9 = ''.join([datenow1, morning9])
@@ -1399,6 +1405,7 @@ def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
         dates = Attendance.query.filter_by(date=datenow).first()
         if dates:
             print '444546456646546465465465464654654654654'
+            pass
 
         else:
             dbase.session.add(attendancenNew)
