@@ -73,7 +73,7 @@ class Attendance(dbase.Model):
     def __init__(self, employeeid):
         self.employeeid = employeeid
 
-class PersonalTime(dbase.model):
+class PersonalTime(dbase.Model):
     __tablename__= 'PersonalTime'
     PersonalTimeId = dbase.Column(dbase.Integer, primary_key=True)
     employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey('employee.employeeid'))
