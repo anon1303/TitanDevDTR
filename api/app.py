@@ -602,7 +602,7 @@ def timein():
 
    # 1 for active and 0 for inactive
    data = request.get_json()
-   employee = Employee.query.filter_by(code=data['code']).first()
+   employee = Employee.query.filter(and_(Employee.code==data['code'], Employee.employeestatus == 1)).first()
    empID = employee.employeeid
    attendancenNew = Attendance(employeeid=empID)
    PersonalTimeIN = PersonalTime.query.filter(and_(PersonalTime.employeeid == empID, PersonalTime.date == str(datenow))).order_by(PersonalTime.date.desc()).first()
@@ -1384,7 +1384,7 @@ def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
 
    # 1 for active and 0 for inactive
    attendancenNew = Attendance(employeeid=empID)
-   employee = Employee.query.filter_by(employeeid=empID).first()
+   employee = Employee.query.filter(and_(Employee.employeeid==empID, Employee.employeestatus == 1)).first()
    atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == str(
       datenow))).order_by(Attendance.date.desc()).first()
    # ////////////////////////////IF ID IS NOT LISTED IN THE ATTENDACE CRETAE NEW///////////////////////////////#
