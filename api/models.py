@@ -73,6 +73,25 @@ class Attendance(dbase.Model):
     def __init__(self, employeeid):
         self.employeeid = employeeid
 
+class PersonalTime(dbase.model):
+    __tablename__= 'PersonalTime'
+    PersonalTimeId = dbase.Column(dbase.Integer, primary_key=True)
+    employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey('employee.employeeid'))
+    morningTimeIn = dbase.Column(dbase.DateTime)
+    morningTimeOut = dbase.Column(dbase.DateTime)
+    morningStatus = dbase.Column(dbase.Integer, default=0, nullable=False)
+    morningDailyStatus = dbase.Column(dbase.String(8))
+    morningRemark = dbase.Column(dbase.String(50))
+    afterTimeIn = dbase.Column(dbase.DateTime)
+    afterTimeOut = dbase.Column(dbase.DateTime)
+    afterStatus = dbase.Column(dbase.Integer, default=0, nullable=False)
+    date = dbase.Column(dbase.DATE)
+
+    def __init__(self, employeeid, date):
+        self.employeeid = employeeid
+        self.date = dbase.Column(dbase.DATE)
+
+
 class Overtime(dbase.Model):
     __tablename__ = 'overtime'
     overtimeid = dbase.Column(dbase.Integer, primary_key=True)
