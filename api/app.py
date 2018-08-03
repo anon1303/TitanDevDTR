@@ -684,8 +684,6 @@ def edit_time():
 
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
-    
-
     morning7 = timeAdmin.morning_time_in_start.strftime('%H%M')
     morning9 = timeAdmin.morning_time_out_start.strftime('%H%M')
     morning12 = timeAdmin.morning_time_out_end.strftime('%H%M')
