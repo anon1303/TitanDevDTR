@@ -77,19 +77,24 @@ class PersonalTime(dbase.Model):
     __tablename__= 'PersonalTime'
     PersonalTimeId = dbase.Column(dbase.Integer, primary_key=True)
     employeeid = dbase.Column(dbase.Integer, dbase.ForeignKey('employee.employeeid'))
-    morningTimeIn = dbase.Column(dbase.DateTime)
-    morningTimeOut = dbase.Column(dbase.DateTime)
-    morningStatus = dbase.Column(dbase.Integer, default=0, nullable=False)
-    morningDailyStatus = dbase.Column(dbase.String(8))
-    morningRemark = dbase.Column(dbase.String(50))
-    afterTimeIn = dbase.Column(dbase.DateTime)
-    afterTimeOut = dbase.Column(dbase.DateTime)
-    afterStatus = dbase.Column(dbase.Integer, default=0, nullable=False)
+    morningTimeIn = dbase.Column(dbase.Time)
+    morningTimeOut = dbase.Column(dbase.Time)
+    morningTimeOutend = dbase.Column(dbase.Time)
+    afterTimeIn = dbase.Column(dbase.Time)
+    afterTimeOut = dbase.Column(dbase.Time)
+    afterTimeOutend = dbase.Column(dbase.Time)
     date = dbase.Column(dbase.DATE)
 
-    def __init__(self, employeeid, date):
+    def __init__(self, employeeid, date, morningTimeIn, morningTimeOut, morningTimeOutend, afterTimeIn, afterTimeOut, afterTimeOutend):
         self.employeeid = employeeid
-        self.date = dbase.Column(dbase.DATE)
+        self.date = date
+        self.morningTimeIn = morningTimeIn
+        self.morningTimeOut = morningTimeOut
+        self.morningTimeOutend = morningTimeOutend
+        self.afterTimeIn = afterTimeIn
+        self.afterTimeOut = afterTimeOut
+        self.afterTimeOutend = afterTimeOutend
+
 
 
 class Overtime(dbase.Model):
