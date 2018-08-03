@@ -1360,8 +1360,8 @@ def timein():
          after1 = PersonalTimeIN.afterTimeIn
          after6 = PersonalTimeIN.afterTimeOut
          after7 = PersonalTimeIN.afterTimeOutend
-         personalTime_in(morning7, morning9, morning12,
-                         after1, after6, after7, empID)
+         return(personalTime_in(morning7, morning9, morning12,
+                         after1, after6, after7, empID))
 
 
 @app.route('/set/personalTime', methods=['POST'])
