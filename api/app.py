@@ -1339,7 +1339,7 @@ def timein():
             
 
 
-@app.route('/set/personalTime', method=['POST'])
+@app.route('/set/personalTime', methods=['POST'])
 def set_time():
    data = request.get_json()
    #ako ra edit aning line sa ubos
