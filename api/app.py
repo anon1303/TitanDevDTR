@@ -684,6 +684,16 @@ def edit_time():
 
 @app.route('/TimeIn/', methods=['POST'])
 def timein():
+    now = datetime.now().strftime('%m%d%Y%H%M')
+    datenow1 = datetime.now().strftime('%m%d%Y')
+    datenow3 = datetime.now().strftime('%Y-%m-%d')
+    (y, m, d) = datenow3.split('-')
+    datenow2 = dt.date(int(y), int(m), int(d))
+    datenow = datetime.strptime(str(datenow1), '%m%d%Y')
+    week_no = datetime.strptime(str(datenow1), '%m%d%Y'
+                                ).isocalendar()[1]
+    timeAdmin = Admin.query.get(1)
+
     morning7 = timeAdmin.morning_time_in_start.strftime('%H%M')
     morning9 = timeAdmin.morning_time_out_start.strftime('%H%M')
     morning12 = timeAdmin.morning_time_out_end.strftime('%H%M')
