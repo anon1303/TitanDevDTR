@@ -852,7 +852,7 @@ def timein():
                                 dbase.session.commit()
                                 return jsonify({'message': 'Overtime time out success'})
                 
-    # ////////// ///////////////////////////////IF ID IS EXISTING/////////////////////////////////////////////////////////
+            # ////////// ///////////////////////////////IF ID IS EXISTING/////////////////////////////////////////////////////////
             elif atts:
                 dates = Attendance.query.filter_by(date=datenow).order_by(Attendance.date.desc()).first()
                 print dates
@@ -1382,7 +1382,7 @@ def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
     atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == str(
         datenow))).order_by(Attendance.date.desc()).first()
     # ////////////////////////////IF ID IS NOT LISTED IN THE ATTENDACE CRETAE NEW///////////////////////////////#
-    if atts is None:
+    if not atts:
 
         dbase.session.add(attendancenNew)
         dbase.session.commit()
