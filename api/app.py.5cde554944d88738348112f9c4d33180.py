@@ -1387,7 +1387,7 @@ def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
    # 1 for active and 0 for inactive
    attendancenNew = Attendance(employeeid=empID)
    employee = Employee.query.filter(and_(Employee.employeeid==empID, Employee.employeestatus == 1)).first()
-   if not employee:
+      if not employee:
       return jsonify({'message': 'user not found'})
    atts = Attendance.query.filter(and_(Attendance.employeeid == empID, Attendance.date == str(
       datenow))).order_by(Attendance.date.desc()).first()
