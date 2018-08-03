@@ -1357,7 +1357,6 @@ def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
     datenow2 = dt.date(int(y), int(m), int(d))
     datenow = datetime.strptime(str(datenow1), "%m%d%Y")
     week_no = datetime.strptime(str(datenow1), "%m%d%Y").isocalendar()[1]
-    timeAdmin = Admin.query.get(1)
 
     morning7 = morning7.strftime("%H%M")
     morning9 = morning9.strftime("%H%M")
