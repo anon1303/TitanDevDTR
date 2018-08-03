@@ -1344,7 +1344,7 @@ def set_time():
    data = request.get_json()
    #ako ra edit aning line sa ubos
    personal_time = PersonalTime(employeeid=data['id'], morningTimeIn=data['morningIn'], morningTimeOut=data['morningOut'], morningTimeOutend=data['morningOutend'],
-    afterTimeIn= data['afterIn'], afterTimeOut=data['afterOut'], afterTimeOutend=data['afterOutend'], date=data['date'])
+                                afterTimeIn=data['afterIn'], afterTimeOut=data['afterOut'], afterTimeOutend=data['afterOutend'], date=data['date'])
    dbase.session.add(personal_time)
    dbase.session.commit()
 
