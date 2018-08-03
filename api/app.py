@@ -1327,7 +1327,7 @@ def timein():
                                 return jsonify({'message': 'Request for overtime '})
                         else:
                             return jsonify({'message': 'Please request overtime first!'})
-        elif PersonalTimeIN:
+        else:
             print('sulod syas personal bay!')
             morning7 = PersonalTimeIN.morningTimeIn
             morning9 = PersonalTimeIN.morningTimeOut
