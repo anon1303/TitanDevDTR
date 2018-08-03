@@ -1347,6 +1347,7 @@ def set_time():
                                 afterTimeIn=data['afterIn'], afterTimeOut=data['afterOut'], afterTimeOutend=data['afterOutend'], date=data['date'])
    dbase.session.add(personal_time)
    dbase.session.commit()
+   return jsonify({'message':'Individual Time added!'})
 
 
 def personalTime_in(morning7, morning9, morning12, afte1, afte6, afte7, empID):
