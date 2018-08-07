@@ -63,7 +63,7 @@ def newAdmin():
         if data['username'] == '' or data['username'] is None:
           new.username = new.username
         else:
-          new.fname = data['username']
+          new.username = data['username']
         if data['password'] == '':
           new.password = new.password
         else:
