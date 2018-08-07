@@ -222,7 +222,6 @@ def searchEmployee():
     if activate is None:
         return jsonify({'message': 'not found'})
     else:
-
         for i in activate:
             data = {}
             data['fname'] = i.fname
@@ -462,7 +461,7 @@ def employee_monthly(emp_id):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = str(employee.morningTimeIn)
+       employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%m-%d %H:%M")
        employee_data['morningTimeOut'] = str(employee.morningTimeOut)
        employee_data['afterTimeIn'] = str(employee.afterTimeIn)
        employee_data['afterTimeOut'] = str(employee.afterTimeOut)
