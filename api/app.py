@@ -61,7 +61,7 @@ def newAdmin():
     new = Admin.query.get(1)
     try:
         if data['username'] == '' or data['username'] is None:
-          new.fname = new.fname
+          new.username = new.username
         else:
           new.fname = data['username']
         if data['password'] == '':
