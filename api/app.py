@@ -64,10 +64,10 @@ def newAdmin():
           new.fname = new.fname
         else:
           new.fname = data['username']
-        if data['code'] == '':
-          new.code = new.code
+        if data['password'] == '':
+          new.password = new.password
         else:
-          new.code = generate_password_hash(data['code'], method='sha256')
+          new.password = generate_password_hash(data['password'], method='sha256')
         dbase.session.commit()
         msg = "username or password updated"
         logmessage = Logs(details=msg, log_date=lgdate)
