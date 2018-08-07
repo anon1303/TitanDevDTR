@@ -67,7 +67,7 @@ def logout():
 # @login_required
 def newAdmin():
     data = request.get_json()
-    new = Admin(username=data['username'], password=data['password'])
+    new = Admin.query.get(1)
     try:
         if data['username'] == '' or data['username'] is None:
           new.fname = new.fname
@@ -2172,10 +2172,9 @@ def absents():
 @app.route('/remark/<string:codes>', methods=['GET', 'POST'])
 def add_remarks(codes):
   data = request.get_json()
-  ids = Employee.query.filter_by(code=codes).first()
+  ids = Employee.query.filter_by(code=codes).first() 
   print ids
-  remarks = Attendance.query.filter_by(
-      employeeid=ids.employeeid).order_by(Attendance.date.desc()).first()
+  remarks = Attendance.query.filter_by(employeeid=ids.employeeid).order_by(Attendance.date.desc()).first()
   if remarks.morningDailyStatus == "late":
     if remarks.morningRemark is None:
       remarks.morningRemark = data['reason']
