@@ -557,8 +557,8 @@ def employee_week(dates, emp_id):
    summary = Attendance.query.filter(and_(Attendance.employeeid == emp_id, Attendance.week_number == week_number, extract(
        'year', Attendance.date) == year)).order_by(Attendance.week_number.desc()).all()
    employees = []
-#    if summary is None:
-#        return jsonify({"message": "No data to show"})
+   if not summary:
+      return jsonify({'employee': employees})
    for employee in summary:
        employee_data = {}
        name = Employee.query.filter_by(employeeid=employee.employeeid).first()
