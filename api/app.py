@@ -393,7 +393,7 @@ def company_month(dates):
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
-       employee_data['afterDailyStatus'] = employee.afterDailyStatu
+       employee_data['afterDailyStatus'] = employee.afterDailyStatus
        employee_data['morningRemark'] = employee.morningRemark
        employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
