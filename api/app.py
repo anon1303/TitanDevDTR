@@ -389,7 +389,7 @@ def company_month(dates):
        employee_data['morningTimeIn'] = (employee.morningTimeIn)
        employee_data['morningTimeOut'] = (employee.morningTimeOut)
        employee_data['afterTimeIn'] = (employee.afterTimeIn)
-       employee_data['afterTimeOut'] = (employee.afterTimeOut
+       employee_data['afterTimeOut'] = (employee.afterTimeOut)
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -427,10 +427,10 @@ def company_week(sort_date):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = (employee.morningTimeIn
-       employee_data['morningTimeOut'] = (employee.morningTimeOut
-       employee_data['afterTimeIn'] = (employee.afterTimeIn
-       employee_data['afterTimeOut'] = (employee.afterTimeOut
+       employee_data['morningTimeIn'] = (employee.morningTimeIn)
+       employee_data['morningTimeOut'] = (employee.morningTimeOut)
+       employee_data['afterTimeIn'] = (employee.afterTimeIn)
+       employee_data['afterTimeOut'] = (employee.afterTimeOut)
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatu
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -484,35 +484,19 @@ def employee_week(dates, emp_id):
    year, week_number = dates.split("-")
    print year
    print week_number
-   summary = Attendance.query.filter(and_(Attendance.employeeid == emp_id, Attendance.week_number == week_number, extract(
-       'year', Attendance.date) == year)).order_by(Attendance.week_number.desc()).all()
-   employees = []
-#    if summary is None:
-#        return jsonify({"message": "No data to show"})
-   for employee in summary:
-       employee_data = {}
-       name = Employee.query.filter_by(employeeid=employee.employeeid).first()
-       overtimee = Overtime.query.filter_by(employeeid=employee.employeeid).order_by(
-           Overtime.overtimeDate.desc()).first()
-       employee_data['name'] = name.fname + " " + name.mname + " " + name.lname
-       if overtimee is None:
-            employee_data['overtimeTotal'] = 0
-       else:
-            employee_data['overtimeTotal'] = overtimee.overtimeTotal
-       employee_data['employeeid'] = employee.employeeid
-       employee_data['lateTotal'] = employee.lateTotal
-       employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = (employee.morningTimeIn)
-       employee_data['morningTimeOut'] = (employee.morningTimeOut)
-       employee_data['afterTimeIn'] = (employee.afterTimeIn)
-       employee_data['afterTimeOut'] = (employee.afterTimeOut)
-       employee_data['morningStatus'] = employee.morningStatus
-       employee_data['afterStatus'] = employee.afterStatus
-       employee_data['morningDailyStatus'] = employee.morningDailyStatus
-       employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemark
-       employee_data['afterRemark'] = employee.afterRemark
-       employees.append(employee_data)
+   employee_data['lateTotal'] = employee.lateTotal
+   employee_data['absentTotal'] = employee.absentTotal
+   employee_data['morningTimeIn'] = (employee.morningTimeIn)
+   employee_data['morningTimeOut'] = (employee.morningTimeOut)
+   employee_data['afterTimeIn'] = (employee.afterTimeIn)
+   employee_data['afterTimeOut'] = (employee.afterTimeOut)
+   employee_data['morningStatus'] = employee.morningStatus
+   employee_data['afterStatus'] = employee.afterStatus
+   employee_data['morningDailyStatus'] = employee.morningDailyStatus
+   employee_data['afterDailyStatus'] = employee.afterDailyStatus
+   employee_data['morningRemark'] = employee.morningRemark
+   employee_data['afterRemark'] = employee.afterRemark
+   employees.append(employee_data)
    if len(employees) < 1:
         return jsonify({"message": "No data to show"})
    return jsonify({'employee': employees})
