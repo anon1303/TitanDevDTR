@@ -414,13 +414,11 @@ def company_month(dates):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemark
-       employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
    return jsonify({'Employee': employees})
 
 
-@app.route('/M_summary/weekly/<string:sort_date>', methods=['GET'])
+@app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
 # @cross_origin("*")
 # @login_required
 def company_week(sort_date):
@@ -479,8 +477,6 @@ def company_week(sort_date):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemark
-       employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
    return jsonify({'Employee': employees})
 
@@ -533,8 +529,6 @@ def employee_monthly(emp_id):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatusM
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemark
-       employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
    return jsonify({'employee': employees})
 
@@ -594,8 +588,6 @@ def employee_week(dates, emp_id):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemarkd
-       employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
    if len(employees) < 1:
         return jsonify({"message": "No data to show"})
