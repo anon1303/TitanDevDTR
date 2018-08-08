@@ -10,7 +10,7 @@ import pyqrcode
 from datetime import date, datetime, time
 import os
 import string
-from threading import Timer
+import threading
 
 lgdate = datetime.now()
 login_manager = LoginManager()
@@ -42,9 +42,9 @@ def login():
 
 
 def printit():
-  Timer(1.0, printit).start()
+  threading.Timer(1.0, printit).start()
   otTimeout()
-  print("infinite crash")
+  print("infinite")
 
 printit()
 
