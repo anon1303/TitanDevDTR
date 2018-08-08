@@ -432,7 +432,7 @@ def company_week(sort_date):
        employee_data['afterTimeIn'] = (employee.afterTimeIn)
        employee_data['afterTimeOut'] = (employee.afterTimeOut)
        employee_data['morningStatus'] = employee.morningStatus
-       employee_data['afterStatus'] = employee.afterStatu
+       employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
        employee_data['morningRemark'] = employee.morningRemark
