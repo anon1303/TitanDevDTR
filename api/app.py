@@ -535,7 +535,7 @@ def employee_monthly(emp_id):
           employee_data['afterRemark'] = employee.afterRemark
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
-       employee_data['morningDailyStatus'] = employee.morningDailyStatusM
+       employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
        if (employee.morningTimeIn is None) and (employee.morningTimeOut is None):
           employee_data['morningRemark'] = "Absent"
