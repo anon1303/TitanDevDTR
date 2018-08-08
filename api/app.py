@@ -414,6 +414,10 @@ def company_month(dates):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+       if (employee.morningTimeIn is None) and ( employee.morningTimeOut is None):
+          employee_data['morningRemark'] = "Absent"
+       if (employee.afterTimeIn is None) and (employee.afterTimeOut is None):
+          employee_data['afterRemark'] = "Absent"
        employees.append(employee_data)
    return jsonify({'Employee': employees})
 
@@ -477,6 +481,10 @@ def company_week(sort_date):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+       if (employee.morningTimeIn is None) and (employee.morningTimeOut is None):
+          employee_data['morningRemark'] = "Absent"
+       if (employee.afterTimeIn is None) and (employee.afterTimeOut is None):
+          employee_data['afterRemark'] = "Absent"
        employees.append(employee_data)
    return jsonify({'Employee': employees})
 
@@ -529,6 +537,10 @@ def employee_monthly(emp_id):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatusM
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+       if (employee.morningTimeIn is None) and (employee.morningTimeOut is None):
+          employee_data['morningRemark'] = "Absent"
+       if (employee.afterTimeIn is None) and (employee.afterTimeOut is None):
+          employee_data['afterRemark'] = "Absent"
        employees.append(employee_data)
    return jsonify({'employee': employees})
 
@@ -588,6 +600,10 @@ def employee_week(dates, emp_id):
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
+       if (employee.morningTimeIn is None) and (employee.morningTimeOut is None):
+          employee_data['morningRemark'] = "Absent"
+       if (employee.afterTimeIn is None) and (employee.afterTimeOut is None):
+          employee_data['afterRemark'] = "Absent"
        employees.append(employee_data)
    if len(employees) < 1:
         return jsonify({"message": "No data to show"})
