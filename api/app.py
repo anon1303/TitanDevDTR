@@ -389,19 +389,27 @@ def company_month(dates):
        if employee.morningTimeIn is None:
           employee_data['morningTimeIn'] = "None"
        else:
-          employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.morningTimeOut is None:
           employee_data['morningTimeOut'] = "None"
        else:
-          employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeIn is None:
           employee_data['afterTimeIn'] = "None"
        else:
-          employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeOut is None:
           employee_data['afterTimeOut'] = "None"
        else:
-          employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%M %p")
+       if employee.morningRemark is None:
+          employee_data['morningRemark'] = "On time"
+       else:
+          employee_data['morningRemark'] = employee.morningRemark
+       if employee.afterRemark is None:
+          employee_data['afterRemark'] = "On time"
+       else:
+          employee_data['afterRemark'] = employee.afterRemark
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -412,7 +420,7 @@ def company_month(dates):
    return jsonify({'Employee': employees})
 
 
-@app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
+@app.route('/M_summary/weekly/<string:sort_date>', methods=['GET'])
 # @cross_origin("*")
 # @login_required
 def company_week(sort_date):
@@ -443,22 +451,30 @@ def company_week(sort_date):
           employee_data['morningTimeIn'] = "None"
        else:
           employee_data['morningTimeIn'] = (
-              employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+              employee.morningTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.morningTimeOut is None:
           employee_data['morningTimeOut'] = "None"
        else:
           employee_data['morningTimeOut'] = (
-              employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+              employee.morningTimeOut).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeIn is None:
           employee_data['afterTimeIn'] = "None"
        else:
           employee_data['afterTimeIn'] = (
-              employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+              employee.afterTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeOut is None:
           employee_data['afterTimeOut'] = "None"
        else:
           employee_data['afterTimeOut'] = (
-              employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
+              employee.afterTimeOut).strftime("%Y-%b-%d %I:%M %p")
+       if employee.morningRemark is None:
+          employee_data['morningRemark'] = "On time"
+       else:
+          employee_data['morningRemark'] = employee.morningRemark
+       if employee.afterRemark is None:
+          employee_data['afterRemark'] = "On time"
+       else:
+          employee_data['afterRemark'] = employee.afterRemark
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -492,22 +508,30 @@ def employee_monthly(emp_id):
        if employee.morningTimeIn is None:
           employee_data['morningTimeIn'] = "None"
        else:
-          employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.morningTimeOut is None:
           employee_data['morningTimeOut'] = "None"
        else:
-          employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeIn is None:
           employee_data['afterTimeIn'] = "None"
        else:
-          employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeOut is None:
           employee_data['afterTimeOut'] = "None"
        else:
-          employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%M %p")
+       if employee.morningRemark is None:
+          employee_data['morningRemark'] = "On time"
+       else:
+          employee_data['morningRemark'] = employee.morningRemark
+       if employee.afterRemark is None:
+          employee_data['afterRemark'] = "On time"
+       else:
+          employee_data['afterRemark'] = employee.afterRemark
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
-       employee_data['morningDailyStatus'] = employee.morningDailyStatus
+       employee_data['morningDailyStatus'] = employee.morningDailyStatusM
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
        employee_data['morningRemark'] = employee.morningRemark
        employee_data['afterRemark'] = employee.afterRemark
@@ -545,28 +569,32 @@ def employee_week(dates, emp_id):
        if employee.morningTimeIn is None:
           employee_data['morningTimeIn'] = "None"
        else:
-          employee_data['morningTimeIn'] = (
-              employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%M %p")
        if employee.morningTimeOut is None:
           employee_data['morningTimeOut'] = "None"
        else:
-          employee_data['morningTimeOut'] = (
-              employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%M %p")
        if employee.afterTimeIn is None:
           employee_data['afterTimeIn'] = "None"
        else:
-          employee_data['afterTimeIn'] = (
-              employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
-       if employee.afterTimeOut is None:
+          employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%M %p")
+       if employee.afterTimeOut is None: 
           employee_data['afterTimeOut'] = "None"
        else:
-          employee_data['afterTimeOut'] = (
-              employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
+          employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%M %p")
+       if employee.morningRemark is None:
+          employee_data['morningRemark'] = "On time"
+       else:
+          employee_data['morningRemark'] = employee.morningRemark
+       if employee.afterRemark is None:
+          employee_data['afterRemark'] = "On time"
+       else:
+          employee_data['afterRemark'] = employee.afterRemark
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
        employee_data['afterDailyStatus'] = employee.afterDailyStatus
-       employee_data['morningRemark'] = employee.morningRemark
+       employee_data['morningRemark'] = employee.morningRemarkd
        employee_data['afterRemark'] = employee.afterRemark
        employees.append(employee_data)
    if len(employees) < 1:
