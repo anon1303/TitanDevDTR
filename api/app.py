@@ -387,19 +387,19 @@ def company_month(dates):
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
        if employee.morningTimeIn is None:
-          employee_data['morningTimeIn'] = "NONE"
+          employee_data['morningTimeIn'] = "None"
        else:
           employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
        if employee.morningTimeOut is None:
-          employee_data['morningTimeOut'] = "NONE"
+          employee_data['morningTimeOut'] = "None"
        else:
           employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
        if employee.afterTimeIn is None:
-          employee_data['afterTimeIn'] = "NONE"
+          employee_data['afterTimeIn'] = "None"
        else:
           employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
        if employee.afterTimeOut is None:
-          employee_data['afterTimeOut'] = "NONE"
+          employee_data['afterTimeOut'] = "None"
        else:
           employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
        employee_data['morningStatus'] = employee.morningStatus
@@ -439,10 +439,26 @@ def company_week(sort_date):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = (employee.morningTimeIn)
-       employee_data['morningTimeOut'] = (employee.morningTimeOut)
-       employee_data['afterTimeIn'] = (employee.afterTimeIn)
-       employee_data['afterTimeOut'] = (employee.afterTimeOut)
+       if employee.morningTimeIn is None:
+          employee_data['morningTimeIn'] = "None"
+       else:
+          employee_data['morningTimeIn'] = (
+              employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       if employee.morningTimeOut is None:
+          employee_data['morningTimeOut'] = "None"
+       else:
+          employee_data['morningTimeOut'] = (
+              employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+       if employee.afterTimeIn is None:
+          employee_data['afterTimeIn'] = "None"
+       else:
+          employee_data['afterTimeIn'] = (
+              employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       if employee.afterTimeOut is None:
+          employee_data['afterTimeOut'] = "None"
+       else:
+          employee_data['afterTimeOut'] = (
+              employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -473,10 +489,22 @@ def employee_monthly(emp_id):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = (employee.morningTimeIn)
-       employee_data['morningTimeOut'] = (employee.morningTimeOut)
-       employee_data['afterTimeIn'] = (employee.afterTimeIn)
-       employee_data['afterTimeOut'] = (employee.afterTimeOut)
+       if employee.morningTimeIn is None:
+          employee_data['morningTimeIn'] = "None"
+       else:
+          employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       if employee.morningTimeOut is None:
+          employee_data['morningTimeOut'] = "None"
+       else:
+          employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+       if employee.afterTimeIn is None:
+          employee_data['afterTimeIn'] = "None"
+       else:
+          employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       if employee.afterTimeOut is None:
+          employee_data['afterTimeOut'] = "None"
+       else:
+          employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -514,10 +542,26 @@ def employee_week(dates, emp_id):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = (employee.morningTimeIn)
-       employee_data['morningTimeOut'] = (employee.morningTimeOut)
-       employee_data['afterTimeIn'] = (employee.afterTimeIn)
-       employee_data['afterTimeOut'] = (employee.afterTimeOut)
+       if employee.morningTimeIn is None:
+          employee_data['morningTimeIn'] = "None"
+       else:
+          employee_data['morningTimeIn'] = (
+              employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       if employee.morningTimeOut is None:
+          employee_data['morningTimeOut'] = "None"
+       else:
+          employee_data['morningTimeOut'] = (
+              employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+       if employee.afterTimeIn is None:
+          employee_data['afterTimeIn'] = "None"
+       else:
+          employee_data['afterTimeIn'] = (
+              employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       if employee.afterTimeOut is None:
+          employee_data['afterTimeOut'] = "None"
+       else:
+          employee_data['afterTimeOut'] = (
+              employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
