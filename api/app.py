@@ -386,10 +386,10 @@ def company_month(dates):
        employee_data['employeeid'] = employee.employeeid
        employee_data['lateTotal'] = employee.lateTotal
        employee_data['absentTotal'] = employee.absentTotal
-       employee_data['morningTimeIn'] = (employee.morningTimeIn)
-       employee_data['morningTimeOut'] = (employee.morningTimeOut)
-       employee_data['afterTimeIn'] = (employee.afterTimeIn)
-       employee_data['afterTimeOut'] = (employee.afterTimeOut)
+       employee_data['morningTimeIn'] = (employee.morningTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       employee_data['morningTimeOut'] = (employee.morningTimeOut).strftime("%Y-%b-%d %I:%m %p")
+       employee_data['afterTimeIn'] = (employee.afterTimeIn).strftime("%Y-%b-%d %I:%m %p")
+       employee_data['afterTimeOut'] = (employee.afterTimeOut).strftime("%Y-%b-%d %I:%m %p")
        employee_data['morningStatus'] = employee.morningStatus
        employee_data['afterStatus'] = employee.afterStatus
        employee_data['morningDailyStatus'] = employee.morningDailyStatus
@@ -591,7 +591,6 @@ def timein():
    morning7 = timeAdmin.morning_time_in_start.strftime("%H%M")
    morning9 = timeAdmin.morning_time_out_start.strftime("%H%M")
    morning12 = timeAdmin.morning_time_out_end.strftime("%H%M")
-
    afte1 = timeAdmin.afternoon_time_in_start.strftime("%H%M")
    afte6 = timeAdmin.afternoon_time_out_start.strftime("%H%M")
    afte7 = timeAdmin.afternoon_time_out_end.strftime("%H%M")
