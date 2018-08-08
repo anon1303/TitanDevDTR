@@ -10,6 +10,7 @@ import pyqrcode
 from datetime import date, datetime, time
 import os
 import string
+import threading
 
 lgdate = datetime.now()
 login_manager = LoginManager()
@@ -39,6 +40,12 @@ def login():
       return jsonify({'message': 'Login Successful!'})
   return jsonify({'message': 'invalid password'})
 
+
+def printit():
+  threading.Timer(1.0, printit).start()
+  otTimeout()
+
+printit()
 
 @app.route('/logout', methods=['GET'])
 # @cross_origin(allow_headers=['Content-Type'])
@@ -2445,7 +2452,6 @@ def counterunseen():
         return jsonify({'adminlogs': 'done'})
 
 
-@app.route('/autotimeout/', methods=['POST'])
 def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
     # nowdate = datetime.now().strftime("%Y-%d-%m")
