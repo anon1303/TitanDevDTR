@@ -10,7 +10,7 @@ import pyqrcode
 from datetime import date, datetime, time
 import os
 import string
-# import threading
+import threading
 
 lgdate = datetime.now()
 login_manager = LoginManager()
@@ -41,12 +41,12 @@ def login():
   return jsonify({'message': 'invalid password'})
 
 
-# def printit():
-#   threading.Timer(1.0, printit).start()
-#   otTimeout()
-#   print("infinite")
+def printit():
+  threading.Timer(1.0, printit).start()
+  otTimeout()
+  print("infinite")
 
-# printit()
+printit()
 
 @app.route('/logout', methods=['GET'])
 # @cross_origin(allow_headers=['Content-Type'])
