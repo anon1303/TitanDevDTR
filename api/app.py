@@ -2484,5 +2484,5 @@ def overtimelog():
       else:
          overtime_data['timeout'] = (ot.overtimeOut).strftime("%Y-%b-%d %I:%M %p")
       overtime_data['date'] = str(ot.overtimeDate)
-      otlog.append(overtime_data)
+      logs.append(overtime_data)
    return jsonify({'Otlog': logs})
