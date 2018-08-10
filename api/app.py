@@ -2462,6 +2462,8 @@ def otTimeout():
     return jsonify({"message": nowtime})
 
 @app.route('/view/overtimelog', methods=['GET'])
+@login_required
+@cross_origin("*")
 def overtimelog():
    otlog = Overtime.query.all()
    logs = []
