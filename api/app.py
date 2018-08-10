@@ -10,7 +10,6 @@ import pyqrcode
 from datetime import date, datetime
 import os
 import string
-import schedule
 
 lgdate = datetime.now()
 login_manager = LoginManager()
@@ -2445,24 +2444,7 @@ def counterunseen():
             dbase.session.commit()
         return jsonify({'adminlogs': 'done'})
 
-# @app.route('/autotimeout/', methods=['POST'])
-# def otTimeout():
-#     nowtime = datetime.now().strftime("%H%M")
-#     # nowdate = datetime.now().strftime("%Y-%d-%m")
-#     timeout = "2200"
-#     timeout1 = "2300"
-#     emp = Overtime.query.filter_by(overtimeInStatus=1).all()
-#     if emp:
-#         if nowtime >= timeout and nowtime <= timeout1:
-#             for i in emp:
-#                 i.overtimeInStatus = 0
-#                 dbase.session.commit()
-#             return jsonify({"message": "timeout "})
-#     else:
-#         pass
-#         return jsonify({"message": 'not time yet'})
-#     return jsonify({"message": nowtime})
-
+@app.route('/autotimeout/', methods=['POST'])
 def otTimeout():
     nowtime = datetime.now().strftime("%H%M")
     # nowdate = datetime.now().strftime("%Y-%d-%m")
@@ -2472,16 +2454,11 @@ def otTimeout():
     if emp:
         if nowtime >= timeout and nowtime <= timeout1:
             for i in emp:
-                i.overtimeInStatus = 2
-            dbase.session.commit()
+                i.overtimeInStatus = 0
+                dbase.session.commit()
             return jsonify({"message": "timeout "})
     else:
         pass
         return jsonify({"message": 'not time yet'})
     return jsonify({"message": nowtime})
 
-
-schedule.every().day.at("22:00").do(otTimeout)
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
