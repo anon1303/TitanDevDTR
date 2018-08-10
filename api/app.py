@@ -2473,8 +2473,14 @@ def overtimelog():
       overtime_data = {}
       name = Employee.query.filter_by(employeeid=ot.employeeid).first()
       overtime_data['name'] = name.fname + " " + name.mname + " " + name.lname
-      overtime_data['timein'] = (ot.overtimeIn).strftime("%Y-%b-%d %I:%M %p")
-      overtime_data['timeout'] = (ot.overtimeOut).strftime("%Y-%b-%d %I:%M %p")
+      if ot.overtimeIn is None:
+         overtime_data['timein'] = "None"
+      else:
+         overtime_data['timein'] = (ot.overtimeIn).strftime("%Y-%b-%d %I:%M %p")
+      if ot.overtimeOut is None:
+         overtime_data['timeout'] = "None"
+      else:
+         overtime_data['timeout'] = (ot.overtimeOut).strftime("%Y-%b-%d %I:%M %p")
       overtime_data['date'] = str(ot.overtimeDate)
       otlog.append(overtime_data)
    return jsonify({'Otlog': logs})
