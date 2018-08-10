@@ -30,7 +30,7 @@ def login():
     return jsonify({'message': 'Invalid username or password'})
   else:
     if check_password_hash(user.password, code):
-      login_user(user, remember=True, duration=1)
+      login_user(user, remember=True)
       print(login_user(user, remember=True))
       msg = "Logged in"
       logmessage = Logs(details=msg, log_date=lgdate)
