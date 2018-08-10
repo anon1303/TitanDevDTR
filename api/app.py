@@ -2461,3 +2461,18 @@ def otTimeout():
         return jsonify({"message": 'not time yet'})
     return jsonify({"message": nowtime})
 
+@app.route('/view/overtimelog', methods=['GET'])
+def overtimelog():
+   otlog = Overtime.query.all()
+   logs = []
+   if not otlog:
+      return jsonify({'Overtimelog': logs})
+   for ot in otlog:
+      overtime_data = {}
+      name = Overtime.query.filter_by(employeeid=ot.employeeid).first()
+      overtime_data['name'] = name.fname + " " + name.mname + " " + name.lname
+      overtime_data['timein'] = (ot.overtimeIn).strftime("%Y-%b-%d %I:%M %p")
+      overtime_data['timeout'] = (ot.overtimeOut).strftime("%Y-%b-%d %I:%M %p")
+      overtime_data['date'] = str(ot.overtimeDate)
+      otlog.append(overtime_data)
+   return jsonify({'Otlog': logs})
