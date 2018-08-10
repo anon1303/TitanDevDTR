@@ -2471,6 +2471,8 @@ def overtimelog():
       return jsonify({'Overtimelog': logs})
    for ot in otlog:
       overtime_data = {}
+      print(ot)
+      print(ot.employeeid)
       name = Employee.query.filter_by(employeeid=ot.employeeid).first()
       overtime_data['name'] = name.fname + " " + name.mname + " " + name.lname
       if ot.overtimeIn is None:
