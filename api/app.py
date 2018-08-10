@@ -21,7 +21,7 @@ def load_user(user_id):
   return Admin.query.get(int(user_id))
 
 @app.route('/login', methods=['GET', 'POST'])
-# @cross_origin(allow_headers=['Content-Type'])
+@cross_origin(allow_headers=['Content-Type'])
 def login():
   data = request.get_json()
   code = str(data['password'])
@@ -41,8 +41,8 @@ def login():
 
 
 @app.route('/logout', methods=['GET'])
-# @cross_origin(allow_headers=['Content-Type'])
-# @login_required
+@cross_origin(allow_headers=['Content-Type'])
+@login_required
 def logout():
 
   msg = "Logged out"
@@ -54,8 +54,8 @@ def logout():
 
 
 @app.route('/newAdmin', methods=['POST'])
-# @cross_origin(allow_headers=['Content-Type'])
-# @login_required
+@cross_origin(allow_headers=['Content-Type'])
+@login_required
 def newAdmin():
     data = request.get_json()
     new = Admin.query.get(1)
@@ -79,7 +79,7 @@ def newAdmin():
 
 
 @app.route('/newEmployee', methods=['POST'])
-# @login_required
+@login_required
 @cross_origin(allow_headers=['Content-Type'])
 def addemployee():
     data = request.get_json()
@@ -107,8 +107,8 @@ def addemployee():
 
 
 @app.route('/view/', methods=['GET'])
-# @login_required
-# @cross_origin('*')
+@login_required
+@cross_origin('*')
 def viewEmployee():
     employess = Employee.query.filter_by(employeestatus=1).all()
 
@@ -137,8 +137,8 @@ def viewEmployee():
 
 
 @app.route('/viewOne/', methods=['GET', 'POST'])
-# @login_required
-# @cross_origin('*')
+@login_required
+@cross_origin('*')
 def viewOneEmployee():
     data = request.get_json()
     employess = Employee.query.filter_by(employeeid=data['id']).first()
@@ -183,7 +183,7 @@ def view_total():
 
 
 @app.route('/viewDeactivated/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 @cross_origin('*')
 def viewEmployeeDeactivated():
     employess = Employee.query.filter_by(employeestatus=0).all()
@@ -210,7 +210,7 @@ def viewEmployeeDeactivated():
 
 
 @app.route('/search/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 @cross_origin('*')
 def searchEmployee():
     data = request.get_json()
@@ -240,7 +240,7 @@ def searchEmployee():
 
 @app.route('/generate/qrcode', methods=['POST'])
 @cross_origin('*')
-# @login_required
+@login_required
 def genereate_code():
     data = request.get_json()
     qr = pyqrcode.create(data['code'])
@@ -254,7 +254,7 @@ def genereate_code():
 
 @app.route('/deactivate', methods=['GET', 'POST'])
 @cross_origin('*')
-# @login_required
+@login_required
 def delEmployee():
 
     data = request.get_json()
@@ -280,7 +280,7 @@ def delEmployee():
 
 @app.route('/activate', methods=['GET', 'POST'])
 @cross_origin('*')
-# @login_required
+@login_required
 def ReActEmployee():
 
     data = request.get_json()
@@ -306,7 +306,7 @@ def ReActEmployee():
 
 @app.route('/edit/<string:user_id>', methods=['POST'])
 @cross_origin(allow_headers=['Content-Type'])
-# @login_required
+@login_required
 def edit(user_id):
     data = request.get_json()
     employee = Employee.query.filter_by(employeeid=user_id).first()
@@ -366,8 +366,8 @@ def edit(user_id):
 
 
 @app.route('/company_summary/monthly/<string:dates>', methods=['GET'])
-# @cross_origin("*")
-# @login_required
+@cross_origin("*")
+@login_required
 def company_month(dates):
    dates = datetime.strptime(dates, "%Y-%m-%d")
    summary = Attendance.query.filter(extract('year', Attendance.date) == (dates.strftime("%Y")))\
@@ -423,8 +423,8 @@ def company_month(dates):
 
 
 @app.route('/company_summary/weekly/<string:sort_date>', methods=['GET'])
-# @cross_origin("*")
-# @login_required
+@cross_origin("*")
+@login_required
 def company_week(sort_date):
    dates = string.replace(sort_date, "W", "")
    print dates
@@ -490,8 +490,8 @@ def company_week(sort_date):
 
 
 @app.route('/employee_summary/monthly/<int:emp_id>', methods=['GET'])
-# @cross_origin("*")
-# @login_required
+@cross_origin("*")
+@login_required
 def employee_monthly(emp_id):
    summary = Attendance.query.filter(
        Attendance.employeeid == emp_id).order_by(Attendance.date.desc()).all()
@@ -546,8 +546,8 @@ def employee_monthly(emp_id):
 
 
 @app.route('/employee_summary/weekly/<string:dates>/<int:emp_id>', methods=['GET'])
-# @cross_origin("*")
-# @login_required
+@cross_origin("*")
+@login_required
 def employee_week(dates, emp_id):
    dates = string.replace(dates, "W", "")
    print dates
@@ -612,7 +612,7 @@ def employee_week(dates, emp_id):
 
 @app.route('/edit/login-time', methods=['POST'])
 @cross_origin(allow_headers=['Content-Type'])
-# @login_required
+@login_required
 def edit_time():
    data = request.get_json()
 
@@ -2312,7 +2312,7 @@ def request_overtime():
 
 
 @app.route('/view/overtime/requests', methods=['GET'])
-# @login_required
+@login_required
 @cross_origin(allow_headers=['Content-Type'])
 def view_requests():
    overtime1 = Overtime.query.filter_by(overtimeStatus=0).all()
@@ -2340,7 +2340,7 @@ def view_requests():
 
 
 @app.route('/approve/request', methods=['POST'])
-# @login_required
+@login_required
 @cross_origin(allow_headers=['Content-Type'])
 def approve():
    data = request.get_json()
@@ -2368,8 +2368,8 @@ def approve():
 
 
 @app.route('/decline/request', methods=['POST'])
-# @login_required
-# @cross_origin(allow_headers=['Content-Type'])
+@login_required
+@cross_origin(allow_headers=['Content-Type'])
 def decline():
    data = request.get_json()
    overtime = Overtime.query.filter(and_(Overtime.overtimeStatus == 0, Overtime.employeeid == int(
@@ -2410,8 +2410,8 @@ def notifications():
 
 
 @app.route('/view/admin/logs', methods=['GET'])
-# @login_required
-# @cross_origin("*")
+@login_required
+@cross_origin("*")
 def view_logs():
     log = Logs.query.all()
     if not log:
