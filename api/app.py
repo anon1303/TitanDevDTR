@@ -7,7 +7,7 @@ import time
 from sqlalchemy import and_, desc, extract
 import png
 import pyqrcode
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import os
 import string
 
@@ -30,7 +30,7 @@ def login():
     return jsonify({'message': 'Invalid username or password'})
   else:
     if check_password_hash(user.password, code):
-      login_user(user, remember=True)
+      login_user(user, remember=True, duration=timedelta(days=1))
       print(login_user(user, remember=True))
       msg = "Logged in"
       logmessage = Logs(details=msg, log_date=lgdate)
@@ -44,7 +44,6 @@ def login():
 @cross_origin(allow_headers=['Content-Type'])
 @login_required
 def logout():
-
   msg = "Logged out"
   logmessage = Logs(details=msg, log_date=lgdate)
   dbase.session.add(logmessage)
@@ -2454,7 +2453,7 @@ def otTimeout():
     if emp:
         if nowtime >= timeout and nowtime <= timeout1:
             for i in emp:
-                i.overtimeInStatus = 0
+                i.overtimeInStatus = 2
                 dbase.session.commit()
             return jsonify({"message": "timeout "})
     else:
