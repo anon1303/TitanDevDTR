@@ -17,7 +17,7 @@ Flask-Login==0.4.0
 Flask-MySQL==1.4.0
 flask-paginate==0.5.1
 Flask-SQLAlchemy==2.3.2
-Flask-WTF==0.14.2
+Flask-WTF==
 futures==3.2.0
 idna==2.6
 isort==4.3.4
